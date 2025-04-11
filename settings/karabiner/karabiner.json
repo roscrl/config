@@ -45,27 +45,6 @@
                         ]
                     },
                     {
-                        "description": "Hyper + S to copy terminal screen content (Ghostty only)",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "com.mitchellh.ghostty"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "s",
-                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
-                                },
-                                "to": [{ "shell_command": "osascript ~/.config/appsscript/copy-screen-terminal.scpt" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Map Command-Shift-Option-Control-Period to f19 (avoid System Diagnostics)",
                         "manipulators": [
                             {

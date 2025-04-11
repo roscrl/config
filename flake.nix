@@ -93,9 +93,12 @@
                 ".config/linearmouse".source      = "${self}/settings/linearmouse";
                 ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
                 ".config/appsscript".source       = "${self}/settings/appsscript";
+                "dev/scripts".source              = "${self}/settings/scripts";
+                ".hushlogin".text                 = ""
                 # TODO Alfred 
                 # TODO cursor
                 # TODO vscode 
+                # TODO jetbrains
                 # TODO .zsh_history 
                 # TODO secrets 
               };
@@ -131,7 +134,7 @@
                   gd       = "git diff";
                   gdc      = "git diff --cached";
                   gco      = "git checkout";
-                  gcdr     = "cd $(git rev-parse --show-toplevel)"; # cd to git root;
+                  gcdr     = "cd $(git rev-parse --show-toplevel)"; # cd to git root
                   gopen    = "open_github";
                   gce      = "clone_cd_vim";
                   gc       = "clone_cd";
@@ -145,29 +148,30 @@
                   lg       = "lazygit";
                   ld       = "lazydocker";
                   tf       = "terraform";
+                  sync    = "~/dev/repos/config/sync.sh";
+                  econfig  = "nvim ~/dev/repos/config/flake.nix";
                   ezsh     = "nvim ~/.zshrc && source ~/.zshrc";
                   evim     = "nvim ~/.config/nvim/init.vim";
                   eghostty = "nvim ~/.config/ghostty/config";
                   ekari    = "nvim ~/.config/karabiner/karabiner.json";
-                  econfig  = "nvim ~/dev/repos/config/flake.nix";
                   dev      = "cd ~/dev";
+                  scripts  = "cd ~/dev/scripts";
                   scratch  = "cd ~/dev/scratch";
+                  refs     = "cd ~/dev/refrences";
                   repos    = "cd ~/dev/repos";
                   config   = "cd ~/dev/repos/config";
-                  sync     = "~/dev/repos/config/sync.sh";
-                  refs     = "cd ~/dev/refrences";
-                  drive    = "cd ~/Drive";
-                  dl       = "cd ~/Downloads";
-                  docs     = "cd ~/Documents";
-                  scripts  = "cd ~/dev/scripts";
                   walters  = "cd ~/dev/repos/walters";
                   me       = "cd ~/dev/repos/roscrl.com";
                   posts    = "cd ~/dev/repos/roscrl.com/posts && nvim";
-                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
+                  drive    = "cd ~/Drive";
+                  dl       = "cd ~/Downloads";
+                  docs     = "cd ~/Documents";
+                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
                 };
 
                 initExtra = ''
-                  source ~/Drive/settings/dotfiles/.secrets # secrets
+                  source ~/Drive/settings/dotfiles/.secrets # TODO secrets
+                  export PATH="$PATH:~/dev/scripts"
 
                   setopt AUTO_CD          # cd by typing directory name if it's not a command
                   setopt auto_menu        # show completion menu automatically
@@ -368,7 +372,7 @@
                 "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
                 "/Applications/Discord.app"
                 "/System/Applications/Preview.app"
-              ];
+              ]; # TODO automate safari add to Dock web apps
             };
 
             finder = {
@@ -379,8 +383,8 @@
               FXPreferredViewStyle = "Nlsv";                         # use list view
               FXRemoveOldTrashItems = true;                          # remove items from Trash after 30 days
 
-              NewWindowTarget = "Other";                                    # allow new window target
-              NewWindowTargetPath = "file:///Users/${username}/Downloads/"; # set new window target path
+              NewWindowTarget = "Other";                                   # allow new window target
+              NewWindowTargetPath = "file:///Users/${username}/Downloads"; # set new window target path
             };
 
             ".GlobalPreferences" = {
