@@ -432,9 +432,8 @@
               };
 
               home.file = {
-                ".config/nvim" = {
-                  source = "${self}/settings/nvim";
-                };
+                ".config/nvim".source                               = "${self}/settings/nvim";
+                ".config/karabiner".source                          = "${self}/settings/karabiner";
               };
 
               home.stateVersion = "25.05";
