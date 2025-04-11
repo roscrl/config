@@ -1,0 +1,56 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "escape",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+c",
+    "command": "composer.startComposerPrompt"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+v",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+x",
+    "command": "workbench.action.openRecent"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+a",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "f",
+    "command": "workbench.action.quickOpen",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+o",
+    "command": "workbench.files.action.showActiveFileInExplorer",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+3",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
+    "key": "shift+r",
+    "command": "editor.action.rename",
+    "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
+  },
+  {
+    "key": "cmd+shift+l",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+r",
+    "command": "workbench.action.tasks.build"
+  },
+  {
+    "key": "ctrl+shift+alt+cmd+c",
+    "command": "composerMode.agent"
+  }
+]

@@ -1,0 +1,184 @@
+set NERDTree " navigatable project tool window
+set multiple-cursors
+set surround
+set ideajoin
+set easymotion
+set ideastatusicon=gray
+
+set clipboard=unnamedplus " share clipboard with system
+set scrolloff=8           " reaching top or bottom of screen is offset by
+
+set hlsearch   " dont keep highlighting after searching
+set incsearch  " while typing search command, incrementally show highlited results
+set ignorecase " ignore case when searching with /
+set smartcase  " dont ignore case if a caps letter is used while seraching
+
+set ideavimsupport=""
+
+let mapleader = " "
+
+map , :action ActivateProjectToolWindow<cr>
+imap <Right> <Action>(copilot.applyInlays)
+
+" Empty line above/below
+nnoremap <M-A-C-S-K> O<esc>j
+nnoremap <M-A-C-S-j> o<esc>k
+
+" AI
+noremap <leader>s :action com.github.roscrl.inlineaichat.actions.StreamTextAction<cr>
+nnoremap t :action AIIntentionsActionGroup<cr>
+nnoremap m :action AIAssistant.Editor.AskAiAssistantInEditor<cr>
+
+" Search
+nnoremap s /
+
+" Tab to tab lines in visual mode
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+" Insert mode quick remove one char ahead
+inoremap <c-x> <c-o>x
+
+" Insert mode quick delete line
+inoremap <c-d> <c-o>dd
+
+" Switch between open editor tabs
+" nnoremap <S-Tab> :action PreviousTab<cr>
+" nnoremap <Tab> :action NextTab<cr>
+
+" Window navigation
+nnoremap <Left> <C-w>h
+" nnoremap <Right> <C-w>l
+nnoremap <Down> <C-w>j
+nnoremap <Up> <C-w>k
+nnoremap <silent> <M-A-C-S-U> :vsplit<cr>
+nnoremap <silent> <M-A-C-S-N> :split<cr>
+
+nmap S <Plug>(easymotion-s2)
+omap f <Plug>(easymotion-fl)
+omap F <Plug>(easymotion-Fl)
+vmap f <Plug>(easymotion-fl)
+vmap F <Plug>(easymotion-Fl)
+
+omap t <Plug>(easymotion-tl)
+omap T <Plug>(easymotion-Tl)
+vmap t <Plug>(easymotion-tl)
+vmap T <Plug>(easymotion-Tl)
+
+" Select all
+nnoremap <C-a> gg<S-v>G
+
+" Swap dd to D
+nnoremap D "_dd
+nnoremap dd "_D
+
+" Selecting to end of line should not include new line char
+vnoremap $ $h
+
+" Delete to not override paste clipboard using leader, keep paste clipboard on multiple paste.
+nnoremap x "_x
+vnoremap x "_x
+nnoremap d "_d
+vnoremap d "_d
+nnoremap C "_C
+vnoremap C "_C
+nnoremap c "_c
+vnoremap c "_c
+
+" Allow paste in visual mode without losing paste again
+xnoremap p pgvy
+xnoremap P Pgvy
+
+" Swap gg and G
+nnoremap gg G
+nnoremap G gg
+
+" Jump around with screen in center
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+" Line movement on multi select up and down
+vnoremap J :action MoveStatementDown<cr>
+vnoremap K :action MoveStatementUp<cr>
+
+" Yank full line to Y
+nnoremap Y yy
+
+" Make j and k move to the next row, not file line useful for when line wrapping occurs
+nnoremap j gj
+nnoremap k gk
+
+" Disable highlighted search upon escape
+nnoremap <silent> <esc> :noh<return><esc>
+
+" Quit
+nnoremap <silent> <C-x> :x<CR>
+nnoremap <silent> <C-q> :qa<CR>
+
+" dont use zt or zb so make common case on centering easier
+nnoremap z zz
+
+" Jump around searches while keeping screen centered
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Cut
+vnoremap X ygvd
+
+" map m <Action>(FileStructurePopup)
+
+nnoremap <leader>po :action ManageRecentProjects<CR>
+nnoremap <leader>pc :action CloseProject<CR>
+
+nnoremap <leader>mr :action MoveElementRight<CR>
+nnoremap <leader>ml :action MoveElementLeft<CR>
+
+nnoremap <leader>fn :action ShowNavBar<CR>
+nnoremap <leader>rr :action Refactorings.QuickListPopupAction<CR>
+nnoremap <leader>t :action RerunTests<CR>
+nnoremap <leader>gb :action Git.Branches<CR>
+nnoremap <leader>ga :action Annotate<CR>
+nnoremap <leader>gp :action Git.Pull<CR>
+
+nnoremap \c :action CollapseRegion<CR>
+nnoremap \o :action ExpandRegion<CR>
+
+nnoremap <c-o> :action Back<cr>
+nnoremap <c-i> :action Forward<cr>
+
+map <M-z> <Action>(ToggleDistractionFreeMode)
+
+" Grep everywhere
+nnoremap F :action FindInPath<cr>
+nnoremap f :action GotoFile<cr>
+
+map R <Action>(RenameElement)
+map <leader>b <Action>(ToggleLineBreakpoint)
+
+map <c-d> <Action>(EditorPageDown)
+map <c-u> <Action>(EditorPageUp)
+
+map <leader>rt :action TestTreePopupMenu<CR>
+
+map gc :action CommentByLineComment<CR>
+map gd <Action>(GotoDeclaration)
+map gi <Action>(GotoImplementation)
+map ga <Action>(ShowIntentionActions)
+map gf <Action>(AnalyzeMenu)
+map gt <Action>(GotoTest)
+map gr <Action>(FindUsages)
+map gh <Action>(QuickJavaDoc)
+map ge <Action>(GotoNextError)
+map gE <Action>(GotoPreviousError)
+map gv <Action>(IntroduceVariable)
+map gm <Action>(ExtractMethod)
+map gw <Action>(SurroundWith)
+map gu <Action>(Unwrap)
+map gn <Action>(Inline)
+map gs <Action>(GotoRelated)
+
+nnoremap <leader>l :action QuickChangeScheme<cr>
+
+" Reload ideavimrc
+nnoremap <leader><space> :e ~/.ideavimrc<CR>
+nnoremap <leader><cr> :action IdeaVim.ReloadVimRc.reload<CR>

@@ -74,7 +74,6 @@
                 "betterdisplay"
                 "sloth"
                 "rectangle"
-                "utm"
                 "signal" 
                 "mullvadvpn"
                 "transmission" 
@@ -84,18 +83,21 @@
               masApps = { "AdGuard for Safari" = 1440147259; };
           };
 
-          home-manager = {
+          home-manager = { # https://home-manager-options.extranix.com
             users.${username} = { pkgs', ... }: { 
               home.file = {
-                ".config/nvim".source      = "${self}/settings/nvim";
-                ".config/karabiner".source = "${self}/settings/karabiner";
-                # Alfred TODO
-                # ghostty TODO
-                # git-hooks TODO
-                # .ideavimrc TODO
-                # cursor TODO
-                # vscode TODO
-                # .zsh_history TODO
+                ".config/nvim".source             = "${self}/settings/nvim";
+                ".config/ghostty".source          = "${self}/settings/ghostty";
+                ".ideavimrc".source               = "${self}/settings/ideavimrc/.ideavimrc";
+                ".config/karabiner".source        = "${self}/settings/karabiner";
+                ".config/linearmouse".source      = "${self}/settings/linearmouse";
+                ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
+                ".config/appsscript".source       = "${self}/settings/appsscript";
+                # TODO Alfred 
+                # TODO cursor
+                # TODO vscode 
+                # TODO .zsh_history 
+                # TODO secrets 
               };
 
               programs.zsh = {
@@ -147,9 +149,12 @@
                   evim     = "nvim ~/.config/nvim/init.vim";
                   eghostty = "nvim ~/.config/ghostty/config";
                   ekari    = "nvim ~/.config/karabiner/karabiner.json";
+                  econfig  = "nvim ~/dev/repos/config/flake.nix";
                   dev      = "cd ~/dev";
                   scratch  = "cd ~/dev/scratch";
                   repos    = "cd ~/dev/repos";
+                  config   = "cd ~/dev/repos/config";
+                  sync     = "~/dev/repos/config/sync.sh";
                   refs     = "cd ~/dev/refrences";
                   drive    = "cd ~/Drive";
                   dl       = "cd ~/Downloads";
@@ -282,11 +287,11 @@
 
               programs.git = {
                 enable = true;
-                userEmail = "13072760+roscrl@users.noreply.github.com"; # TODO fix parameterise
+                userEmail = "13072760+roscrl@users.noreply.github.com";
                 userName = "roscrl";
                 extraConfig = {
                   push.autoSetupRemote = true;
-                  core.hooksPath = "/Users/${username}/Drive/Settings/dotfiles/scripts/hooks";
+                  core.hooksPath = "${self}/settings/githooks";
                   init.defaultBranch = "main";
                   pull.rebase = false;
                 };
@@ -298,13 +303,17 @@
               };
 
               programs.fzf.enable = true;
-              programs.ghostty.enable = true;
 
               home.stateVersion = "25.05";
             };
           };
 
-          system.defaults = {
+          # Find out which Mac settings relates to which defaults setting
+          #  - defaults read > ~/Desktop/defaults_before.txt
+          #  - do manual mac settings change
+          #  - defaults read > ~/Desktop/defaults_after.txt
+          #  - diff ~/Desktop/defaults_before.txt ~/Desktop/defaults_after.txt
+          system.defaults = { # https://nix-darwin.github.io/nix-darwin/manual/index.html
             dock = {
               autohide = true;                 # enable dock auto hiding
               autohide-delay = 0.0;            # make dock hide instantly
@@ -329,9 +338,9 @@
                 "/System/Applications/Messages.app"
                 "/System/Applications/Mail.app"
                 "/System/Applications/Notes.app"
-                "/Users/${username}/Applications/RubyMine.app"
-                "/Users/${username}/Applications/GoLand.app"
-                "/Users/${username}/Applications/IntelliJ IDEA Ultimate.app"
+                "/Applications/RubyMine.app"
+                "/Applications/GoLand.app"
+                "/Applications/IntelliJ IDEA.app"
                 "/Applications/Cursor.app"
                 "/Applications/Visual Studio Code.app"
                 "/Applications/Sublime Text.app"
@@ -397,6 +406,8 @@
               NSAutomaticDashSubstitutionEnabled = false;   # disable automatic text correction
               NSAutomaticQuoteSubstitutionEnabled = false;  # disable automatic text correction
             };
+
+            WindowManager.EnableTilingByEdgeDrag = false; # disable built in mac window tiling as Rectangle allows you to use shortcuts
 
             screencapture = {
               disable-shadow = true; # disable screenshot shadow

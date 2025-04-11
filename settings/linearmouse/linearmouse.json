@@ -1,0 +1,91 @@
+{
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.9.5",
+  "schemes" : [
+    {
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "vendorID" : "0x5ac",
+          "category" : "trackpad",
+          "productID" : "0x342",
+          "productName" : "Apple Internal Keyboard \/ Trackpad"
+        }
+      }
+    },
+    {
+      "pointer" : {
+        "disableAcceleration" : false,
+        "acceleration" : 0,
+        "speed" : 0.2625
+      },
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true,
+          "horizontal" : false
+        },
+        "distance" : {
+          "vertical" : 5
+        }
+      },
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "productName" : "X2 Wireless",
+          "vendorID" : "0x25a7",
+          "category" : "mouse",
+          "productID" : "0xfa7c"
+        }
+      }
+    },
+    {
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true
+        },
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "speed" : {
+          "vertical" : 0
+        },
+        "distance" : {
+          "vertical" : 3
+        }
+      },
+      "pointer" : {
+        "speed" : 0.2625,
+        "disableAcceleration" : false
+      },
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "vendorID" : "0x25a7",
+          "productID" : "0xfa7b",
+          "productName" : "X2 Wireless"
+        }
+      }
+    },
+    {
+      "if" : {
+        "device" : {
+          "serialNumber" : "4A570F52243FA92E",
+          "productName" : "M720 Triathlon",
+          "category" : "mouse",
+          "vendorID" : "0x46d",
+          "productID" : "0xb015"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1.5,
+        "disableAcceleration" : true
+      }
+    }
+  ]
+}

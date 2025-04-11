@@ -60,7 +60,7 @@
                                     "key_code": "s",
                                     "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
                                 },
-                                "to": [{ "shell_command": "osascript ~/Drive/Settings/dotfiles/copy-screen-terminal.scpt" }],
+                                "to": [{ "shell_command": "osascript ~/.config/appsscript/copy-screen-terminal.scpt" }],
                                 "type": "basic"
                             }
                         ]
@@ -238,7 +238,7 @@
                                     "key_code": "m",
                                     "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
                                 },
-                                "to": [{ "shell_command": "osascript ~/Drive/Settings/dotfiles/open-llm-window.scpt" }],
+                                "to": [{ "shell_command": "osascript ~/.config/appsscript/open-llm-window.scpt" }],
                                 "type": "basic"
                             }
                         ]
