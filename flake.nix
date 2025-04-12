@@ -366,12 +366,6 @@
               ]; # TODO automate safari add to Dock web apps
             };
 
-            menuExtraClock.Show24Hour = true; # show 24 hour clock
-
-            universalaccess ={
-              reduceMotion = true; # require terminal to have 'System Settings > Privacy & Security > Full Disk Access'
-            };
-
             finder = {
               AppleShowAllExtensions = true;          # show all filename extensions
               FXEnableExtensionChangeWarning = false; # disable warning before changing an extension
@@ -386,10 +380,6 @@
               NewWindowTargetPath = "file:///Users/${username}/Downloads"; # set new window target path
             };
 
-            ".GlobalPreferences" = {
-              "com.apple.mouse.scaling" = -1.0; # disable mouse acceleration
-            };
-
             trackpad = {
               FirstClickThreshold = 1;        # enable light click
               SecondClickThreshold = 1;       # enable light click
@@ -398,6 +388,8 @@
               TrackpadRightClick = true;      # enable two tap right click
               TrackpadThreeFingerDrag = true; # enable three finger window drag
             };
+
+            ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0; # disable mouse acceleration
 
             NSGlobalDomain = {
               _HIHideMenuBar = false;
@@ -438,17 +430,9 @@
                 };
               };
 
-              "com.apple.universalaccess" = {
-                showWindowTitlebarIcons = true;
-              };
-
-              "com.apple.finder" = {
-                QLEnableTextSelection = true; # allow text selection in Quick Look
-              };
-
-              "com.apple.AppStore" = {
-                InAppReviewEnabled = false;
-              };
+              "com.apple.universalaccess".showWindowTitlebarIcons = true; # show file icon in finder on title bar
+              "com.apple.finder".QLEnableTextSelection = true;            # allow text selection in Quick Look
+              "com.apple.AppStore".InAppReviewEnabled = false;            # disable in app reviews
 
               "com.apple.desktopservices" = {
                 DSDontWriteNetworkStores = true; # avoid creating .DS_Store files on network
@@ -456,18 +440,20 @@
               };
             };
 
-            WindowManager.EnableTilingByEdgeDrag = false; # disable built in mac window tiling as Rectangle allows you to use shortcuts
-
             screencapture = {
               disable-shadow = true; # disable screenshot shadow
               target = "clipboard";
             };
 
-            LaunchServices.LSQuarantine = false; # disable "Are you sure you want to open this application?" dialog
+            menuExtraClock.Show24Hour = true;             # show 24 hour clock
+            universalaccess.reduceMotion = true;          # require terminal to have 'System Settings > Privacy & Security > Full Disk Access'
+            WindowManager.EnableTilingByEdgeDrag = false; # disable built in mac window tiling as Rectangle allows you to use shortcuts
+            LaunchServices.LSQuarantine = false;          # disable "Are you sure you want to open this application?" dialog
+
           };
 
-          system.startup.chime = false;
-          security.pam.services.sudo_local.touchIdAuth = true;
+          system.startup.chime = false;                        # disable startup sound
+          security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
 
           users.users.${username} = {
             name = username;
