@@ -92,11 +92,11 @@
               home.file = {
                 ".config/nvim".source             = "${self}/settings/nvim";
                 ".config/ghostty".source          = "${self}/settings/ghostty";
-                ".ideavimrc".source               = "${self}/settings/ideavimrc/.ideavimrc";
                 ".config/karabiner".source        = "${self}/settings/karabiner";
                 ".config/linearmouse".source      = "${self}/settings/linearmouse";
                 ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
                 ".config/appsscript".source       = "${self}/settings/appsscript";
+                ".ideavimrc".source               = "${self}/settings/ideavimrc/.ideavimrc";
                 "dev/scripts".source              = "${self}/settings/scripts";
                 ".hushlogin".text                 = "";
                 # TODO alfred 
@@ -449,7 +449,6 @@
             universalaccess.reduceMotion = true;          # require terminal to have 'System Settings > Privacy & Security > Full Disk Access'
             WindowManager.EnableTilingByEdgeDrag = false; # disable built in mac window tiling as Rectangle allows you to use shortcuts
             LaunchServices.LSQuarantine = false;          # disable "Are you sure you want to open this application?" dialog
-
           };
 
           system.startup.chime = false;                        # disable startup sound
