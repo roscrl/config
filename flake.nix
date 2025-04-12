@@ -209,7 +209,7 @@
             dock = {
               autohide = true;                 # enable dock auto hiding
               autohide-delay = 0.0;            # make dock hide instantly
-              autohide-time-modifier = 0.15;   # make dock show/hide faster
+              autohide-time-modifier = 0.175;  # make dock show/hide faster
               launchanim = false;              # dont animate opening of applications
               expose-group-apps = true;        # group windows by application in Mission Control
               largesize = 128;                 # magnified icon size on hover
