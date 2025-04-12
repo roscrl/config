@@ -22,12 +22,16 @@
             yq
             tree
             wget
+            sqlite          
+            zsh-autosuggestions
             ripgrep
             ripgrep-all
             silver-searcher
-            zsh-autosuggestions
             fzf
-            sqlite          
+            watchexec
+            psrecord
+            httpie
+            broot               # file tree navigation
             btop                # better htop
             fd                  # find files
             hyperfine           # benchmark
@@ -94,8 +98,8 @@
                 ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
                 ".config/appsscript".source       = "${self}/settings/appsscript";
                 "dev/scripts".source              = "${self}/settings/scripts";
-                ".hushlogin".text                 = ""
-                # TODO Alfred 
+                ".hushlogin".text                 = "";
+                # TODO alfred 
                 # TODO cursor
                 # TODO vscode 
                 # TODO jetbrains
@@ -110,30 +114,21 @@
 
                 shellAliases = {
                   ".."     = "cd ..";
-                  "..."    = "cd ../..";
                   ll       = "ls -roAhtG";
                   copy     = "tr -d '\\n' | pbcopy";
                   g        = "git";
                   ga       = "git add . && git commit -am";
+                  gaa      = "git add -A";
+                  gcm      = "git commit -m";
                   gcp      = "git add . && git commit --allow-empty-message -m '' && git push";
                   gs       = "git status";
                   gsw      = "git switch";
                   gp       = "git push";
                   gpe      = "git commit --amend --no-edit && git push —force-with-lease";
                   gpu      = "git pull";
-                  gm       = "git merge";
-                  gpur     = "git pull --rebase";
                   gl       = "git log --pretty=oneline";
-                  gfe      = "git fetch";
-                  gre      = "git rebase";
-                  glr      = "git l -30";
-                  ghs      = "git rev-parse --short HEAD";
-                  ghm      = "git log --format=%B -n 1 HEAD";
-                  gaa      = "git add -A";
-                  gcm      = "git commit -m";
                   gd       = "git diff";
                   gdc      = "git diff --cached";
-                  gco      = "git checkout";
                   gcdr     = "cd $(git rev-parse --show-toplevel)"; # cd to git root
                   gopen    = "open_github";
                   gce      = "clone_cd_vim";
@@ -148,30 +143,29 @@
                   lg       = "lazygit";
                   ld       = "lazydocker";
                   tf       = "terraform";
-                  sync    = "~/dev/repos/config/sync.sh";
                   econfig  = "nvim ~/dev/repos/config/flake.nix";
                   ezsh     = "nvim ~/.zshrc && source ~/.zshrc";
                   evim     = "nvim ~/.config/nvim/init.vim";
                   eghostty = "nvim ~/.config/ghostty/config";
                   ekari    = "nvim ~/.config/karabiner/karabiner.json";
+                  drive    = "cd ~/Drive";
+                  dl       = "cd ~/Downloads";
+                  docs     = "cd ~/Documents";
+                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
                   dev      = "cd ~/dev";
                   scripts  = "cd ~/dev/scripts";
                   scratch  = "cd ~/dev/scratch";
                   refs     = "cd ~/dev/refrences";
                   repos    = "cd ~/dev/repos";
                   config   = "cd ~/dev/repos/config";
+                  settings = "cd ~/dev/repos/config/settings";
                   walters  = "cd ~/dev/repos/walters";
                   me       = "cd ~/dev/repos/roscrl.com";
                   posts    = "cd ~/dev/repos/roscrl.com/posts && nvim";
-                  drive    = "cd ~/Drive";
-                  dl       = "cd ~/Downloads";
-                  docs     = "cd ~/Documents";
-                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
                 };
 
                 initExtra = ''
                   source ~/Drive/settings/dotfiles/.secrets # TODO secrets
-                  export PATH="$PATH:~/dev/scripts"
 
                   setopt AUTO_CD          # cd by typing directory name if it's not a command
                   setopt auto_menu        # show completion menu automatically
@@ -312,11 +306,7 @@
             };
           };
 
-          # Find out which Mac settings relates to which defaults setting
-          #  - defaults read > ~/Desktop/defaults_before.txt
-          #  - do manual mac settings change
-          #  - defaults read > ~/Desktop/defaults_after.txt
-          #  - diff ~/Desktop/defaults_before.txt ~/Desktop/defaults_after.txt
+          # Use settings/scripts/find_defaults.sh to find out which MacOS menu settings relate to which defaults settings
           system.defaults = { # https://nix-darwin.github.io/nix-darwin/manual/index.html
             dock = {
               autohide = true;                 # enable dock auto hiding
@@ -330,10 +320,11 @@
               mineffect = "scale";             # use scale effect for window minimising/maximising
               show-recents = false;            # turn off show suggested and recent apps in dock
               tilesize = 58;                   # icon size
-              wvous-tl-corner = 1;             # top    left  hot corner -> noop
-              wvous-tr-corner = 12;            # top    right hot corner -> Notifications Center
-              wvous-br-corner = 1;             # top    left  hot corner -> noop
-              wvous-bl-corner = 1;             # bottom left  hot corner -> noop
+              wvous-tl-corner = 1;             # top-left    hot corner -> noop
+              wvous-tr-corner = 12;            # top-right   hot corner -> Notifications Center
+              wvous-br-corner = 1;             # top-left    hot corner -> noop
+              wvous-bl-corner = 1;             # bottom-left hot corner -> noop
+              expose-animation-duration = 0.0; # disable mission control animations
               persistent-apps = [
                 "/System/Applications/iPhone Mirroring.app"
                 "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
@@ -375,13 +366,21 @@
               ]; # TODO automate safari add to Dock web apps
             };
 
+            menuExtraClock.Show24Hour = true; # show 24 hour clock
+
+            universalaccess ={
+              reduceMotion = true; # require terminal to have 'System Settings > Privacy & Security > Full Disk Access'
+            };
+
             finder = {
-              AppleShowAllExtensions = true;                         # show all filename extensions
-              FXEnableExtensionChangeWarning = false;                # show warning before changing an extension off
-              QuitMenuItem = true;                                   # allow quitting via ⌘ + Q
-              ShowPathbar = true;                                    # show path bar at bottom
-              FXPreferredViewStyle = "Nlsv";                         # use list view
-              FXRemoveOldTrashItems = true;                          # remove items from Trash after 30 days
+              AppleShowAllExtensions = true;          # show all filename extensions
+              FXEnableExtensionChangeWarning = false; # disable warning before changing an extension
+              QuitMenuItem = true;                    # allow quitting via ⌘ + Q
+              ShowPathbar = true;                     # show path bar at bottom
+              FXPreferredViewStyle = "Nlsv";          # use list view
+              FXRemoveOldTrashItems = true;           # remove items from Trash after 30 days
+              _FXShowPosixPathInTitle = true;         # display full POSIX path as finder window title
+              FXDefaultSearchScope = "SCcf";          # search the current folder by default
 
               NewWindowTarget = "Other";                                   # allow new window target
               NewWindowTargetPath = "file:///Users/${username}/Downloads"; # set new window target path
@@ -391,24 +390,70 @@
               "com.apple.mouse.scaling" = -1.0; # disable mouse acceleration
             };
 
+            trackpad = {
+              FirstClickThreshold = 1;        # enable light click
+              SecondClickThreshold = 1;       # enable light click
+              ActuationStrength = 0;          # enable silent clicking
+              Clicking = true;                # enable tap to click
+              TrackpadRightClick = true;      # enable two tap right click
+              TrackpadThreeFingerDrag = true; # enable three finger window drag
+            };
+
             NSGlobalDomain = {
               _HIHideMenuBar = false;
               "com.apple.sound.beep.volume" = 0.0;          # disable alert sound effect 
               NSNavPanelExpandedStateForSaveMode = true;    # expand save panel by default
+              NSNavPanelExpandedStateForSaveMode2 = true;   # expand save panel by default
+              NSDocumentSaveNewDocumentsToCloud = false;    # save to disk (not iCloud) by default
+              NSAutomaticWindowAnimationsEnabled = false;   # disable opening and closing animations of windows
               "com.apple.mouse.tapBehavior" = 1;            # enable tap to click for trackpad
               "com.apple.trackpad.scaling" = 0.875;         # faster trackpad speed
-              "com.apple.trackpad.forceClick" = true;
-              "com.apple.swipescrolldirection" = true;
-              "com.apple.springing.delay" = 0.5;
+              "com.apple.trackpad.forceClick" = true;       # force click down on trackpad
+              "com.apple.springing.delay" = 0.0;            # remove the delay for popping folders open with a dragged file
               "com.apple.springing.enabled" = true;
               NSWindowShouldDragOnGesture = true;           # drag window with cmd+click 
               AppleKeyboardUIMode = 3;                      # tab keyboard navigation for mac menus
               KeyRepeat = 1;                                # fast keyboard repeat rate
               InitialKeyRepeat = 10;                        # fast initial keyboard repeat rate
               ApplePressAndHoldEnabled = false;             # disable accent bar when holding key
+              AppleFontSmoothing = 0;                       # disable font smoothing
               NSAutomaticSpellingCorrectionEnabled = false; # disable automatic text correction
               NSAutomaticDashSubstitutionEnabled = false;   # disable automatic text correction
+              NSAutomaticPeriodSubstitutionEnabled = false; # disable automatic text correction
+              NSAutomaticCapitalizationEnabled = false;     # disable automatic text correction
               NSAutomaticQuoteSubstitutionEnabled = false;  # disable automatic text correction
+            };
+
+            CustomUserPreferences = {
+              NSGlobalDomain.NSUserKeyEquivalents = { "Paste and Match Style" = "@$v"; }; # paste without formatting -> shift-command-v
+
+              "com.apple.symbolichotkeys" = {
+                AppleSymbolicHotKeys = {
+                  "64"  = { enabled = false; }; # disable spotlight search
+                  "65"  = { enabled = false; }; # disable spotlight finder search
+                  "118" = { enabled = true; value = { parameters = [49 18 1966080]; type = "standard"; }; }; # 'Switch to Desktop 1' -> hyper+1
+                  "119" = { enabled = true; value = { parameters = [50 19 1966080]; type = "standard"; }; }; # 'Switch to Desktop 2' -> hyper+2
+                  "120" = { enabled = true; value = { parameters = [51 20 1966080]; type = "standard"; }; }; # 'Switch to Desktop 3' -> hyper+3
+                  "32"  = { enabled = true; value = { parameters = [53 23 1966080]; type = "standard"; }; }; # 'Mission Control'     -> hyper+5
+                };
+              };
+
+              "com.apple.universalaccess" = {
+                showWindowTitlebarIcons = true;
+              };
+
+              "com.apple.finder" = {
+                QLEnableTextSelection = true; # allow text selection in Quick Look
+              };
+
+              "com.apple.AppStore" = {
+                InAppReviewEnabled = false;
+              };
+
+              "com.apple.desktopservices" = {
+                DSDontWriteNetworkStores = true; # avoid creating .DS_Store files on network
+                DSDontWriteUSBStores = true;     # avoid creating .DS_Store files on usb
+              };
             };
 
             WindowManager.EnableTilingByEdgeDrag = false; # disable built in mac window tiling as Rectangle allows you to use shortcuts
@@ -418,33 +463,7 @@
               target = "clipboard";
             };
 
-            LaunchServices = {
-              LSQuarantine = false; # disable "Are you sure you want to open this application?" dialog
-            };
-
-            # Settings needing manual confirmation or complex setup:
-            # - Keyboard auto-correction (best done via GUI System Settings -> Keyboard)
-            # - Press Globe key action (best done via GUI System Settings -> Keyboard)
-            # - Backlight timing (best done via GUI System Settings -> Keyboard or Display)
-            # - Microsoft Receiver shortcuts (requires specific peripheral software, not Nix manageable)
-            # - Keyboard Shortcuts (Mission Control, Hyper keys -> Requires Karabiner-Elements config)
-            # - Paste and Match Style shortcut (GUI System Settings -> Keyboard -> Shortcuts -> App Shortcuts)
-            # - Accessibility -> Pointer Control -> Trackpad Options -> Force Silent Clicking off / Enable Light click (GUI only)
-            # - Accessibility -> Zoom settings (GUI only)
-            # - Mission Control Hot Corners setup confirmed via GUI after `killall Dock`
-            # - Display -> Slightly dim on battery (GUI System Settings -> Battery or Display)
-            # - Terminal -> Preferences (Requires manual profile editing or managing plist)
-            # - Finder Sidebar customization (GUI drag and drop)
-            # - Finder Search Scope (GUI Finder -> Preferences -> Advanced)
-            # - Safari Start Page / Status Bar / History / Advanced Settings (Mostly GUI / Safari Preferences)
-            # - Mail / iMessage Settings (App Preferences GUI)
-            # - Night Shift schedule (GUI System Settings -> Displays)
-            # - Notification settings per app (GUI System Settings -> Notifications)
-            # - Siri disable (GUI System Settings -> Siri & Spotlight)
-            # - iCloud Drive Desktop/Documents sync disable (GUI Apple ID -> iCloud -> iCloud Drive Options)
-            # - Remove Siri from menu bar (GUI System Settings -> Control Centre -> Drag Siri out)
-            # - Accessibility -> Reduced Motion (GUI System Settings -> Accessibility -> Display)
-            # - Spotlight Menu Bar Icon (Maybe `defaults write com.apple.Spotlight MenuItemHidden -bool true`? or use `services.spotlight.enable = false;` to disable spotlight indexing)
+            LaunchServices.LSQuarantine = false; # disable "Are you sure you want to open this application?" dialog
           };
 
           system.startup.chime = false;

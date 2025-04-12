@@ -22,9 +22,6 @@ cleanup() {
   rm -rf "$TMP_DIR"
 }
 
-# --- Main Script ---
-
-# Set trap to ensure cleanup happens on script exit (normal or error/interrupt)
 trap cleanup EXIT
 
 echo ">>> Step 1: Capturing current 'defaults read' output..."
@@ -46,14 +43,5 @@ echo "-----------------------------------------------------"
 # Use diff to compare the files.
 # Consider `diff -u` for a unified format which is often clearer.
 diff -u "$BEFORE_FILE" "$AFTER_FILE"
-echo "-----------------------------------------------------"
-
-# Check if diff found anything - $? is the exit code of the last command
-if [[ $? -eq 0 ]]; then
-  echo "No differences found between the before and after states."
-fi
-
-echo "\n--- Script Finished ---"
-# Trap will automatically call cleanup now
 
 exit 0
