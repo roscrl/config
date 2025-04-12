@@ -133,16 +133,16 @@
                   gopen    = "open_github";
                   gce      = "clone_cd_vim";
                   gc       = "clone_cd";
-                  m        = "make";
-                  deploy   = "make deploy";
                   r        = "rails";
                   be       = "bundle exec";
-                  v        = "nvim";
-                  vi       = "nvim";
-                  vim      = "nvim";
                   lg       = "lazygit";
                   ld       = "lazydocker";
                   tf       = "terraform";
+                  m        = "make";
+                  deploy   = "make deploy";
+                  v        = "nvim";
+                  vi       = "nvim";
+                  vim      = "nvim";
                   econfig  = "nvim ~/dev/repos/config/flake.nix";
                   ezsh     = "nvim ~/.zshrc && source ~/.zshrc";
                   evim     = "nvim ~/.config/nvim/init.vim";
@@ -151,7 +151,6 @@
                   drive    = "cd ~/Drive";
                   dl       = "cd ~/Downloads";
                   docs     = "cd ~/Documents";
-                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
                   dev      = "cd ~/dev";
                   scripts  = "cd ~/dev/scripts";
                   scratch  = "cd ~/dev/scratch";
@@ -162,6 +161,7 @@
                   walters  = "cd ~/dev/repos/walters";
                   me       = "cd ~/dev/repos/roscrl.com";
                   posts    = "cd ~/dev/repos/roscrl.com/posts && nvim";
+                  secrets  = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
                 };
 
                 initExtra = ''
