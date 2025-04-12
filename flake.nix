@@ -166,7 +166,7 @@
 
                 initExtra = ''
                   source ~/Drive/settings/dotfiles/.secrets # TODO secrets
-                  ${builtins.readFile ${self}/settings/scripts}
+                  ${builtins.readFile ./settings/zshrc/extra}
                 '';
 
                 history = {
