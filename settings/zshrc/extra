@@ -1,0 +1,102 @@
+setopt   AUTO_CD          # cd by typing directory name if it's not a command
+setopt   AUTO_MENU        # show completion menu automatically
+setopt   COMPLETE_IN_WORD # allow completion from within words
+setopt   ALWAYS_TO_END    # move cursor to end of word on completion
+setopt   AUTO_PUSHD       # automatically push directories onto the stack
+unsetopt CORRECT_ALL      # disable command correction
+unsetopt FLOWCONTROL      # disable ^S/^Q flow control
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
+
+# git branch on the right when in git folder https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
+PROMPT='%B%F{blue}%2~%f%b %# '
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+RPROMPT=\$vcs_info_msg_0_
+zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
+zstyle ':vcs_info:*' enable git
+
+function mkcd() { mkdir $1 && cd $1; }
+function cnw() { open -na "Google Chrome" --args --new-window "$@" }
+function killport() { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
+function myip() { curl -s https://api.ipify.org; printf "\n" }
+function grab() { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
+function rs() { bundle exec foreman start -f Procfile.dev "$@" }
+function speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.01462 seconds avg
+
+function initialize_gh_copilot_alias() {
+    if ! alias | grep -q "alias ghcs="; then
+        eval "$(gh copilot alias -- zsh)"
+    fi
+}
+
+function clone_cd_vim() {
+  local url="$1"; 
+  local dir_name=$(basename "$url" .git); 
+
+  if [[ $url =~ ^(https|git|ssh)://.+\.git$ || $url =~ ^git@.+:.+\.git$ ]]; then 
+      git clone "$url" && cd "$dir_name" && vim .; 
+  else 
+      echo "Invalid Git URL"; 
+  fi 
+}
+
+function clone_cd() {
+  local url="$1"; 
+  local dir_name=$(basename "$url" .git); 
+
+  if [[ $url =~ ^(https|git|ssh)://.+\.git$ || $url =~ ^git@.+:.+\.git$ ]]; then 
+      git clone "$url" && cd "$dir_name";
+  else 
+      echo "Invalid Git URL"; 
+  fi 
+}
+
+function fcd() {
+  local dir;
+  while true; do
+    # exit with ^D
+    dir="$(ls -a1F | grep '[/@]$' | grep -v '^./$' | sed 's/@$//' | fzf --height 40% --reverse --no-multi --preview 'pwd' --preview-window=up,1,border-none --no-info)"
+    if [[ -z "''${dir}" ]]; then
+      break
+    elif [[ -d "''${dir}" ]]; then
+      cd "''${dir}"
+    fi
+  done
+}
+
+function pbfilter() {
+    if [ $# -gt 0 ]; then
+        pbpaste | "$@" | pbcopy
+    else
+        pbpaste | pbcopy
+    fi
+}  
+
+function open_github() {
+  local remote_url=$(git config --get remote.origin.url)
+  if [[ -z "$remote_url" ]]; then
+    echo "Not a git repository or no remote.origin.url set"
+    return 1
+  fi
+
+  # Convert SSH URL to HTTPS if necessary
+  if [[ $remote_url == git@github.com:* ]]; then
+    remote_url=''${remote_url/git@github.com:/https://github.com/}
+  fi
+
+  # Remove .git suffix if present
+  remote_url=''${remote_url%.git}
+
+  # Open the URL in the default browser
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    open "$remote_url"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    xdg-open "$remote_url"
+  else
+    echo "Unsupported operating system"
+    return 1
+  fi
+}
