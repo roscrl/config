@@ -209,7 +209,7 @@
             dock = {
               autohide = true;                 # enable dock auto hiding
               autohide-delay = 0.0;            # make dock hide instantly
-              autohide-time-modifier = 0.25;   # make dock show/hide faster
+              autohide-time-modifier = 0.15;   # make dock show/hide faster
               launchanim = false;              # dont animate opening of applications
               expose-group-apps = true;        # group windows by application in Mission Control
               largesize = 128;                 # magnified icon size on hover
@@ -222,7 +222,7 @@
               wvous-tr-corner = 12;            # top-right   hot corner -> Notifications Center
               wvous-br-corner = 1;             # top-left    hot corner -> noop
               wvous-bl-corner = 1;             # bottom-left hot corner -> noop
-              expose-animation-duration = 0.0; # disable mission control animations
+              expose-animation-duration = 0.1; # speed up mission control animations
               persistent-apps = [
                 "/System/Applications/iPhone Mirroring.app"
                 "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
