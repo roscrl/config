@@ -16,6 +16,8 @@ fi
 
 brew --version
 
+nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update
+
 nix run \
   --extra-experimental-features nix-command \
   --extra-experimental-features flakes \

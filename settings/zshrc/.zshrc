@@ -1,5 +1,4 @@
 # aliases
-
 alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
@@ -16,7 +15,7 @@ alias gpu="git pull";
 alias gl="git log --pretty=oneline";
 alias gd="git diff";
 alias gdc="git diff --cached";
-alias gcdr="cd $(git rev-parse --show-toplevel)"; # cd to git root
+alias gcdr='cd "$(git rev-parse --show-toplevel)"'
 alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";
@@ -30,10 +29,10 @@ alias deploy="make deploy";
 alias v="nvim";
 alias vi="nvim";
 alias vim="nvim";
-alias sync="~/dev/config/sync.sh";
+alias sync="cd ~/dev/config && ./sync.sh";
 alias econfig="nvim ~/dev/config/flake.nix";
 alias ezsh="nvim ~/.zshrc && source ~/.zshrc";
-alias exzsh="nvim ~/dev/config/settings/zshrc/extra && source ~/dev/config/settings/zshrc/extra";
+alias eczsh="nvim ~/dev/config/settings/zshrc/.zshrc && source ~/dev/config/settings/zshrc/.zshrc";
 alias evim="nvim ~/.config/nvim/init.vim";
 alias ecvim="nvim ~/dev/config/settings/nvim/init.vim";
 alias eghostty="nvim ~/.config/ghostty/config";
@@ -56,15 +55,14 @@ alias posts="cd ~/dev/repos/roscrl.com/posts && nvim";
 alias secrets="nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
 
 # options
-
 HISTSIZE="100000"
 SAVEHIST="100000"
 setopt EXTENDED_HISTORY     # write the history file in the ':start:elapsed;command' format
 setopt SHARE_HISTORY        # share history between all sessions
 setopt HIST_IGNORE_DUPS     # do not record an entry that was just recorded again
 setopt HIST_IGNORE_ALL_DUPS # delete old recorded entry if new entry is a duplicate
-setopt HIST_SAVE_NO_DUPS    # do not display a line previously found.
-setopt HIST_FIND_NO_DUPS    # do not write duplicate entries in the history file.
+setopt HIST_SAVE_NO_DUPS    # do not write duplicate entries in the history file
+setopt HIST_FIND_NO_DUPS    # prevent history or fc commands from showing duplicates
 setopt HIST_IGNORE_SPACE    # do not record an entry starting with a space
 
 setopt   AUTO_CD          # cd by typing directory name if it's not a command
@@ -88,18 +86,16 @@ zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
 zstyle ':vcs_info:*' enable git
 
 # exports 
-
 source ~/Drive/settings/dotfiles/.secrets
 
 # functions
-
 function mkcd() { mkdir $1 && cd $1; }
 function cnw() { open -na "Google Chrome" --args --new-window "$@" }
 function killport() { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 function myip() { curl -s https://api.ipify.org; printf "\n" }
 function grab() { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
 function rs() { bundle exec foreman start -f Procfile.dev "$@" }
-function speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.01462 seconds avg
+function speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem)
 
 function initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then

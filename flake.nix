@@ -105,8 +105,10 @@
                 ".config/direnv/direnvrc".text      = "source ${nix-direnv}/direnvrc";
                 ".config/direnv/direnv.toml".source = "${self}/settings/direnv/direnv.toml";
                 ".zshrc".text                       = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
+                  export PATH=$PATH:/opt/homebrew/bin
                   source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
                   source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+                  source <(fzf --zsh)
                   eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
                 ".ideavimrc".source                 = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                   = "";
@@ -275,6 +277,17 @@
             name = username;
             home = "/Users/${username}";
             shell = pkgs.zsh;
+          };
+
+          nix.gc = {
+            automatic = true;
+            interval = { Weekday = 0; Hour = 0; Minute = 0; }; # first day of every week
+            options = "--delete-older-than 60d";
+          };
+
+          nix.optimise = {
+            automatic = true;
+            interval = { Weekday = 0; Hour = 0; Minute = 0; }; # first day of every week
           };
 
           system.stateVersion = 6;
