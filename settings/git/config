@@ -10,3 +10,6 @@
 [user]
 	email = "13072760+roscrl@users.noreply.github.com"
 	name = "roscrl"
+
+[core]
+  hooksPath = ~/.config/git/hooks
