@@ -56,6 +56,7 @@
                 "ghostty"
                 "visual-studio-code"
                 "cursor"
+                "zed" 
                 "rubymine"
                 "goland"
                 "webstorm"
@@ -143,8 +144,10 @@
                   v         = "nvim";
                   vi        = "nvim";
                   vim       = "nvim";
+                  sync      = "~/dev/repos/config/sync.sh";
                   econfig   = "nvim ~/dev/repos/config/flake.nix";
                   ezsh      = "nvim ~/.zshrc && source ~/.zshrc";
+                  exzsh     = "nvim ~/dev/repos/config/settings/zshrc/extra && source ~/dev/repos/config/settings/zshrc/extra";
                   evim      = "nvim ~/.config/nvim/init.vim";
                   ecvim     = "nvim ~/dev/repos/config/settings/nvim/init.vim";
                   eghostty  = "nvim ~/.config/ghostty/config";
@@ -199,6 +202,12 @@
               programs.direnv = {
                 enable = true;
                 nix-direnv.enable = true;
+                config = {
+                  global = {
+                    warn_timeout = "0s";
+                    hide_env_diff = true;
+                  };
+                };
               };
 
               programs.fzf.enable = true;

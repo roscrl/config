@@ -100,3 +100,97 @@ function open_github() {
     return 1
   fi
 }
+
+# Function to initialize a Nix flake development environment with direnv
+# Usage: denv <pkg1> <pkg2> ...
+function denv() {
+  # Check if any arguments (package names) were provided
+  if [[ $# -eq 0 ]]; then
+    print -u2 "Error: No packages specified."
+    print -u2 "Usage: denv <pkg1> <pkg2> ..."
+    return 1
+  fi
+
+  local envrc_file=".envrc"
+  local flake_file="flake.nix"
+  local gitignore_file=".gitignore"
+  local gitignore_entries=(".DS_Store" ".direnv/") # Array of entries to ensure
+
+  # --- Check and create .envrc ---
+  if [[ -e "$envrc_file" ]]; then
+    print -u2 "Error: '$envrc_file' already exists. Aborting."
+    return 1
+  else
+    echo "use flake" > "$envrc_file"
+    # Optionally allow direnv if installed
+    if command -v direnv &> /dev/null; then
+        print "Running 'direnv allow .'..."
+        direnv allow .
+    else
+        print "Warning: direnv command not found. You may need to run 'direnv allow .' manually."
+    fi
+  fi
+
+  # --- Check and create flake.nix ---
+  if [[ -e "$flake_file" ]]; then
+    print -u2 "Error: '$flake_file' already exists. Aborting."
+    return 1
+  fi
+
+  # --- Prepare package list for flake.nix ---
+  # This part remains the same, formatting the packages correctly.
+  local pkgs_string=""
+  local num_pkgs=$#
+  local current_pkg_num=0
+
+  for pkg in "$@"; do
+    ((current_pkg_num++))
+    # Indentation needs to match the 'packages' list in the new template (14 spaces)
+    pkgs_string+="          ${pkg}"
+    # Add a newline unless it's the very last package
+    if [[ $current_pkg_num -lt $num_pkgs ]]; then
+      pkgs_string+="\n"
+    fi
+  done
+
+  # --- Create flake.nix using the forAllSystems template ---
+  cat <<EOF > "$flake_file"
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  };
+
+  outputs = { self, nixpkgs, ... }:
+  let
+    forAllSystems = f: nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ] (system: f nixpkgs.legacyPackages.\${system});
+  in {
+    devShells = forAllSystems (pkgs: {
+      default = pkgs.mkShell {
+        packages = with pkgs; [
+${pkgs_string}
+        ];
+      };
+    });
+  };
+}
+EOF
+
+  if [[ -f "$gitignore_file" ]]; then
+    # File exists, check and append missing entries
+    local entry_added=false
+    for entry in "${gitignore_entries[@]}"; do
+      # Use grep -qxF to check for exact, full line match, suppressing output
+      if ! grep -qxF "$entry" "$gitignore_file"; then
+        print "  Adding '$entry' to $gitignore_file"
+        # Append the entry on a new line
+        echo "$entry" >> "$gitignore_file"
+        entry_added=true
+      fi
+    done
+  else
+    # Use printf for reliable newline handling
+    printf '%s\n' "${gitignore_entries[@]}" > "$gitignore_file"
+  fi
+
+  return 0
+}

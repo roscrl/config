@@ -5,23 +5,22 @@ Plug 'dstein64/vim-startuptime' " :StartupTime
 Plug 'ziglang/zig.vim'
 Plug 'rluba/jai.vim'
 
-Plug 'hrsh7th/nvim-cmp'                                     " autocomplete - LLM plugin
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " better syntax highlighting, incremental selection, indentation
-Plug 'nvim-treesitter/playground'                           " :TSPlaygroundToggle
 Plug 'windwp/nvim-ts-autotag'                               " auto close html tags and ciw to change tags
 
-Plug 'nvim-tree/nvim-web-devicons'                   " file explorer icons
-Plug 'echasnovski/mini.nvim', { 'branch': 'stable' } " file explorer
-Plug 'kdheepak/lazygit.nvim'                         " lazygit integration
-Plug 'hrsh7th/vim-vsnip'
+" Tree Explorer
+Plug 'kdheepak/lazygit.nvim' " lazygit integration
 
+" Telescope
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
+Plug 'BurntSushi/ripgrep '
 Plug 'nvim-lua/plenary.nvim'
-Plug 'echasnovski/mini.nvim', { 'branch': 'stable' }
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
-Plug 'otavioschwanck/arrow.nvim'         
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " fuzzy search finder
-Plug 'junegunn/fzf.vim'                             " fuzzy search finder
 
+Plug 'otavioschwanck/arrow.nvim'         
+Plug 'echasnovski/mini.nvim', { 'branch': 'stable' }
+
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'romainl/vim-cool'           " auto stop highlighting after done searching
 Plug 'tpope/vim-surround'         " surround/change quotes tags
 Plug 'tpope/vim-repeat'           " repeat with .
@@ -82,6 +81,10 @@ set clipboard=unnamedplus " share clipboard with system
 set number                " add line numbers to gutter
 set numberwidth=5         " make line numbers 4 characters wide
 set mouse=ar              " allow mouse use
+set autoread              " reload files that have not been modified
+set backspace=2           " makes backspace behave like you'd expect
+set splitright
+set splitbelow
 
 set laststatus=0 " one global statusline at bottom (not for each window)
 set noruler
@@ -96,8 +99,6 @@ set tw=0         " dont wrap at 80 columns by default
 set scrolloff=6  " reaching top or bottom of screen is offset by 
 set updatetime=300
 set signcolumn=number
-"set signcolumn=no  " keep gutter spacing always, use 'yes' to always show. THIS IS OVERRIDDEN BY GITGUTTER CONF
-"set guicursor=     " disable insert mode cursor
 
 " Keep history
 set noswapfile nobackup
@@ -111,7 +112,7 @@ set ignorecase " ignore case when searching with /
 set smartcase  " dont ignore case if a caps letter is used while seraching
 
 " Indentaton, also handled by treesitter
-set expandtab       " tabs as spaces
+set expandtab " tabs as spaces
 set tabstop=2 softtabstop=2 shiftwidth=2
 set autoindent
 set smartindent
@@ -301,22 +302,6 @@ lua require('arrow').setup({ leader_key=';' })
 " LazyGit keybind
 nnoremap <silent> <leader>g :LazyGit<CR>
 
-" Sidebar Tree
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-
-lua require('mini.files').setup()
-set splitright
-set splitbelow
-
-lua << EOF
-  local minifiles_toggle = function()
-    if not MiniFiles.close() then MiniFiles.open() end
-  end
-
-  vim.keymap.set({ 'n', 'v' }, ',', minifiles_toggle, { desc = 'Toggle MiniFiles' })
-EOF
-
 " Hop
 lua require('hop').setup()
 
@@ -358,97 +343,8 @@ nnoremap \a za
 nnoremap \o zo
 nnoremap \f zf
 
-" CoC 
-let g:coc_node_path = '/opt/homebrew/opt/node@20/bin/node'
-
-" Rename CoC Action
-noremap R <Plug>(coc-rename)
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocActionAsync('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-" Use CTRL-L for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-l> <Plug>(coc-range-select)
-xmap <silent> <C-l> <Plug>(coc-range-select)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
 " Format
 nnoremap <silent> <c-l> :Format<CR>
-
-" GoTo code navigation
-nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <C-LeftMouse> <LeftMouse><Plug>(coc-definition)
-nnoremap <silent> gs :call CocAction('jumpDefinition', 'vsplit')<cr>
-nnoremap <silent> gt :call CocAction('jumpDefinition', 'tabe')<CR>
-nnoremap <silent> gy <Plug>(coc-type-definition)
-nnoremap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
-inoremap <silent><expr> <c-space> coc#refresh()
-
-inoremap <silent><expr> <down> coc#pum#visible() ? coc#pum#next(0) : "\<down>"
-inoremap <silent><expr> <up> coc#pum#visible() ? coc#pum#prev(0) : "\<up>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-" Insert <tab> when previous text is space, refresh completion if not.
-inoremap <silent><expr> <TAB>
-\ coc#pum#visible() ? coc#pum#next(1):
-\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-\ <SID>check_back_space() ? "\<Tab>" :
-\ "\<Tab>"
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-" Enter to complete
-inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
-
-" Run the Code Lens action on the current line.
-" nmap <leader>cl <Plug>(coc-codelens-action)
-
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> gE <Plug>(coc-diagnostic-prev)
-nmap <silent> ge <Plug>(coc-diagnostic-next)
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap ga <Plug>(coc-codeaction)
-nmap ga <Plug>(coc-codeaction)
-
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ga  <Plug>(coc-codeaction)
-
-" Apply AutoFix to problem on the current line.
-nmap <M-C-S-Z> <Plug>(coc-fix-current)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
 
 command FormatJson :%!jq .
 command UnformatJson :%!jq -c .
@@ -485,8 +381,6 @@ lua << EOF
     }),
 
     sources = cmp.config.sources({
-      -- { name = 'llm_autocomplete' },
-      { name = 'vsnip' },
       { 
         name = 'buffer', 
         entry_filter = function(entry, ctx)
@@ -681,7 +575,6 @@ lua require('avante').setup({provider = "openrouter", vendors = { openrouter = {
 augroup mygroup
     autocmd!
 
-    "autocmd FileType typescript,json,go setl formatexpr=CocAction('formatSelected')
     autocmd FileType java nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:exec '!java' shellescape(@%, 1)<CR>
     "autocmd FileType jai  nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:!jai % && ./main<CR>
 
@@ -689,14 +582,7 @@ augroup mygroup
 
     autocmd FileType c nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:silent !make build run >/dev/null 2>&1 &<CR>
 
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
-
     " Auto save on focus lost
     autocmd FocusLost * silent! :wa
-
-    " autocmd BufNew,BufEnter *.txt execute "silent! CocDisable"
-    " autocmd BufLeave *.txt execute "silent! CocEnable"
 augroup end
 
