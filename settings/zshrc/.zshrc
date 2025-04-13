@@ -30,26 +30,26 @@ alias deploy    = "make deploy";
 alias v         = "nvim";
 alias vi        = "nvim";
 alias vim       = "nvim";
-alias sync      = "~/dev/repos/config/sync.sh";
-alias econfig   = "nvim ~/dev/repos/config/flake.nix";
+alias sync      = "~/dev/config/sync.sh";
+alias econfig   = "nvim ~/dev/config/flake.nix";
 alias ezsh      = "nvim ~/.zshrc && source ~/.zshrc";
-alias exzsh     = "nvim ~/dev/repos/config/settings/zshrc/extra && source ~/dev/repos/config/settings/zshrc/extra";
+alias exzsh     = "nvim ~/dev/config/settings/zshrc/extra && source ~/dev/config/settings/zshrc/extra";
 alias evim      = "nvim ~/.config/nvim/init.vim";
-alias ecvim     = "nvim ~/dev/repos/config/settings/nvim/init.vim";
+alias ecvim     = "nvim ~/dev/config/settings/nvim/init.vim";
 alias eghostty  = "nvim ~/.config/ghostty/config";
-alias ecghostty = "nvim ~/dev/repos/config/settings/ghostty/config";
+alias ecghostty = "nvim ~/dev/config/settings/ghostty/config";
 alias ekari     = "nvim ~/.config/karabiner/karabiner.json";
-alias eckari    = "nvim ~/dev/repos/config/settings/karabiner/karabiner.json";
+alias eckari    = "nvim ~/dev/config/settings/karabiner/karabiner.json";
 alias drive     = "cd ~/Drive";
 alias dl        = "cd ~/Downloads";
 alias docs      = "cd ~/Documents";
 alias dev       = "cd ~/dev";
+alias config    = "cd ~/dev/config";
+alias settings  = "cd ~/dev/config/settings";
 alias scripts   = "cd ~/dev/scripts";
 alias scratch   = "cd ~/dev/scratch";
 alias refs      = "cd ~/dev/refrences";
 alias repos     = "cd ~/dev/repos";
-alias config    = "cd ~/dev/repos/config";
-alias settings  = "cd ~/dev/repos/config/settings";
 alias walters   = "cd ~/dev/repos/walters";
 alias me        = "cd ~/dev/repos/roscrl.com";
 alias posts     = "cd ~/dev/repos/roscrl.com/posts && nvim";
@@ -99,10 +99,7 @@ function killport() { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 function myip() { curl -s https://api.ipify.org; printf "\n" }
 function grab() { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
 function rs() { bundle exec foreman start -f Procfile.dev "$@" }
-
-function speedcheck() { 
-  for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' 
-}; # 0.01462 seconds avg
+function speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.01462 seconds avg
 
 function initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then
