@@ -14,23 +14,24 @@
         home-manager.darwinModules.home-manager
         ({ pkgs, ... }: let username = "ross"; in {
           environment.systemPackages = with pkgs; [
+            git
             neovim
             docker
-            git
-            jujutsu
             jq
             yq
             tree
             wget
+            jujutsu
             sqlite          
-            zsh-autosuggestions
-            ripgrep
-            ripgrep-all
-            silver-searcher
-            fzf
             watchexec
             psrecord
-            httpie
+            zsh-autosuggestions
+            zsh-syntax-highlighting
+            fzf
+            silver-searcher
+            ripgrep
+            ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
+            httpie              # easy curl
             broot               # file tree navigation
             btop                # better htop
             fd                  # find files
@@ -91,15 +92,17 @@
           home-manager = { # https://home-manager-options.extranix.com
             users.${username} = { pkgs', ... }: { 
               home.file = {
+                ".config/git".source              = "${self}/settings/git";
                 ".config/nvim".source             = "${self}/settings/nvim";
                 ".config/ghostty".source          = "${self}/settings/ghostty";
                 ".config/karabiner".source        = "${self}/settings/karabiner";
+                ".config/appsscript".source       = "${self}/settings/appsscript";
                 ".config/linearmouse".source      = "${self}/settings/linearmouse";
                 ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
-                ".config/appsscript".source       = "${self}/settings/appsscript";
+                ".zshrc".source                   = "${self}/settings/zshrc/.zshrc";
                 ".ideavimrc".source               = "${self}/settings/ideavimrc/.ideavimrc";
-                "dev/scripts".source              = "${self}/settings/scripts";
                 ".hushlogin".text                 = "";
+                "dev/scripts".source              = "${self}/settings/scripts";
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 
@@ -108,96 +111,17 @@
                 # TODO secrets 
               };
 
-              programs.zsh = {
-                enable = true;
-                autosuggestion.enable = true;
-                syntaxHighlighting.enable = true;
-
-                shellAliases = {
-                  ".."      = "cd ..";
-                  ll        = "ls -roAhtG";
-                  copy      = "tr -d '\\n' | pbcopy";
-                  g         = "git";
-                  ga        = "git add . && git commit -am";
-                  gaa       = "git add -A";
-                  gcm       = "git commit -m";
-                  gcp       = "git add . && git commit --allow-empty-message -m '' && git push";
-                  gs        = "git status";
-                  gsw       = "git switch";
-                  gp        = "git push";
-                  gpe       = "git commit --amend --no-edit && git push —force-with-lease";
-                  gpu       = "git pull";
-                  gl        = "git log --pretty=oneline";
-                  gd        = "git diff";
-                  gdc       = "git diff --cached";
-                  gcdr      = "cd $(git rev-parse --show-toplevel)"; # cd to git root
-                  gopen     = "open_github";
-                  gce       = "clone_cd_vim";
-                  gc        = "clone_cd";
-                  r         = "rails";
-                  be        = "bundle exec";
-                  lg        = "lazygit";
-                  ld        = "lazydocker";
-                  tf        = "terraform";
-                  m         = "make";
-                  deploy    = "make deploy";
-                  v         = "nvim";
-                  vi        = "nvim";
-                  vim       = "nvim";
-                  sync      = "~/dev/repos/config/sync.sh";
-                  econfig   = "nvim ~/dev/repos/config/flake.nix";
-                  ezsh      = "nvim ~/.zshrc && source ~/.zshrc";
-                  exzsh     = "nvim ~/dev/repos/config/settings/zshrc/extra && source ~/dev/repos/config/settings/zshrc/extra";
-                  evim      = "nvim ~/.config/nvim/init.vim";
-                  ecvim     = "nvim ~/dev/repos/config/settings/nvim/init.vim";
-                  eghostty  = "nvim ~/.config/ghostty/config";
-                  ecghostty = "nvim ~/dev/repos/config/settings/ghostty/config";
-                  ekari     = "nvim ~/.config/karabiner/karabiner.json";
-                  eckari    = "nvim ~/dev/repos/config/settings/karabiner/karabiner.json";
-                  drive     = "cd ~/Drive";
-                  dl        = "cd ~/Downloads";
-                  docs      = "cd ~/Documents";
-                  dev       = "cd ~/dev";
-                  scripts   = "cd ~/dev/scripts";
-                  scratch   = "cd ~/dev/scratch";
-                  refs      = "cd ~/dev/refrences";
-                  repos     = "cd ~/dev/repos";
-                  config    = "cd ~/dev/repos/config";
-                  settings  = "cd ~/dev/repos/config/settings";
-                  walters   = "cd ~/dev/repos/walters";
-                  me        = "cd ~/dev/repos/roscrl.com";
-                  posts     = "cd ~/dev/repos/roscrl.com/posts && nvim";
-                  secrets   = "nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc"; # TODO secrets
-                };
-
-                initExtra = ''
-                  source ~/Drive/settings/dotfiles/.secrets # TODO secrets
-                  ${builtins.readFile ./settings/zshrc/extra}
-                '';
-
-                history = {
-                  size = 100000;         
-                  extended = true;       
-                  share = true;          # share history between all sessions
-                  ignoreDups = true;     # do not record an entry that was just recorded again
-                  ignoreAllDups = true;  # delete old recorded entry if new entry is a duplicate
-                  ignoreSpace = true;    # do not record an entry starting with a space
-                  saveNoDups = true;     # do not display a line previously found.
-                  findNoDups = true;     # do not write duplicate entries in the history file.
-                };
-              };
-
-              programs.git = {
-                enable = true;
-                userEmail = "13072760+roscrl@users.noreply.github.com";
-                userName = "roscrl";
-                extraConfig = {
-                  push.autoSetupRemote = true;
-                  core.hooksPath = "${self}/settings/githooks";
-                  init.defaultBranch = "main";
-                  pull.rebase = false;
-                };
-              };
+              # programs.git = {
+              #   enable = true;
+              #   userEmail = "13072760+roscrl@users.noreply.github.com";
+              #   userName = "roscrl";
+              #   extraConfig = {
+              #     push.autoSetupRemote = true;
+              #     core.hooksPath = "${self}/settings/git/hooks";
+              #     init.defaultBranch = "main";
+              #     pull.rebase = false;
+              #   };
+              # };
 
               programs.direnv = {
                 enable = true;
