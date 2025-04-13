@@ -112,7 +112,7 @@
               };
 
               # programs.git = {
-              #   enable = true;
+              #   enable = true; # nocheckin
               #   userEmail = "13072760+roscrl@users.noreply.github.com";
               #   userName = "roscrl";
               #   extraConfig = {
