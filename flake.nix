@@ -144,7 +144,7 @@
               wvous-br-corner = 1;             # top-left    hot corner -> noop
               wvous-bl-corner = 1;             # bottom-left hot corner -> noop
               expose-animation-duration = 0.1; # speed up mission control animations
-              persistent-apps = [
+              persistent-apps = [ # defaults read com.apple.dock persistent-apps | grep -i "_CFURLString"
                 "/System/Applications/iPhone Mirroring.app"
                 "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
                 "/Applications/Google Chrome.app"
@@ -167,6 +167,7 @@
                 "/Users/${username}/Applications/Gemini Web.app"
                 "/Applications/Perplexity.app"
                 "/Users/${username}/Applications/Perplexity Web.app"
+                "/Users/${username}/Applications/NotebookLM.app"
                 "/Users/${username}/Applications/Phind.app"
                 "/Users/${username}/Applications/Kagi.app"
                 "/Users/${username}/Applications/DeepSeek.app"
