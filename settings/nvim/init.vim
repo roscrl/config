@@ -2,12 +2,10 @@ call plug#begin("~/.vim/plugged")
 
 Plug 'dstein64/vim-startuptime' " :StartupTime
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'} 
-
 Plug 'ziglang/zig.vim'
 Plug 'rluba/jai.vim'
 
-Plug 'hrsh7th/nvim-cmp' " autocomplete - LLM plugin
+Plug 'hrsh7th/nvim-cmp'                                     " autocomplete - LLM plugin
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " better syntax highlighting, incremental selection, indentation
 Plug 'nvim-treesitter/playground'                           " :TSPlaygroundToggle
 Plug 'windwp/nvim-ts-autotag'                               " auto close html tags and ciw to change tags
@@ -46,17 +44,11 @@ Plug 'MeanderingProgrammer/render-markdown.nvim'
 
 " Optional deps
 Plug 'hrsh7th/nvim-cmp'
-Plug 'nvim-tree/nvim-web-devicons' "or Plug 'echasnovski/mini.icons'
 Plug 'HakonHarnes/img-clip.nvim'
 Plug 'zbirenbaum/copilot.lua'
 
-" Yay, pass source=true if you want to build from source
 Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 " --- Avante VIM ---
-
-"Plug 'nvim-lualine/lualine.nvim'   " statusline
-"Plug 'lewis6991/gitsigns.nvim'     " gutter icons
-"Plug 'github/copilot.vim'
 
 Plug 'kvrohit/rasmus.nvim'                            " colorscheme
 Plug 'https://gitlab.com/yorickpeterse/vim-paper.git' " colorscheme
