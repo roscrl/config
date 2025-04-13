@@ -111,18 +111,6 @@
                 # TODO secrets 
               };
 
-              # programs.git = {
-              #   enable = true; # nocheckin
-              #   userEmail = "13072760+roscrl@users.noreply.github.com";
-              #   userName = "roscrl";
-              #   extraConfig = {
-              #     push.autoSetupRemote = true;
-              #     core.hooksPath = "${self}/settings/git/hooks";
-              #     init.defaultBranch = "main";
-              #     pull.rebase = false;
-              #   };
-              # };
-
               programs.direnv = {
                 enable = true;
                 nix-direnv.enable = true;
