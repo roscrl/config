@@ -5,9 +5,11 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-direnv.url = "github:nix-community/nix-direnv";
+    nix-direnv.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nix-darwin, home-manager, nix-direnv, ... }@inputs:
   {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
@@ -28,6 +30,7 @@
             zsh-autosuggestions
             zsh-syntax-highlighting
             fzf
+            direnv
             silver-searcher
             ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
@@ -90,19 +93,24 @@
           };
 
           home-manager = { # https://home-manager-options.extranix.com
-            users.${username} = { pkgs', ... }: { 
+            users.${username} = { ... }: { 
               home.file = {
-                ".config/git".source              = "${self}/settings/git";
-                ".config/nvim".source             = "${self}/settings/nvim";
-                ".config/ghostty".source          = "${self}/settings/ghostty";
-                ".config/karabiner".source        = "${self}/settings/karabiner";
-                ".config/appsscript".source       = "${self}/settings/appsscript";
-                ".config/linearmouse".source      = "${self}/settings/linearmouse";
-                ".config/manual/rectangle".source = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
-                ".zshrc".source                   = "${self}/settings/zshrc/.zshrc";
-                ".ideavimrc".source               = "${self}/settings/ideavimrc/.ideavimrc";
-                ".hushlogin".text                 = "";
-                "dev/scripts".source              = "${self}/settings/scripts";
+                ".config/git".source                = "${self}/settings/git";
+                ".config/nvim".source               = "${self}/settings/nvim";
+                ".config/ghostty".source            = "${self}/settings/ghostty";
+                ".config/karabiner".source          = "${self}/settings/karabiner";
+                ".config/appsscript".source         = "${self}/settings/appsscript";
+                ".config/linearmouse".source        = "${self}/settings/linearmouse";
+                ".config/manual/rectangle".source   = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
+                ".config/direnv/direnvrc".text      = "source ${nix-direnv}/direnvrc";
+                ".config/direnv/direnv.toml".source = "${self}/settings/direnv/direnv.toml";
+                ".zshrc".text                       = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
+                  source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+                  source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+                  eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
+                ".ideavimrc".source                 = "${self}/settings/ideavimrc/.ideavimrc";
+                ".hushlogin".text                   = "";
+                "dev/scripts".source                = "${self}/settings/scripts";
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 
@@ -110,19 +118,6 @@
                 # TODO .zsh_history 
                 # TODO secrets 
               };
-
-              programs.direnv = {
-                enable = true;
-                nix-direnv.enable = true;
-                config = {
-                  global = {
-                    warn_timeout = "0s";
-                    hide_env_diff = true;
-                  };
-                };
-              };
-
-              programs.fzf.enable = true;
 
               home.stateVersion = "25.05";
             };
