@@ -31,7 +31,6 @@
             zsh-syntax-highlighting
             fzf
             direnv
-            silver-searcher
             ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
@@ -95,24 +94,25 @@
           home-manager = { # https://home-manager-options.extranix.com
             users.${username} = { ... }: { 
               home.file = {
-                ".config/git".source                = "${self}/settings/git";
-                ".config/nvim".source               = "${self}/settings/nvim";
-                ".config/ghostty".source            = "${self}/settings/ghostty";
-                ".config/karabiner".source          = "${self}/settings/karabiner";
-                ".config/appsscript".source         = "${self}/settings/appsscript";
-                ".config/linearmouse".source        = "${self}/settings/linearmouse";
-                ".config/manual/rectangle".source   = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
-                ".config/direnv/direnvrc".text      = "source ${nix-direnv}/direnvrc";
-                ".config/direnv/direnv.toml".source = "${self}/settings/direnv/direnv.toml";
-                ".zshrc".text                       = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
+                ".config/git".source                     = "${self}/settings/git";
+                ".config/nvim".source                    = "${self}/settings/nvim";
+                ".config/ghostty".source                 = "${self}/settings/ghostty";
+                ".config/karabiner".source               = "${self}/settings/karabiner";
+                ".config/appsscript".source              = "${self}/settings/appsscript";
+                ".config/linearmouse".source             = "${self}/settings/linearmouse";
+                ".config/manual/rectangle".source        = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
+                ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
+                ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
+                "Library/Application\ Support/jj".source = "${self}/settings/jj";
+                ".zshrc".text                            = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
                   export PATH=$PATH:/opt/homebrew/bin
                   source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
                   source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
                   source <(fzf --zsh)
                   eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
-                ".ideavimrc".source                 = "${self}/settings/ideavimrc/.ideavimrc";
-                ".hushlogin".text                   = "";
-                "dev/scripts".source                = "${self}/settings/scripts";
+                ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
+                ".hushlogin".text                        = "";
+                "dev/scripts".source                     = "${self}/settings/scripts";
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 

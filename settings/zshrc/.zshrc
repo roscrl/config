@@ -85,6 +85,8 @@ RPROMPT=\$vcs_info_msg_0_
 zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
 zstyle ':vcs_info:*' enable git
 
+bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
+
 # exports 
 source ~/Drive/settings/dotfiles/.secrets
 
@@ -172,8 +174,6 @@ function open_github() {
   fi
 }
 
-# Function to initialize a Nix flake development environment with direnv
-# Usage: denv <pkg1> <pkg2> ...
 function denv() {
   # Check if any arguments (package names) were provided
   if [[ $# -eq 0 ]]; then
@@ -196,35 +196,19 @@ function denv() {
     # Optionally allow direnv if installed
     if command -v direnv &> /dev/null; then
         print "Running 'direnv allow .'..."
-        direnv allow .
-    else
-        print "Warning: direnv command not found. You may need to run 'direnv allow .' manually."
+        direnv allow . # Allow direnv to manage the environment
     fi
   fi
 
   # --- Check and create flake.nix ---
   if [[ -e "$flake_file" ]]; then
+    # Clean up the potentially created .envrc if flake.nix already exists
     print -u2 "Error: '$flake_file' already exists. Aborting."
     return 1
   fi
 
-  # --- Prepare package list for flake.nix ---
-  # This part remains the same, formatting the packages correctly.
-  local pkgs_string=""
-  local num_pkgs=$#
-  local current_pkg_num=0
-
-  for pkg in "$@"; do
-    ((current_pkg_num++))
-    # Indentation needs to match the 'packages' list in the new template (14 spaces)
-    pkgs_string+="          ${pkg}"
-    # Add a newline unless it's the very last package
-    if [[ $current_pkg_num -lt $num_pkgs ]]; then
-      pkgs_string+="\n"
-    fi
-  done
-
-  # --- Create flake.nix using the forAllSystems template ---
+  # --- Create flake.nix ---
+  # Write the initial part of the flake.nix file
   cat <<EOF > "$flake_file"
 {
   inputs = {
@@ -238,7 +222,17 @@ function denv() {
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
-${pkgs_string}
+EOF
+
+  # --- Append packages to flake.nix ---
+  # Loop through the arguments (package names) and append them to the file
+  # Use printf for reliable newline handling and formatting
+  for pkg in "$@"; do
+    printf "          %s\n" "${pkg}" >> "$flake_file"
+  done
+
+  # --- Append the closing part of flake.nix ---
+  cat <<EOF >> "$flake_file"
         ];
       };
     });
@@ -246,6 +240,7 @@ ${pkgs_string}
 }
 EOF
 
+  # --- Update .gitignore ---
   if [[ -f "$gitignore_file" ]]; then
     # File exists, check and append missing entries
     local entry_added=false
@@ -258,8 +253,12 @@ EOF
         entry_added=true
       fi
     done
+     # Add a newline at the end if we added entries and the file didn't end with one (optional cosmetic improvement)
+     if ${entry_added} && [[ -n "$(tail -c1 "$gitignore_file")" ]]; then
+        echo >> "$gitignore_file"
+     fi
   else
-    # Use printf for reliable newline handling
+    # File doesn't exist, create it with the entries
     printf '%s\n' "${gitignore_entries[@]}" > "$gitignore_file"
   fi
 
