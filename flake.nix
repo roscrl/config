@@ -76,7 +76,6 @@
                 "karabiner-elements" 
                 "discord" 
                 "spotify" 
-                "keepassxc" 
                 "chatgpt"
                 "google-chrome"
                 "betterdisplay"
