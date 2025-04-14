@@ -20,6 +20,7 @@ alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";
 alias js="jj st";
+alias jgc="jj git clone --colocate";
 alias jn="jj new";
 alias jf="jj git fetch";
 alias r="rails";
@@ -92,6 +93,7 @@ bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
 # exports 
 source ~/Drive/settings/dotfiles/.secrets
+export EDITOR="nvim"
 
 # functions
 function mkcd() { mkdir $1 && cd $1; }
