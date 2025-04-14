@@ -99,7 +99,8 @@
                 ".config/karabiner".source               = "${self}/settings/karabiner";
                 ".config/appsscript".source              = "${self}/settings/appsscript";
                 ".config/linearmouse".source             = "${self}/settings/linearmouse";
-                ".config/manual/rectangle".source        = "${self}/settings/rectangle"; # manual: Rectangle.app needs config import via its UI
+                ".config/manual/rectangle".source        = "${self}/settings/rectangle";  # manual: Rectangle.app requires config import via its UI
+                ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
                 ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
                 ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
                 "Library/Application\ Support/jj".source = "${self}/settings/jj";
