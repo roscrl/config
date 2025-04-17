@@ -4,4 +4,4 @@ email = "13072760+roscrl@users.noreply.github.com"
 
 [ui]
 paginate = "never"
-default-command = log
+default-command = ["log"]
