@@ -1,0 +1,54 @@
+keybind = ctrl+alt+shift+cmd+w=esc:f
+keybind = ctrl+alt+shift+cmd+b=esc:b
+keybind = performable:ctrl+alt+shift+cmd+m=text:cd /Users/ross/dev/scratch/llm && nvim +startinsert $(date +\"%Y-%m-%d_%H-%M-%S\").md\x0d
+keybind = cmd+s=write_screen_file:paste
+
+window-width=140
+window-height=40
+
+window-position-x=480
+window-position-y=210
+
+macos-titlebar-proxy-icon=hidden
+
+confirm-close-surface = false
+
+font-family = SF Mono
+
+# Theme
+foreground = 000000
+background = F2EEDE
+
+selection-foreground = 000000
+selection-background = D8D5C7
+
+cursor-color = 111
+cursor-text = fff
+
+palette = 0=#000000
+palette = 8=#555555
+
+palette = 1=#CC3E28
+palette = 9=#CC3E28
+
+palette = 2=#216609
+palette = 10=#216609
+
+palette = 3=#B58900
+palette = 11=#B58900
+
+palette = 4=#1E6FCC
+palette = 12=#1E6FCC
+
+palette = 5=#5C21A5
+palette = 13=#5C21A5
+
+palette = 6=#158c86
+palette = 14=#158c86
+
+palette = 7=#AAAAAA
+palette = 15=#AAAAAA
+
+cursor-style = bar 
+cursor-style-blink = false
+shell-integration-features = no-cursor
