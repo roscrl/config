@@ -253,14 +253,21 @@
                 };
               };
 
-              "com.apple.universalaccess".showWindowTitlebarIcons = true; # show file icon in finder on title bar
-              "com.apple.finder".QLEnableTextSelection = true;            # allow text selection in Quick Look
-              "com.apple.AppStore".InAppReviewEnabled = false;            # disable in app reviews
+              "com.apple.Safari" = {
+                ShowFullURLInSmartSearchField = true;
+                AlwaysRestoreSessionAtLaunch = true;
+                HomePage = "";
+              };
 
               "com.apple.desktopservices" = {
                 DSDontWriteNetworkStores = true; # avoid creating .DS_Store files on network
                 DSDontWriteUSBStores = true;     # avoid creating .DS_Store files on usb
               };
+
+              "com.apple.universalaccess".showWindowTitlebarIcons = true;  # show file icon in finder on title bar
+              "com.apple.finder".QLEnableTextSelection = true;             # allow text selection in Quick Look
+              "com.apple.AppStore".InAppReviewEnabled = false;             # disable in app reviews
+              "com.apple.AdLib".allowApplePersonalizedAdvertising = false; # disable in app reviews
             };
 
             screencapture = {
