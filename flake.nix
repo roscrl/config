@@ -103,7 +103,6 @@
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
                 ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
                 ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
-                "Library/Application\ Support/jj".source = "${self}/settings/jj";
                 ".zshrc".text                            = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
                   export PATH=$PATH:/opt/homebrew/bin
                   source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -113,6 +112,9 @@
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/settings/scripts";
+                "Library/Application\ Support/jj".source                               = "${self}/settings/jj";
+                "Library/Application\ Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
+                "Library/Application\ Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 

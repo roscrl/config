@@ -1,0 +1,73 @@
+{
+	"auto_complete": true,
+	"auto_complete_commit_on_tab": false,
+	"show_definitions": false,
+	"indent_to_bracket": false,
+	"scroll_past_end": true,
+	"bold_folder_labels": true,
+	"draw_indent_guides": false,
+	"fold_buttons": false,
+	"scroll_speed": 3.0, // when using e.g. goto line or meta-G
+	"shell_environment": true,
+	"show_full_path": true,
+	"show_git_status": false,
+	"highlight_gutter": false,
+	"tab_completion": true,
+	"tab_size": 2,
+	"translate_tabs_to_spaces": true,
+	"trim_automatic_white_space": false,
+
+	"save_on_focus_lost": true,
+
+	"trim_trailing_white_space_on_save": true,
+	"font_face": "Consolas",
+	"font_size": 17.0,
+	"font_options": [ "no_calt"],
+	"ui_scale": 1.0,
+	"word_wrap": true,
+	"line_padding_bottom": 1,
+	"line_padding_top": 0,
+	"highlight_line": false,
+	"show_tab_close_buttons": false,
+	
+	"theme": "rsms-adaptive.sublime-theme",
+	"color_scheme": "rsms-theme/rsms-bright.sublime-color-scheme",
+	
+	"ignored_packages":
+	[
+		"R",
+		"Vintage",
+	],
+
+	"binary_file_patterns":
+	[
+		"node_modules/**",
+		"deps/**",
+		"out/**",
+		"_archive/**",
+		".*",
+		"tmp/cache/bootsnap/**"
+	],	
+	"file_exclude_patterns":
+	[
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.iml",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.sdf",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		"*.cache",
+		".DS_Store"
+	],
+	"index_files": true,
+}

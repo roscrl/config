@@ -2,8 +2,9 @@
 alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
-alias c="cursor";
-alias s="subl";
+alias c="cursor .";
+alias o="open .";
+alias s="subl .";
 alias g="git";
 alias ga="git add . && git commit -am";
 alias gaa="git add -A";
