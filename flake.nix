@@ -85,6 +85,7 @@
                 "mullvadvpn"
                 "transmission" 
                 "font-ibm-plex-mono"
+                "font-inter"
               ];
               brews = [ "mas" ];
               masApps = { "AdGuard for Safari" = 1440147259; };

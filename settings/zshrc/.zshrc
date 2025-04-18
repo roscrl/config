@@ -60,6 +60,7 @@ alias dev="cd ~/dev";
 alias config="cd ~/dev/config";
 alias settings="cd ~/dev/config/settings";
 alias scripts="cd ~/dev/scripts";
+alias find_defaults="~/dev/scripts/find_defaults.sh";
 alias scratch="cd ~/dev/scratch";
 alias refs="cd ~/dev/refrences";
 alias repos="cd ~/dev/repos";
