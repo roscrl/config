@@ -18,7 +18,6 @@ alias gpu="git pull";
 alias gl="git log --pretty=oneline";
 alias gd="git diff";
 alias gdc="git diff --cached";
-alias gcdr='cd "$(git rev-parse --show-toplevel)"'
 alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";

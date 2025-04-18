@@ -35,19 +35,15 @@ Plug 'mbbill/undotree'            " easy view of files undo history
 Plug 'rmagatti/auto-session'      " remember my session upon opening
 Plug 'mg979/vim-visual-multi'     " multiple cursor selection <c-n>
 
-" --- Avante VIM ---
+" Avante VIM
 Plug 'stevearc/dressing.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'MeanderingProgrammer/render-markdown.nvim'
-
-" Optional deps
 Plug 'hrsh7th/nvim-cmp'
 Plug 'HakonHarnes/img-clip.nvim'
 Plug 'zbirenbaum/copilot.lua'
-
 Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-" --- Avante VIM ---
 
 Plug 'kvrohit/rasmus.nvim'                            " colorscheme
 Plug 'https://gitlab.com/yorickpeterse/vim-paper.git' " colorscheme
@@ -284,6 +280,9 @@ nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
 nmap <silent> <leader>tv :TestVisit<CR>
 
+" Format
+nnoremap <silent> <c-l> :Format<CR>
+
 " Telescope
 lua require('telescope').setup({ defaults = { mappings = { i = { ["<Esc>"] = require('telescope.actions').close } } }})
 
@@ -343,232 +342,8 @@ nnoremap \a za
 nnoremap \o zo
 nnoremap \f zf
 
-" Format
-nnoremap <silent> <c-l> :Format<CR>
-
-command FormatJson :%!jq .
-command UnformatJson :%!jq -c .
-
-"--------------------------------------------------------------
-
-" dingllm
-lua << EOF
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-      end,
-    },
-
-    enabled = function()
-      local context = require 'cmp.config.context'
-
-      if vim.api.nvim_get_mode().mode == 'c' then
-        return true
-      else
-        return not context.in_treesitter_capture("comment") 
-          and not context.in_syntax_group("Comment")
-          and vim.bo.filetype ~= 'text'
-          and vim.bo.filetype ~= 'txt'
-      end
-    end,
-    
-    mapping = cmp.mapping.preset.insert({
-      ['<Right>'] = cmp.mapping.confirm({ select = true }),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    }),
-
-    sources = cmp.config.sources({
-      { 
-        name = 'buffer', 
-        entry_filter = function(entry, ctx)
-          return require('cmp.types').lsp.CompletionItemKind[entry:get_kind()] ~= 'Text'
-        end
-      },
-    }),
-
-    experimental = { 
-      ghost_text = true 
-    },
-  })
-EOF
-
-lua << EOF
-
-local system_prompt =
-  'You should replace the code that you are sent, only following the comments. Do not talk at all. Only output valid code. Do not provide any backticks that surround the code. Never ever output backticks like this ```. Any comment that is asking you for something should be removed after you satisfy them. Other comments should left alone. Do not output backticks'
-local helpful_prompt = 'You are a helpful assistant. If you\'re unsure about something, say so rather than guessing. Don\'t apologize.'
-local dingllm = require 'dingllm'
-
-local function handle_open_router_spec_data(data_stream)
-  local success, json = pcall(vim.json.decode, data_stream)
-  if success then
-    if json.choices and json.choices[1] and json.choices[1].text then
-      local content = json.choices[1].text
-      if content then
-        dingllm.write_string_at_cursor(content)
-      end
-    end
-  else
-    print("non json " .. data_stream)
-  end
-end
-
-local function custom_make_openai_spec_curl_args(opts, prompt)
-  local url = opts.url
-  local api_key = opts.api_key_name and os.getenv(opts.api_key_name)
-  local data = {
-    prompt = prompt,
-    model = opts.model,
-    temperature = 0.7,
-    stream = true,
-  }
-  local args = { '-N', '-X', 'POST', '-H', 'Content-Type: application/json', '-d', vim.json.encode(data) }
-  if api_key then
-    table.insert(args, '-H')
-    table.insert(args, 'Authorization: Bearer ' .. api_key)
-  end
-  table.insert(args, url)
-  return args
-end
-
-local function anthropic_help()
-  dingllm.invoke_llm_and_stream_into_editor({
-    url = "https://openrouter.ai/api/v1/chat/completions",
-    model = "anthropic/claude-3.5-sonnet",
-    api_key_name = 'ANTHROPIC_API_KEY',
-    system_prompt = helpful_prompt,
-    replace = false,
-  }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-local function anthropic_replace()
-  dingllm.invoke_llm_and_stream_into_editor({
-    url = "https://api.anthropic.com/v1/messages",
-    model = "claude-3-5-sonnet-20241022",
-    api_key_name = "ANTHROPIC_API_KEY",
-    system_prompt = system_prompt,
-    replace = true,
-  }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-
-local function openai_help_chatgpt_4o_latest()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://api.openai.com/v1/chat/completions",
-   model = "chatgpt-4o-latest",
-   api_key_name = "OPENAI_API_KEY",
-   system_prompt = helpful_prompt,
-   replace = false,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-local function openai_replace_chatgpt_4o_latest()
-   dingllm.invoke_llm_and_stream_into_editor({
-     url = "https://api.openai.com/v1/chat/completions",
-     model = "chatgpt-4o-latest",
-     api_key_name = "OPENAI_API_KEY",
-     system_prompt = system_prompt,
-     replace = true,
-   }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-
-local function openai_help_o1_mini()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://api.openai.com/v1/chat/completions",
-   model = "o1-mini",
-   api_key_name = "OPENAI_API_KEY",
-   system_prompt = helpful_prompt,
-   replace = false,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-local function openai_replace_o1_mini()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://api.openai.com/v1/chat/completions",
-   model = "o1-mini",
-   api_key_name = "OPENAI_API_KEY",
-   system_prompt = system_prompt,
-   replace = true,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-
-local function gemini_flash_help()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-   model = "gemini-2.0-pro-exp",
-   api_key_name = "GEMINI_API_KEY",
-   system_prompt = helpful_prompt,
-   replace = false,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-local function gemini_flash_replace()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-   model = "gemini-2.0-pro-exp",
-   api_key_name = "GEMINI_API_KEY",
-   system_prompt = system_prompt,
-   replace = true,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-
-local function gemini_flash_thinking_help()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-   model = "gemini-2.0-flash-thinking-exp",
-   api_key_name = "GEMINI_API_KEY",
-   system_prompt = helpful_prompt,
-   replace = false,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-local function gemini_flash_thinking_replace()
- dingllm.invoke_llm_and_stream_into_editor({
-   url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-   model = "gemini-2.0-flash-thinking-exp",
-   api_key_name = "GEMINI_API_KEY",
-   system_prompt = system_prompt,
-   replace = true,
- }, dingllm.make_openai_spec_curl_args, dingllm.handle_openai_spec_data)
-end
-
-local function insert_new_lines_and_call(f)
-  return function()
-    if vim.fn.mode() == 'i' then  -- Check if in insert mode
-      vim.cmd('stopinsert')  -- Exit insert mode
-    end
-    vim.api.nvim_put({'', ''}, 'l', true, true)  -- Insert two newlines below
-    vim.cmd('normal! 2j')  -- Move cursor down twice
-    f()
-  end
-end
-
-vim.keymap.set({ "n", "v" }, "<leader>s", insert_new_lines_and_call(anthropic_help), { desc = "llm anthropic_help" })
-vim.keymap.set({ "n", "v" }, "<leader>S", insert_new_lines_and_call(anthropic_replace), { desc = "llm anthropic_replace" })
-
-vim.keymap.set({ "n", "v" }, "<leader>d", insert_new_lines_and_call(gemini_flash_help), { desc = "llm gemini_flash_help" })
-vim.keymap.set({ "n", "v" }, "<leader>D", insert_new_lines_and_call(gemini_flash_replace), { desc = "llm gemini_flash_replace" })
-
-vim.keymap.set({ "n", "v" }, "<leader>e", insert_new_lines_and_call(gemini_flash_thinking_help), { desc = "llm gemini_flash_thinking_help" })
-vim.keymap.set({ "n", "v" }, "<leader>E", insert_new_lines_and_call(gemini_flash_thinking_replace), { desc = "llm gemini_flash_thinking_replace" })
-
-vim.keymap.set({ "n", "v" }, "<leader>p", insert_new_lines_and_call(openai_help_chatgpt_4o_latest), { desc = "llm openai_help_chatgpt_4o_latest" })
-vim.keymap.set({ "n", "v" }, "<leader>P", insert_new_lines_and_call(openai_replace_chatgpt_4o_latest), { desc = "llm openai_replace_chatgpt_4o_latest" })
-
-vim.keymap.set({ "n", "v" }, "<leader>n", insert_new_lines_and_call(openai_help_o1_mini), { desc = "llm openai_help_o1_mini" })
-vim.keymap.set({ "n", "v" }, "<leader>N", insert_new_lines_and_call(openai_replace_o1_mini), { desc = "llm openai_replace_o1_mini" })
-
-vim.keymap.set({ "n", "v" }, "<leader>q", insert_new_lines_and_call(openai_help_o1_mini), { desc = "llm openai_help_o1_mini" })
-vim.keymap.set({ "n", "v" }, "<leader>Q", insert_new_lines_and_call(openai_replace_o1_mini), { desc = "llm openai_replace_o1_mini" })
-
-vim.keymap.set({ "n", "v" }, "<leader>w", insert_new_lines_and_call(openai_help_o1_mini), { desc = "llm openai_help_o1_mini" })
-vim.keymap.set({ "n", "v" }, "<leader>W", insert_new_lines_and_call(openai_replace_o1_mini), { desc = "llm openai_replace_o1_mini" })
-
-
-EOF
-
-"--------------------------------------------------------------
-
-" --- Avante VIM ---
+" Avante VIM
 autocmd! User avante.nvim lua << EOF
-
 lua require('avante_lib').load()
 lua require('avante').setup({provider = "openrouter", vendors = { openrouter = { __inherited_from = 'openai', endpoint = 'https://openrouter.ai/api/v1', api_key_name = 'OPENROUTER_API_KEY', model = 'anthropic/claude-3.5-sonnet', }, }, })
 
@@ -576,7 +351,6 @@ augroup mygroup
     autocmd!
 
     autocmd FileType java nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:exec '!java' shellescape(@%, 1)<CR>
-    "autocmd FileType jai  nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:!jai % && ./main<CR>
 
     autocmd FileType jai nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:call system('kitten @ send-key --match "title:^Output" up enter && kitty @ focus-window --match "title:^Output"')<CR>
 
@@ -585,4 +359,3 @@ augroup mygroup
     " Auto save on focus lost
     autocmd FocusLost * silent! :wa
 augroup end
-

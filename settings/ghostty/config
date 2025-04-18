@@ -1,6 +1,5 @@
 keybind = ctrl+alt+shift+cmd+w=esc:f
 keybind = ctrl+alt+shift+cmd+b=esc:b
-keybind = performable:ctrl+alt+shift+cmd+m=text:cd /Users/ross/dev/scratch/llm && nvim +startinsert $(date +\"%Y-%m-%d_%H-%M-%S\").md\x0d
 keybind = cmd+s=write_screen_file:paste
 
 window-width=140

@@ -112,7 +112,7 @@
                   eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
-                "dev/scripts".source                     = "${self}/settings/scripts";
+                "dev/scripts".source                     = "${self}/scripts";
                 "Library/Application\ Support/jj".source                               = "${self}/settings/jj";
                 "Library/Application\ Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
                 "Library/Application\ Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
