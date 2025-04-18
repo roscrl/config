@@ -1,6 +1,8 @@
 keybind = ctrl+alt+shift+cmd+w=esc:f
 keybind = ctrl+alt+shift+cmd+b=esc:b
 keybind = cmd+s=write_screen_file:paste
+keybind = ctrl+alt+shift+cmd+x=scroll_page_lines:-2
+keybind = ctrl+alt+shift+cmd+z=scroll_page_lines:2
 
 window-width=140
 window-height=40

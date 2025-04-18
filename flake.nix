@@ -29,6 +29,7 @@
             psrecord
             zsh-autosuggestions
             zsh-syntax-highlighting
+            zsh-completions
             fzf
             direnv
             ripgrep
@@ -36,6 +37,7 @@
             httpie              # easy curl
             broot               # file tree navigation
             btop                # better htop
+            zoxide              # better cd
             fd                  # find files
             hyperfine           # benchmark
             lazygit             # git tui
@@ -108,7 +110,9 @@
                   export PATH=$PATH:/opt/homebrew/bin
                   source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
                   source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+                  fpath=(${pkgs.zsh-completions}/share/zsh-completions/src $fpath)
                   source <(fzf --zsh)
+                  eval "$(zoxide init --cmd cd zsh)"
                   eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";

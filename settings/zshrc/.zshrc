@@ -14,7 +14,7 @@ alias gs="git status";
 alias gsw="git switch";
 alias gp="git push";
 alias gpe="git commit --amend --no-edit && git push —force-with-lease";
-alias gpu="git pull";
+alias gpl="git pull";
 alias gl="git log --pretty=oneline";
 alias gd="git diff";
 alias gdc="git diff --cached";
@@ -69,8 +69,9 @@ alias posts="cd ~/dev/repos/roscrl.com/posts && nvim";
 alias secrets="nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
 
 # options
-HISTSIZE="100000"
-SAVEHIST="100000"
+HISTSIZE=100000
+SAVEHIST=$HISTSIZE
+setopt APPEND_HISTORY       # append to history file
 setopt EXTENDED_HISTORY     # write the history file in the ':start:elapsed;command' format
 setopt SHARE_HISTORY        # share history between all sessions
 setopt HIST_IGNORE_DUPS     # do not record an entry that was just recorded again
