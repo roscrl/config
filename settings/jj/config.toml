@@ -1,6 +1,6 @@
 [user]
 name = "roscrl"
-email = "13072760+roscrl@users.noreply.github.com"
+email = "ross@roscrl.com"
 
-[pager]
+[ui]
 paginate = "never"

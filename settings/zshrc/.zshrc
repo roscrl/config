@@ -1,4 +1,5 @@
 # aliases
+
 alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
@@ -25,7 +26,8 @@ alias j="jj";
 alias jc="jj commit -m";
 alias jn="jj new";
 alias jl="jj log";
-alias jd="jj diff";
+alias jd="jj describe -m";
+alias jdi="jj diff";
 alias jcp="jj commit -m '' && jj git push --allow-empty-description -c ";
 alias js="jj st";
 alias jp="jj git push";
@@ -69,24 +71,25 @@ alias posts="cd ~/dev/repos/roscrl.com/posts && nvim";
 alias secrets="nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
 
 # options
+
 HISTSIZE=100000
 SAVEHIST=$HISTSIZE
-setopt APPEND_HISTORY       # append to history file
-setopt EXTENDED_HISTORY     # write the history file in the ':start:elapsed;command' format
-setopt SHARE_HISTORY        # share history between all sessions
+setopt INC_APPEND_HISTORY   # append to history file
+setopt EXTENDED_HISTORY     # include timestamp in history
 setopt HIST_IGNORE_DUPS     # do not record an entry that was just recorded again
 setopt HIST_IGNORE_ALL_DUPS # delete old recorded entry if new entry is a duplicate
 setopt HIST_SAVE_NO_DUPS    # do not write duplicate entries in the history file
 setopt HIST_FIND_NO_DUPS    # prevent history or fc commands from showing duplicates
 setopt HIST_IGNORE_SPACE    # do not record an entry starting with a space
+setopt SHARE_HISTORY        # share history between all sessions
 
-setopt   AUTO_CD          # cd by typing directory name if it's not a command
-setopt   AUTO_MENU        # show completion menu automatically
-setopt   COMPLETE_IN_WORD # allow completion from within words
-setopt   ALWAYS_TO_END    # move cursor to end of word on completion
-setopt   AUTO_PUSHD       # automatically push directories onto the stack
-unsetopt CORRECT_ALL      # disable command correction
-unsetopt FLOWCONTROL      # disable ^S/^Q flow control
+setopt AUTO_CD          # cd by typing directory name if it's not a command
+setopt AUTO_MENU        # show completion menu automatically
+setopt COMPLETE_IN_WORD # allow completion from within words
+setopt ALWAYS_TO_END    # move cursor to end of word on completion
+setopt AUTO_PUSHD       # automatically push directories onto the stack
+unsetopt CORRECT_ALL    # disable command correction
+unsetopt FLOWCONTROL    # disable ^S/^Q flow control
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
 
@@ -103,25 +106,27 @@ zstyle ':vcs_info:*' enable git
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
 # exports 
+
 source ~/Drive/settings/dotfiles/.secrets
 export EDITOR="nvim"
 
 # functions
-function mkcd() { mkdir $1 && cd $1; }
-function cnw() { open -na "Google Chrome" --args --new-window "$@" }
-function killport() { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
-function myip() { curl -s https://api.ipify.org; printf "\n" }
-function grab() { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
-function rs() { bundle exec foreman start -f Procfile.dev "$@" }
-function speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem)
 
-function initialize_gh_copilot_alias() {
+mkcd()       { mkdir $1 && cd $1; }
+cnw()        { open -na "Google Chrome" --args --new-window "$@" }
+killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
+myip()       { curl -s https://api.ipify.org; printf "\n" }
+grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
+rs()         { bundle exec foreman start -f Procfile.dev "$@" }
+speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem)
+
+initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then
         eval "$(gh copilot alias -- zsh)"
     fi
 }
 
-function clone_cd_vim() {
+clone_cd_vim() {
   local url="$1"; 
   local dir_name=$(basename "$url" .git); 
 
@@ -132,7 +137,7 @@ function clone_cd_vim() {
   fi 
 }
 
-function clone_cd() {
+clone_cd() {
   local url="$1"; 
   local dir_name=$(basename "$url" .git); 
 
@@ -143,7 +148,7 @@ function clone_cd() {
   fi 
 }
 
-function fcd() {
+fcd() {
   local dir;
   while true; do
     # exit with ^D
@@ -156,7 +161,7 @@ function fcd() {
   done
 }
 
-function pbfilter() {
+pbfilter() {
     if [ $# -gt 0 ]; then
         pbpaste | "$@" | pbcopy
     else
@@ -164,7 +169,7 @@ function pbfilter() {
     fi
 }  
 
-function open_github() {
+open_github() {
   local remote_url=$(git config --get remote.origin.url)
   if [[ -z "$remote_url" ]]; then
     echo "Not a git repository or no remote.origin.url set"
@@ -190,7 +195,7 @@ function open_github() {
   fi
 }
 
-function denv() {
+denv() {
   # Check if any arguments (package names) were provided
   if [[ $# -eq 0 ]]; then
     print -u2 "Error: No packages specified."
@@ -208,7 +213,7 @@ function denv() {
     print -u2 "Error: '$envrc_file' already exists. Aborting."
     return 1
   else
-    echo "use flake" > "$envrc_file"
+    echo "if has nix; then use flake; fi" > "$envrc_file"
     # Optionally allow direnv if installed
     if command -v direnv &> /dev/null; then
         print "Running 'direnv allow .'..."

@@ -125,6 +125,7 @@
                 # TODO vscode 
                 # TODO jetbrains
                 # TODO .zsh_history 
+                # TODO .zoxide history
                 # TODO secrets 
               };
 
@@ -147,7 +148,7 @@
               show-recents = false;            # turn off show suggested and recent apps in dock
               tilesize = 58;                   # icon size
               wvous-tl-corner = 1;             # top-left    hot corner -> noop
-              wvous-tr-corner = 12;            # top-right   hot corner -> Notifications Center
+              wvous-tr-corner = 1;             # top-right   hot corner -> noop
               wvous-br-corner = 1;             # top-left    hot corner -> noop
               wvous-bl-corner = 1;             # bottom-left hot corner -> noop
               expose-animation-duration = 0.1; # speed up mission control animations

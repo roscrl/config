@@ -8,8 +8,8 @@
 	autoSetupRemote = true
 
 [user]
-	email = "13072760+roscrl@users.noreply.github.com"
 	name = "roscrl"
+	email = "ross@roscrl.com"
 
 [core]
   hooksPath = ~/.config/git/hooks
