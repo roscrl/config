@@ -109,7 +109,7 @@ set smartcase  " dont ignore case if a caps letter is used while seraching
 
 " Indentaton, also handled by treesitter
 set expandtab " tabs as spaces
-set tabstop=2 softtabstop=2 shiftwidth=2
+set tabstop=4 softtabstop=4 shiftwidth=4
 set autoindent
 set smartindent
 set mousescroll=ver:1

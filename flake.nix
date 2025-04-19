@@ -32,6 +32,7 @@
             zsh-completions
             fzf
             direnv
+            gh
             ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl

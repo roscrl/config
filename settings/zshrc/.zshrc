@@ -3,13 +3,13 @@
 alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
-alias c="cursor .";
-alias o="open .";
-alias s="subl .";
+c() { (( $# )) && cursor "$@" || cursor .; }
+o() { (( $# )) && open  "$@"  || open  .; }
+s() { (( $# )) && subl  "$@"  || subl  .; }
 alias g="git";
-alias ga="git add . && git commit -am";
+ga()  { git add .; (( $# )) && git commit -am "$*"; }
 alias gaa="git add -A";
-alias gcm="git commit -m";
+gcm() { (( $# )) && git commit -m "$*" || git commit; }
 alias gcp="git add . && git commit --allow-empty-message -m '' && git push";
 alias gs="git status";
 alias gsw="git switch";
@@ -23,13 +23,14 @@ alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";
 alias j="jj";
-alias jc="jj commit -m";
+jc()  { (( $# )) && jj commit -m "$*" || jj commit; }
 alias jn="jj new";
 alias jl="jj log";
-alias jd="jj describe -m";
+jd()  { (( $# )) && jj describe -m "$*" || jj describe; }
 alias jdi="jj diff";
 alias jcp="jj commit -m '' && jj git push --allow-empty-description -c ";
 alias js="jj st";
+alias ju="jj undo";
 alias jp="jj git push";
 alias jpu="jj git fetch && jj rebase -d";
 alias jgc="jj git clone --colocate";
