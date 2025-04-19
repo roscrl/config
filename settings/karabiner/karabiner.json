@@ -368,12 +368,12 @@
                         ]
                     },
                     {
-                        "description": "Hyper + command + shift + x = open safari",
+                        "description": "Hyper + 1 = Open Safari",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "c",
-                                    "modifiers": { "mandatory": ["left_shift", "left_command", "right_shift", "right_command", "right_control", "right_option"] }
+                                    "key_code": "1",
+                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
                                 },
                                 "to": [{ "shell_command": "open -a safari" }],
                                 "type": "basic"
@@ -381,7 +381,72 @@
                         ]
                     },
                     {
-                        "description": "Hyper + 0 = open goland",
+                        "description": "Hyper + 2 = Open Cursor",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "2",
+                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
+                                },
+                                "to": [{ "shell_command": "open -b com.todesktop.230313mzl4w4u92" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Hyper + 3 = Open Notes",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "3",
+                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
+                                },
+                                "to": [{ "shell_command": "open -b com.apple.notes" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Hyper + 4 = Open Sublime",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "4",
+                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
+                                },
+                                "to": [{ "shell_command": "open -b com.sublimetext.4" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Hyper + 5 = Open Mail",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "5",
+                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
+                                },
+                                "to": [{ "shell_command": "open -b com.apple.mail" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Hyper + Left Command + 2 = Open ChatGPT",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "2",
+                                    "modifiers": { "mandatory": ["left_command","right_shift", "right_command", "right_control", "right_option"] }
+                                },
+                                "to": [{ "shell_command": "open -b com.apple.Safari.WebApp.E51982F9-4EE5-4DFA-9578-98665BD41148" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Hyper + 0 = Open Goland",
                         "manipulators": [
                             {
                                 "from": {
@@ -394,33 +459,7 @@
                         ]
                     },
                     {
-                        "description": "Hyper + 9 = open cursor",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "9",
-                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
-                                },
-                                "to": [{ "shell_command": "open -b com.todesktop.230313mzl4w4u92" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Hyper + 8 = open cursor",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "8",
-                                    "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
-                                },
-                                "to": [{ "shell_command": "open -b com.sublimetext.4" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Hyper + t = open terminal",
+                        "description": "Hyper + t = Open Terminal",
                         "manipulators": [
                             {
                                 "from": {
@@ -428,19 +467,6 @@
                                     "modifiers": { "mandatory": ["right_shift", "right_command", "right_control", "right_option"] }
                                 },
                                 "to": [{ "shell_command": "open -a ghostty" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Hyper + command + shift + s = open spotify",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "d",
-                                    "modifiers": { "mandatory": ["left_shift", "left_command", "right_shift", "right_command", "right_control", "right_option"] }
-                                },
-                                "to": [{ "shell_command": "open -a spotify" }],
                                 "type": "basic"
                             }
                         ]

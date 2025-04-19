@@ -85,6 +85,7 @@
                 "rectangle"
                 "signal" 
                 "mullvadvpn"
+                "google-drive"
                 "transmission" 
                 "font-ibm-plex-mono"
                 "font-inter"
@@ -251,10 +252,10 @@
                 AppleSymbolicHotKeys = {
                   "64"  = { enabled = false; }; # disable spotlight search
                   "65"  = { enabled = false; }; # disable spotlight finder search
-                  "118" = { enabled = true; value = { parameters = [49 18 1966080]; type = "standard"; }; }; # 'Switch to Desktop 1' -> hyper+1
-                  "119" = { enabled = true; value = { parameters = [50 19 1966080]; type = "standard"; }; }; # 'Switch to Desktop 2' -> hyper+2
-                  "120" = { enabled = true; value = { parameters = [51 20 1966080]; type = "standard"; }; }; # 'Switch to Desktop 3' -> hyper+3
-                  "32"  = { enabled = true; value = { parameters = [53 23 1966080]; type = "standard"; }; }; # 'Mission Control'     -> hyper+5
+                  "118" = { enabled = false; value = { parameters = [49 18 1966080]; type = "standard"; }; }; # 'Switch to Desktop 1' -> hyper+1
+                  "119" = { enabled = false; value = { parameters = [50 19 1966080]; type = "standard"; }; }; # 'Switch to Desktop 2' -> hyper+2
+                  "120" = { enabled = false; value = { parameters = [51 20 1966080]; type = "standard"; }; }; # 'Switch to Desktop 3' -> hyper+3
+                  "32"  = { enabled = true; value = { parameters = [54 22 1966080]; type = "standard"; }; };  # 'Mission Control'     -> hyper+6
                 };
               };
 
@@ -269,6 +270,7 @@
                 DSDontWriteUSBStores = true;     # avoid creating .DS_Store files on usb
               };
 
+              "com.apple.Accessibility".ReduceMotionEnabled = true;        # reduce motion
               "com.apple.universalaccess".showWindowTitlebarIcons = true;  # show file icon in finder on title bar
               "com.apple.finder".QLEnableTextSelection = true;             # allow text selection in Quick Look
               "com.apple.AppStore".InAppReviewEnabled = false;             # disable in app reviews

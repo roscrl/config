@@ -158,9 +158,9 @@ inoremap <c-d> <c-o>dd
 nnoremap <RightMouse> <LeftMouse><C-v>
 vnoremap y may`a
 
-" Tab navigation
-nnoremap <silent> <Tab> gt
-nnoremap <silent> <S-Tab> gT
+" Tab indentation
+nnoremap <silent> <Tab>   >>
+nnoremap <silent> <S-Tab> <<
 
 " Window navigation
 nnoremap <Left> <C-w>h
