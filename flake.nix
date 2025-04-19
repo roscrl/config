@@ -106,14 +106,14 @@
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
                 ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
                 ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
-                ".zshrc".text                            = builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
+                ".zshrc".text                            = with pkgs; builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
                   export PATH=$PATH:/opt/homebrew/bin
-                  source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-                  source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-                  fpath=(${pkgs.zsh-completions}/share/zsh-completions/src $fpath)
+                  source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+                  source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+                  fpath=(${zsh-completions}/share/zsh-completions/src $fpath)
                   source <(fzf --zsh)
                   eval "$(zoxide init --cmd cd zsh)"
-                  eval "$(${pkgs.direnv}/bin/direnv hook zsh)"'';
+                  eval "$(${direnv}/bin/direnv hook zsh)"'';
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/scripts";
