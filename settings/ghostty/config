@@ -19,6 +19,7 @@ macos-titlebar-proxy-icon=hidden
 confirm-close-surface = false
 
 font-family = SF Mono
+font-feature = -calt
 
 # Theme
 foreground = 000000
