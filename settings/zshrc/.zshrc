@@ -10,7 +10,7 @@ alias g="git";
 ga()  { git add .; (( $# )) && git commit -am "$*"; }
 alias gaa="git add -A";
 gcm() { (( $# )) && git commit -m "$*" || git commit; }
-alias gcp="git add . && git commit --allow-empty-message -m '' && git push";
+gcp() { git add .; (( $# )) && git commit -m "$*" || git commit --allow-empty-message -m ''; git push; }
 alias gs="git status";
 alias gsw="git switch";
 alias gp="git push";
