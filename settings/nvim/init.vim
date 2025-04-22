@@ -1,52 +1,33 @@
 call plug#begin("~/.vim/plugged")
 
-Plug 'dstein64/vim-startuptime' " :StartupTime
-
-Plug 'ziglang/zig.vim'
-Plug 'rluba/jai.vim'
-
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " better syntax highlighting, incremental selection, indentation
-Plug 'windwp/nvim-ts-autotag'                               " auto close html tags and ciw to change tags
 
-" Tree Explorer
-Plug 'kdheepak/lazygit.nvim' " lazygit integration
-
-" Telescope
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
-Plug 'BurntSushi/ripgrep '
+Plug 'BurntSushi/ripgrep'
 Plug 'nvim-lua/plenary.nvim'
 
 Plug 'otavioschwanck/arrow.nvim'         
 Plug 'echasnovski/mini.nvim', { 'branch': 'stable' }
-
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'romainl/vim-cool'           " auto stop highlighting after done searching
-Plug 'tpope/vim-surround'         " surround/change quotes tags
-Plug 'tpope/vim-repeat'           " repeat with .
-Plug 'vim-test/vim-test'          " test files easily
-Plug 'junegunn/vim-easy-align'    " allow to create nice formatting alignments like shown
-Plug 'farmergreg/vim-lastplace'   " remember cursor position on reopen should be able to remove on next neovim update 0.9
-
-Plug 'windwp/nvim-autopairs'      " auto add ending braces/brackets upon open
-Plug 'phaazon/hop.nvim'           " better jumps/changes around document
-Plug 'terrortylor/nvim-comment'   " auto comment detection with gcc
-Plug 'mbbill/undotree'            " easy view of files undo history
-Plug 'rmagatti/auto-session'      " remember my session upon opening
-Plug 'mg979/vim-visual-multi'     " multiple cursor selection <c-n>
-
-" Avante VIM
-Plug 'stevearc/dressing.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'MunifTanjim/nui.nvim'
-Plug 'MeanderingProgrammer/render-markdown.nvim'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'HakonHarnes/img-clip.nvim'
-Plug 'zbirenbaum/copilot.lua'
-Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+Plug 'nvim-tree/nvim-tree.lua'  " file explorer
+Plug 'romainl/vim-cool'         " auto stop highlighting after done searching
+Plug 'tpope/vim-surround'       " surround/change quotes tags
+Plug 'tpope/vim-repeat'         " repeat with .
+Plug 'junegunn/vim-easy-align'  " allow to create nice formatting alignments like shown
+Plug 'farmergreg/vim-lastplace' " remember cursor position on reopen
+Plug 'windwp/nvim-autopairs'    " auto add ending braces/brackets upon open
+Plug 'phaazon/hop.nvim'         " better jumps/changes around document
+Plug 'terrortylor/nvim-comment' " auto comment detection with gcc
+Plug 'mbbill/undotree'          " easy view of files undo history
+Plug 'rmagatti/auto-session'    " remember my session upon opening
+Plug 'mg979/vim-visual-multi'   " multiple cursor selection <c-n>
+Plug 'windwp/nvim-ts-autotag'   " auto close html tags and ciw to change tags
+Plug 'dstein64/vim-startuptime' " :StartupTime
 
 Plug 'kvrohit/rasmus.nvim'                            " colorscheme
 Plug 'https://gitlab.com/yorickpeterse/vim-paper.git' " colorscheme
+Plug 'ziglang/zig.vim'
+Plug 'rluba/jai.vim'
 
 call plug#end()
 
@@ -273,13 +254,6 @@ function SwitchColorscheme()
   endif
 endfunction
 
-" Vim Test
-nmap <silent> <leader>tn :TestNearest<CR>
-nmap <silent> <leader>tf :TestFile<CR>
-nmap <silent> <leader>ta :TestSuite<CR>
-nmap <silent> <leader>tl :TestLast<CR>
-nmap <silent> <leader>tv :TestVisit<CR>
-
 " Format
 nnoremap <silent> <c-l> :Format<CR>
 
@@ -326,7 +300,7 @@ lua require("nvim-autopairs").setup {}
 lua require('nvim_comment').setup()
 
 " Undo tree explorer
-nnoremap <silent><M-C-S-D-'> :UndotreeToggle<cr>
+nnoremap <silent><M-C-S-D-#> :UndotreeToggle<cr>
 
 " TreeSitter 
 lua require('nvim-treesitter.configs').setup { indent = { enable = true } } 
@@ -342,10 +316,9 @@ nnoremap \a za
 nnoremap \o zo
 nnoremap \f zf
 
-" Avante VIM
-autocmd! User avante.nvim lua << EOF
-lua require('avante_lib').load()
-lua require('avante').setup({provider = "openrouter", vendors = { openrouter = { __inherited_from = 'openai', endpoint = 'https://openrouter.ai/api/v1', api_key_name = 'OPENROUTER_API_KEY', model = 'anthropic/claude-3.5-sonnet', }, }, })
+" nvim tree
+lua require("nvim-tree").setup({ view = { float = { enable = false, open_win_config = { border = "none" } } } })
+nnoremap , :NvimTreeToggle<CR>
 
 augroup mygroup
     autocmd!

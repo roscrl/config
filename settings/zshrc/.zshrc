@@ -27,13 +27,16 @@ jc()  { (( $# )) && jj commit -m "$*" || jj commit; }
 alias jn="jj new";
 alias jl="jj log";
 jd()  { (( $# )) && jj describe -m "$*" || jj describe; }
+alias jh="jj log -r 'heads(all())'"
 alias jdi="jj diff";
 alias jcp="jj commit -m '' && jj git push --allow-empty-description -c ";
 alias js="jj st";
+alias jr="jj rebase";
 alias ju="jj undo";
 alias jp="jj git push";
 alias jpu="jj git fetch && jj rebase -d";
 alias jgc="jj git clone --colocate";
+alias jgi="jj git init --colocate";
 alias jf="jj git fetch";
 alias r="rails";
 alias be="bundle exec";
