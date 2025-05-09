@@ -33,6 +33,7 @@
             fzf
             direnv
             gh
+            lefthook
             ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
@@ -69,10 +70,12 @@
                 "intellij-idea"
                 "pycharm"
                 "sublime-text"
+                "beekeeper-studio"
                 "github"
                 "linearmouse" 
                 "istat-menus" 
                 "superwhisper"
+                "tailscale"
                 "fork"
                 "shifty" 
                 "numi" 
@@ -167,7 +170,6 @@
                 "/Applications/Visual Studio Code.app"
                 "/Applications/Sublime Text.app"
                 "/Applications/Ghostty.app"
-                "/Applications/ChatGPT.app"
                 "/Users/${username}/Applications/ChatGPT.app"
                 "/Users/${username}/Applications/Grok.app"
                 "/Users/${username}/Applications/Claude.app"
@@ -186,6 +188,7 @@
                 "/Users/${username}/Applications/v0.app"
                 "/Users/${username}/Applications/Lovable.app"
                 "/Users/${username}/Applications/tldraw.app"
+                "/Users/${username}/Applications/Hetzner.app"
                 "/Users/${username}/Applications/Excalidraw.app"
                 "/Users/${username}/Applications/QuickBooks.app"
                 "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
@@ -306,6 +309,8 @@
             automatic = true;
             interval = { Weekday = 0; Hour = 0; Minute = 0; }; # first day of every week
           };
+
+          nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
           system.stateVersion = 6;
           nixpkgs.hostPlatform = "aarch64-darwin";

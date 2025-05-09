@@ -7,7 +7,7 @@ c() { (( $# )) && cursor "$@" || cursor .; }
 o() { (( $# )) && open  "$@"  || open  .; }
 s() { (( $# )) && subl  "$@"  || subl  .; }
 alias g="git";
-ga()  { git add .; (( $# )) && git commit -am "$*"; }
+gac()  { git add .; (( $# )) && git commit -am "$*"; }
 alias gaa="git add -A";
 gcm() { (( $# )) && git commit -m "$*" || git commit; }
 gcp() { git add .; (( $# )) && git commit -m "$*" || git commit --allow-empty-message -m ''; git push; }
@@ -38,8 +38,10 @@ alias jpu="jj git fetch && jj rebase -d";
 alias jgc="jj git clone --colocate";
 alias jgi="jj git init --colocate";
 alias jf="jj git fetch";
-alias r="rails";
+alias r="bundle exec rails";
+rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
+alias bi="bundle install";
 alias lg="lazygit";
 alias ld="lazydocker";
 alias tf="terraform";
@@ -68,10 +70,10 @@ alias scripts="cd ~/dev/scripts";
 alias find_defaults="~/dev/scripts/find_defaults.sh";
 alias scratch="cd ~/dev/scratch";
 alias refs="cd ~/dev/refrences";
-alias repos="cd ~/dev/repos";
-alias walters="cd ~/dev/repos/walters";
-alias me="cd ~/dev/repos/roscrl.com";
-alias posts="cd ~/dev/repos/roscrl.com/posts && nvim";
+alias projects="cd ~/dev/projects";
+alias walters="cd ~/dev/projects/walters";
+alias me="cd ~/dev/projects/roscrl.com";
+alias posts="cd ~/dev/projects/roscrl.com/posts && nvim";
 alias secrets="nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
 
 # options
@@ -121,8 +123,7 @@ cnw()        { open -na "Google Chrome" --args --new-window "$@" }
 killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
-rs()         { bundle exec foreman start -f Procfile.dev "$@" }
-speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem)
+speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem, 70ms is possible)
 
 initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then
@@ -217,7 +218,12 @@ denv() {
     print -u2 "Error: '$envrc_file' already exists. Aborting."
     return 1
   else
-    echo "if has nix; then use flake; fi" > "$envrc_file"
+    {
+      echo "if has nix;"
+      echo "  then use flake;"
+      echo "fi"
+    } > "$envrc_file"
+
     # Optionally allow direnv if installed
     if command -v direnv &> /dev/null; then
         print "Running 'direnv allow .'..."

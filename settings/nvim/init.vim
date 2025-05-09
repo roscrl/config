@@ -240,22 +240,13 @@ nnoremap <expr> i IndentWithI()
 nnoremap <silent> <leader>l :call SwitchColorscheme()<cr>
 function SwitchColorscheme()
   if g:colors_name == "paper"
-    execute "silent !" . "sed -i '' -e '1s/colorscheme paper/colorscheme paper/;t' -e '1,/colorscheme paper/s//colorscheme rasmus/' /Users/ross/.config/nvim/init.vim"
-    execute "silent !" . "kitty +kitten themes --reload-in=all Rasmus"
-    " lua require('lualine').setup{ options = {icons_enabled = false, theme = 'auto' } }
-    let $BAT_THEME='zenburn'
+    execute "silent !" . "sed -i '' -e '1s/colorscheme paper/colorscheme paper/;t' -e '1,/colorscheme paper/s//colorscheme rasmus/' ~/.config/nvim/init.vim"
     colorscheme rasmus
   else
-    execute "silent !" . "sed -i '' -e '1s/colorscheme rasmus/colorscheme paper/;t' -e '1,/colorscheme rasmus/s//colorscheme paper/' /Users/ross/.config/nvim/init.vim"
-    execute "silent !" . "kitty +kitten themes --reload-in=all Paper"
-    let $BAT_THEME='Monokai Extended Light'
-    " lua require('lualine').setup{ options = {icons_enabled = false, theme = 'solarized_light'} }
+    execute "silent !" . "sed -i '' -e '1s/colorscheme rasmus/colorscheme paper/;t' -e '1,/colorscheme rasmus/s//colorscheme paper/' ~/.config/nvim/init.vim"
     colorscheme paper
   endif
 endfunction
-
-" Format
-nnoremap <silent> <c-l> :Format<CR>
 
 " Telescope
 lua require('telescope').setup({ defaults = { mappings = { i = { ["<Esc>"] = require('telescope.actions').close } } }})
@@ -265,15 +256,12 @@ nnoremap <silent>F <cmd>Telescope live_grep<cr>
 nnoremap <silent><C-p> <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" Auto session
+" Auto Session
 lua require('auto-session').setup {}
 lua vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 " Arrow
 lua require('arrow').setup({ leader_key=';' })
-
-" LazyGit keybind
-nnoremap <silent> <leader>g :LazyGit<CR>
 
 " Hop
 lua require('hop').setup()
@@ -317,7 +305,7 @@ nnoremap \o zo
 nnoremap \f zf
 
 " nvim tree
-lua require("nvim-tree").setup({ view = { float = { enable = false, open_win_config = { border = "none" } } } })
+lua require("nvim-tree").setup()
 nnoremap , :NvimTreeToggle<CR>
 
 augroup mygroup
