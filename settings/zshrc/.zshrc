@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+
 # aliases
 
 alias ".."="cd ..";
@@ -101,13 +103,37 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomple
 
 # git branch on the right of terminal prompt when in git folder https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 PROMPT='%B%F{blue}%2~%f%b %# '
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
+# autoload -Uz vcs_info
+# precmd_vcs_info() { vcs_info }
+# precmd_functions+=( precmd_vcs_info )
+# setopt prompt_subst
+# RPROMPT=\$vcs_info_msg_0_
+# zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
+# zstyle ':vcs_info:*' enable git
+
+autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
 RPROMPT=\$vcs_info_msg_0_
-zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
 zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
+_update_vcs_info() {
+  psvar=() # Reset array used by vcs_info internally
+  vcs_info
+}
+add-zsh-hook chpwd _update_vcs_info
+git() {
+  command git "$@"
+  local git_exit_status=$?
+
+  case "$1" in
+    switch|checkout|commit|merge|rebase|pull|reset|stash|branch|clean)
+      _update_vcs_info
+      ;;
+  esac
+
+  return $git_exit_status
+}
+_update_vcs_info
 
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
@@ -123,7 +149,8 @@ cnw()        { open -na "Google Chrome" --args --new-window "$@" }
 killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
-speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (sources at bottom are problem, 70ms is possible)
+speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (70ms is possible)
+speedbench() { time ZSH_DEBUGRC=1 zsh -i -c exit };
 
 initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then
@@ -295,3 +322,5 @@ EOF
 
   return 0
 }
+
+# zprof
