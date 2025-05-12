@@ -103,14 +103,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomple
 
 # git branch on the right of terminal prompt when in git folder https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 PROMPT='%B%F{blue}%2~%f%b %# '
-# autoload -Uz vcs_info
-# precmd_vcs_info() { vcs_info }
-# precmd_functions+=( precmd_vcs_info )
-# setopt prompt_subst
-# RPROMPT=\$vcs_info_msg_0_
-# zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
-# zstyle ':vcs_info:*' enable git
-
 autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
 RPROMPT=\$vcs_info_msg_0_
@@ -141,6 +133,7 @@ bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
 source ~/Drive/settings/dotfiles/.secrets
 export EDITOR="nvim"
+export NIXPKGS_ALLOW_UNFREE=1
 
 # functions
 
