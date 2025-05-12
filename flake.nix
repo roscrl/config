@@ -109,7 +109,6 @@
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
                 ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
                 ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
-                ".config/nixpkgs/config.nix".source      = "${self}/settings/nixpkgs/config.nix";
                 ".zshrc".text                            = with pkgs; builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
                   export PATH=$PATH:/opt/homebrew/bin
                   source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
