@@ -231,18 +231,23 @@ denv() {
   local envrc_file=".envrc"
   local flake_file="flake.nix"
   local gitignore_file=".gitignore"
-  local gitignore_entries=(".DS_Store" ".direnv/") # Array of entries to ensure
+  local gitignore_entries=(".DS_Store" ".direnv/" "result") # Added 'result' common symlink
 
   # --- Check and create .envrc ---
   if [[ -e "$envrc_file" ]]; then
     print -u2 "Error: '$envrc_file' already exists. Aborting."
+    # Consider asking to overwrite or exiting cleanly
+    # Read -q "REPLY?Overwrite $envrc_file? (y/N) " || return 1
     return 1
   else
     {
       echo "if has nix;"
       echo "  then use flake;"
       echo "fi"
+      echo ""
+      echo "dotenv"
     } > "$envrc_file"
+    print "Created '$envrc_file'"
 
     # Optionally allow direnv if installed
     if command -v direnv &> /dev/null; then
@@ -251,34 +256,50 @@ denv() {
     fi
   fi
 
-  # --- Check and create flake.nix ---
+  # --- Check flake.nix existence ---
   if [[ -e "$flake_file" ]]; then
-    # Clean up the potentially created .envrc if flake.nix already exists
     print -u2 "Error: '$flake_file' already exists. Aborting."
+    # Clean up the potentially created .envrc if flake.nix already exists
+    # This logic might be too aggressive depending on desired behavior
+    # print -u2 "Removing potentially incomplete '$envrc_file'."
+    # rm -f "$envrc_file"
     return 1
   fi
 
   # --- Create flake.nix ---
-  # Write the initial part of the flake.nix file
+  print "Creating '$flake_file'..."
+  # Write the initial part of the flake.nix file, including the NEW forAllSystems
+  # Note: No need to escape $ inside this specific heredoc as they are not shell vars
   cat <<EOF > "$flake_file"
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, ... } @ inputs:
   let
-    forAllSystems = f: nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ] (system: f nixpkgs.legacyPackages.\${system});
+    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      in
+        f pkgs system inputs
+    );
   in {
-    devShells = forAllSystems (pkgs: {
+    devShells = forAllSystems (pkgs: system: inputs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
 EOF
+# <<< End of first heredoc part
 
   # --- Append packages to flake.nix ---
   # Loop through the arguments (package names) and append them to the file
   # Use printf for reliable newline handling and formatting
   for pkg in "$@"; do
+    # Add indentation for Nix formatting
     printf "          %s\n" "${pkg}" >> "$flake_file"
   done
 
@@ -290,27 +311,38 @@ EOF
   };
 }
 EOF
+# <<< End of second heredoc part
+
+  print "Successfully created '$flake_file'"
 
   # --- Update .gitignore ---
-  if [[ -f "$gitignore_file" ]]; then
-    # File exists, check and append missing entries
-    local entry_added=false
-    for entry in "${gitignore_entries[@]}"; do
-      # Use grep -qxF to check for exact, full line match, suppressing output
-      if ! grep -qxF "$entry" "$gitignore_file"; then
+  # Use a temporary file for safer modification
+  local temp_gitignore=$(mktemp)
+  local gitignore_updated=false
+
+  # Copy existing content or start fresh
+  [[ -f "$gitignore_file" ]] && cp "$gitignore_file" "$temp_gitignore"
+
+  for entry in "${gitignore_entries[@]}"; do
+      # Use grep -qxF to check for exact, full line match
+      if ! grep -qxF "$entry" "$temp_gitignore"; then
         print "  Adding '$entry' to $gitignore_file"
-        # Append the entry on a new line
-        echo "$entry" >> "$gitignore_file"
-        entry_added=true
+        echo "$entry" >> "$temp_gitignore"
+        gitignore_updated=true
       fi
-    done
-     # Add a newline at the end if we added entries and the file didn't end with one (optional cosmetic improvement)
-     if ${entry_added} && [[ -n "$(tail -c1 "$gitignore_file")" ]]; then
-        echo >> "$gitignore_file"
+  done
+
+  if $gitignore_updated || [[ ! -f "$gitignore_file" ]]; then
+     # Add a newline at the end if the file didn't end with one (good practice)
+     if [[ -s "$temp_gitignore" ]] && [[ -n "$(tail -c1 "$temp_gitignore")" ]]; then
+        echo >> "$temp_gitignore"
      fi
+     # Atomically replace the old file
+     mv "$temp_gitignore" "$gitignore_file"
+     print "Updated '$gitignore_file'"
   else
-    # File doesn't exist, create it with the entries
-    printf '%s\n' "${gitignore_entries[@]}" > "$gitignore_file"
+     # No changes needed, remove temp file
+     rm "$temp_gitignore"
   fi
 
   return 0

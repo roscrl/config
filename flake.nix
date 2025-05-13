@@ -61,6 +61,7 @@
                 "charles"
                 "calibre"
                 "ghostty"
+                "docker"
                 "visual-studio-code"
                 "cursor"
                 "zed" 
@@ -199,6 +200,7 @@
 
             finder = {
               AppleShowAllExtensions = true;          # show all filename extensions
+              AppleShowAllFiles = true;               # show all hidden files
               FXEnableExtensionChangeWarning = false; # disable warning before changing an extension
               QuitMenuItem = true;                    # allow quitting via ⌘ + Q
               ShowPathbar = true;                     # show path bar at bottom
