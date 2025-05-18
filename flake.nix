@@ -130,7 +130,7 @@
                 # TODO jetbrains
                 # TODO .zsh_history 
                 # TODO .zoxide history
-                # TODO secrets 
+                # TODO secrets + ssh_key
               };
 
               home.stateVersion = "25.05";
