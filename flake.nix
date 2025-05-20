@@ -190,6 +190,7 @@
                 "/Users/${username}/Applications/Lovable.app"
                 "/Users/${username}/Applications/tldraw.app"
                 "/Users/${username}/Applications/Hetzner.app"
+                "/Users/${username}/Applications/AWS.app"
                 "/Users/${username}/Applications/Excalidraw.app"
                 "/Users/${username}/Applications/QuickBooks.app"
                 "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
@@ -318,6 +319,7 @@
           nixpkgs.hostPlatform = "aarch64-darwin";
           system.configurationRevision = self.rev or self.dirtyRev or null;
           nixpkgs.config.allowUnfree = true;
+          system.primaryUser = "${username}";
         })
       ];
     };

@@ -16,11 +16,6 @@ fi
 
 brew --version
 
-nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update
+nix flake update
 
-nix run \
-  --extra-experimental-features nix-command \
-  --extra-experimental-features flakes \
-  nix-darwin#darwin-rebuild \
-  -- \
-  switch --flake .#macbook
+sudo darwin-rebuild switch --flake .#macbook
