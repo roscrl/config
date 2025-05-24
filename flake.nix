@@ -35,6 +35,8 @@
             gh
             lefthook
             ripgrep
+            codex
+            aider-chat
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
@@ -109,7 +111,9 @@
                 ".config/manual/rectangle".source        = "${self}/settings/rectangle";  # manual: Rectangle.app requires config import via its UI
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
                 ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
-                ".config/direnv/direnv.toml".source      = "${self}/settings/direnv/direnv.toml";
+                ".config/direnv/direnv.toml".text        = builtins.readFile "${self}/settings/direnv/direnv.toml" + "\n" + ''
+                  [whitelist]
+                  prefix = [ "/Users/${username}/dev/projects" ]'';
                 ".zshrc".text                            = with pkgs; builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
                   export PATH=$PATH:/opt/homebrew/bin
                   source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -189,6 +193,8 @@
                 "/Users/${username}/Applications/v0.app"
                 "/Users/${username}/Applications/Lovable.app"
                 "/Users/${username}/Applications/tldraw.app"
+                "/Users/${username}/Applications/Uptime.app"
+                "/Users/${username}/Applications/Cloudflare.app"
                 "/Users/${username}/Applications/Hetzner.app"
                 "/Users/${username}/Applications/AWS.app"
                 "/Users/${username}/Applications/Excalidraw.app"
