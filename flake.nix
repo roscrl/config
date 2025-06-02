@@ -89,7 +89,7 @@
                 "discord" 
                 "spotify" 
                 "signal" 
-                "mullvadvpn"
+                "mullvad-vpn"
                 "google-drive"
                 "transmission" 
                 "font-ibm-plex-mono"
