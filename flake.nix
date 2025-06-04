@@ -187,7 +187,6 @@
                 "/Users/${username}/Applications/Kagi.app"
                 "/Users/${username}/Applications/DeepSeek.app"
                 "/Users/${username}/Applications/Sourcegraph.app"
-                "/Users/${username}/Applications/GitHub.app"
                 "/Users/${username}/Applications/Grep.app"
                 "/Users/${username}/Applications/PostHog.app"
                 "/Users/${username}/Applications/v0.app"
