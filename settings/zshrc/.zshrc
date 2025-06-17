@@ -52,6 +52,7 @@ alias deploy="make deploy";
 alias v="nvim";
 alias vi="nvim";
 alias vim="nvim";
+alias cc="claude";
 alias sync="cd ~/dev/config && ./sync.sh";
 alias econfig="nvim ~/dev/config/flake.nix";
 alias ezsh="nvim ~/.zshrc && source ~/.zshrc";
