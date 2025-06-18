@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# --- Configuration ---
-# Use a unique temporary directory based on the script's PID
-# Ensures parallel runs don't interfere (though unlikely needed here)
 TMP_DIR=$(mktemp -d -t macos_defaults_diff_XXXXXX)
 
 # Check if mktemp failed
@@ -16,14 +13,6 @@ BEFORE_FILE="$TMP_DIR/defaults_before.txt"
 AFTER_FILE="$TMP_DIR/defaults_after.txt"
 
 # --- Functions ---
-# Cleanup function to remove the temporary directory
-cleanup() {
-  # echo "Cleaning up temporary directory: $TMP_DIR" # Uncomment for debugging
-  rm -rf "$TMP_DIR"
-}
-
-trap cleanup EXIT
-
 echo ">>> Step 1: Capturing current 'defaults read' output..."
 defaults read > "$BEFORE_FILE"
 echo "   Saved initial state to $BEFORE_FILE" # Useful confirmation

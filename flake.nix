@@ -30,6 +30,7 @@
             zsh-autosuggestions
             zsh-syntax-highlighting
             zsh-completions
+            claude-code
             fzf
             direnv
             gh
@@ -267,6 +268,10 @@
                   "120" = { enabled = false; value = { parameters = [51 20 1966080]; type = "standard"; }; }; # 'Switch to Desktop 3' -> hyper+3
                   "32"  = { enabled = true; value = { parameters = [54 22 1966080]; type = "standard"; }; };  # 'Mission Control'     -> hyper+6
                 };
+              };
+
+              "com.apple.AppleMultitouchTrackpad" = {
+                TrackpadTwoFingerFromRightEdgeSwipeGesture = false;
               };
 
               "com.apple.Safari" = {
