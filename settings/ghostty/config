@@ -1,8 +1,8 @@
-keybind = ctrl+alt+shift+cmd+w=esc:f
-keybind = ctrl+alt+shift+cmd+b=esc:b
+keybind = ctrl+alt+cmd+w=esc:f
+keybind = ctrl+alt+cmd+b=esc:b
 keybind = cmd+s=write_screen_file:paste
-keybind = ctrl+alt+shift+cmd+x=scroll_page_lines:-1
-keybind = ctrl+alt+shift+cmd+z=scroll_page_lines:1
+keybind = ctrl+alt+cmd+x=scroll_page_lines:-1
+keybind = ctrl+alt+cmd+z=scroll_page_lines:1
 keybind = cmd+k=goto_split:up
 keybind = cmd+j=goto_split:down
 keybind = cmd+l=goto_split:right
