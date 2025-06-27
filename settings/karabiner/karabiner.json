@@ -50,28 +50,6 @@
                         ]
                     },
                     {
-                        "description": "Dictation",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "com.jetbrains.*",
-                                            "com.mitchellh.ghostty"
-                                        ],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "w",
-                                    "modifiers": { "mandatory": ["right_command", "right_control", "right_option"] }
-                                },
-                                "to": [{ "consumer_key_code": "dictation" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Map Command-Shift-Option-Control-Period to f19 (avoid System Diagnostics)",
                         "manipulators": [
                             {
