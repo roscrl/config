@@ -30,12 +30,12 @@
             zsh-autosuggestions
             zsh-syntax-highlighting
             zsh-completions
-            claude-code
             fzf
             direnv
             gh
             lefthook
             ripgrep
+            claude-code
             codex
             aider-chat
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite

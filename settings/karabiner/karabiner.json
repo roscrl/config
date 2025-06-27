@@ -5,20 +5,47 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "CapsLock = Hyper (RSHIFT+RCOMMAND+ROPTION+RCONTROL)",
+                        "description": "CapsLock to Hyper (CMD+OPT+CTRL); Shift+CapsLock to Hyper+Shift",
                         "manipulators": [
                             {
+                                "description": "Shift + CapsLock -> Hyper + Shift (LSHIFT+RCOMMAND+ROPTION+RCONTROL)",
+                                "type": "basic",
                                 "from": {
                                     "key_code": "caps_lock",
-                                    "modifiers": { "optional": ["any"] }
+                                    "modifiers": {
+                                        "mandatory": ["shift"],
+                                        "optional": ["any"]
+                                    }
                                 },
                                 "to": [
                                     {
-                                        "key_code": "right_shift",
-                                        "modifiers": ["right_command", "right_control", "right_option"]
+                                        "key_code": "left_shift",
+                                        "modifiers": [
+                                            "right_command",
+                                            "right_control",
+                                            "right_option"
+                                        ]
                                     }
-                                ],
-                                "type": "basic"
+                                ]
+                            },
+                            {
+                                "description": "CapsLock -> Hyper (RCOMMAND+ROPTION+RCONTROL)",
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": {
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "modifiers": [
+                                            "right_command",
+                                            "right_control",
+                                            "right_option"
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     },

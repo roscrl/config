@@ -222,7 +222,6 @@ open_github() {
 }
 
 denv() {
-  # Check if any arguments (package names) were provided
   if [[ $# -eq 0 ]]; then
     print -u2 "Error: No packages specified."
     print -u2 "Usage: denv <pkg1> <pkg2> ..."
@@ -234,11 +233,8 @@ denv() {
   local gitignore_file=".gitignore"
   local gitignore_entries=(".DS_Store" ".direnv/" "result") # Added 'result' common symlink
 
-  # --- Check and create .envrc ---
   if [[ -e "$envrc_file" ]]; then
     print -u2 "Error: '$envrc_file' already exists. Aborting."
-    # Consider asking to overwrite or exiting cleanly
-    # Read -q "REPLY?Overwrite $envrc_file? (y/N) " || return 1
     return 1
   else
     {
@@ -249,27 +245,18 @@ denv() {
     } > "$envrc_file"
     print "Created '$envrc_file'"
 
-    # Optionally allow direnv if installed
     if command -v direnv &> /dev/null; then
         print "Running 'direnv allow .'..."
         direnv allow . # Allow direnv to manage the environment
     fi
   fi
 
-  # --- Check flake.nix existence ---
   if [[ -e "$flake_file" ]]; then
     print -u2 "Error: '$flake_file' already exists. Aborting."
-    # Clean up the potentially created .envrc if flake.nix already exists
-    # This logic might be too aggressive depending on desired behavior
-    # print -u2 "Removing potentially incomplete '$envrc_file'."
-    # rm -f "$envrc_file"
     return 1
   fi
 
-  # --- Create flake.nix ---
   print "Creating '$flake_file'..."
-  # Write the initial part of the flake.nix file, including the NEW forAllSystems
-  # Note: No need to escape $ inside this specific heredoc as they are not shell vars
   cat <<EOF > "$flake_file"
 {
   inputs = {
@@ -293,17 +280,14 @@ denv() {
       default = pkgs.mkShell {
         packages = with pkgs; [
 EOF
-# <<< End of first heredoc part
 
   # --- Append packages to flake.nix ---
-  # Loop through the arguments (package names) and append them to the file
   # Use printf for reliable newline handling and formatting
   for pkg in "$@"; do
     # Add indentation for Nix formatting
     printf "          %s\n" "${pkg}" >> "$flake_file"
   done
 
-  # --- Append the closing part of flake.nix ---
   cat <<EOF >> "$flake_file"
         ];
       };
@@ -311,16 +295,12 @@ EOF
   };
 }
 EOF
-# <<< End of second heredoc part
 
   print "Successfully created '$flake_file'"
 
-  # --- Update .gitignore ---
-  # Use a temporary file for safer modification
   local temp_gitignore=$(mktemp)
   local gitignore_updated=false
 
-  # Copy existing content or start fresh
   [[ -f "$gitignore_file" ]] && cp "$gitignore_file" "$temp_gitignore"
 
   for entry in "${gitignore_entries[@]}"; do
@@ -333,15 +313,12 @@ EOF
   done
 
   if $gitignore_updated || [[ ! -f "$gitignore_file" ]]; then
-     # Add a newline at the end if the file didn't end with one (good practice)
      if [[ -s "$temp_gitignore" ]] && [[ -n "$(tail -c1 "$temp_gitignore")" ]]; then
         echo >> "$temp_gitignore"
      fi
-     # Atomically replace the old file
      mv "$temp_gitignore" "$gitignore_file"
      print "Updated '$gitignore_file'"
   else
-     # No changes needed, remove temp file
      rm "$temp_gitignore"
   fi
 
