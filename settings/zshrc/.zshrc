@@ -246,7 +246,6 @@ denv() {
       echo "  then use flake;"
       echo "fi"
       echo ""
-      echo "dotenv"
     } > "$envrc_file"
     print "Created '$envrc_file'"
 
