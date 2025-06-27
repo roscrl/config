@@ -39,8 +39,8 @@
                                 },
                                 "to": [
                                     {
+                                        "key_code": "right_command",
                                         "modifiers": [
-                                            "right_command",
                                             "right_control",
                                             "right_option"
                                         ]
