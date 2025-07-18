@@ -40,7 +40,7 @@ alias jpu="jj git fetch && jj rebase -d";
 alias jgc="jj git clone --colocate";
 alias jgi="jj git init --colocate";
 alias jf="jj git fetch";
-alias r="bundle exec rails";
+alias r="make run";
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
 alias bi="bundle install";
@@ -48,6 +48,9 @@ alias lg="lazygit";
 alias ld="lazydocker";
 alias tf="terraform";
 alias m="make";
+alias b="make build"
+alias t="make test"
+alias l="make lint"
 alias deploy="make deploy";
 alias v="nvim";
 alias vi="nvim";
@@ -145,6 +148,34 @@ myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
 speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (70ms is possible)
 speedbench() { time ZSH_DEBUGRC=1 zsh -i -c exit };
+
+# "Explodes" a directory's contents into the current directory,
+# then removes the (now empty) source directory.
+# Usage: explode <directory_name>
+explode() {
+  # --- Safety Checks ---
+  if (( ! $# )); then
+    echo "Error: No directory specified." >&2
+    echo "Usage: explode <directory_name>" >&2
+    return 1
+  fi
+
+  if [[ ! -d "$1" ]]; then
+    echo "Error: '$1' is not a directory." >&2
+    return 1
+  fi
+  
+  # realpath resolves '..' and '.' to an absolute path for a clean comparison.
+  if [[ "$(realpath "$1")" == "$(pwd)" ]]; then
+      echo "Error: Cannot explode the current directory into itself." >&2
+      return 1
+  fi
+
+  # --- The Action ---
+  # 1. Move all contents (including dotfiles) into the current directory (.).
+  # 2. If AND ONLY IF the move succeeds, remove the now-empty source directory.
+  mv "$1"/*(D) . && rmdir "$1"
+}
 
 initialize_gh_copilot_alias() {
     if ! alias | grep -q "alias ghcs="; then

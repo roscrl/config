@@ -24,10 +24,6 @@
             "commands": ["editor.action.showHover"]
         },
         {
-            "before": [","],
-            "commands": ["workbench.view.explorer"]
-        },
-        {
             "before": ["s"],
             "after": ["/"]
         },
@@ -73,7 +69,6 @@
         }
     ],
 
-    // Visual mode keybindings
     "vim.visualModeKeyBindings": [
         {
             "before": ["<Tab>"],
