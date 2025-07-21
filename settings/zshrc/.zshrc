@@ -43,6 +43,7 @@ alias jf="jj git fetch";
 alias r="make run";
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
+alias rails="bundle exec rails"
 alias bi="bundle install";
 alias lg="lazygit";
 alias ld="lazydocker";
