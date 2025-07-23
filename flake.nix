@@ -36,6 +36,7 @@
             lefthook
             ripgrep
             claude-code
+            amp-cli
             codex
             aider-chat
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
