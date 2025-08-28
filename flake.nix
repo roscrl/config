@@ -79,8 +79,10 @@
                 "github"
                 "linearmouse" 
                 "istat-menus" 
+                "cleanshot" 
                 "superwhisper"
                 "tailscale-app"
+                "bisq"
                 "fork"
                 "shifty" 
                 "numi" 
@@ -202,6 +204,8 @@
                 "/Users/${username}/Applications/QuickBooks.app"
                 "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
                 "/Applications/Discord.app"
+                "/Users/${username}/Applications/Wise.app"
+                "/Users/${username}/Applications/Stripe.app"
                 "/System/Applications/Preview.app"
               ]; # TODO automate safari add to Dock web apps
             };
