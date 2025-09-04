@@ -119,7 +119,7 @@
                   [whitelist]
                   prefix = [ "/Users/${username}/dev/projects" ]'';
                 ".zshrc".text                            = with pkgs; builtins.readFile ./settings/zshrc/.zshrc + "\n" + ''
-                  export PATH=$PATH:/opt/homebrew/bin
+                  export PATH=$PATH:/opt/homebrew/bin:/Users/${username}/dev/tools/jai/bin
                   source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
                   source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
                   fpath=(${zsh-completions}/share/zsh-completions/src $fpath)
