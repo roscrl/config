@@ -9,12 +9,10 @@
     nix-direnv.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, nix-direnv, ... }@inputs:
-  {
+  outputs = { self, nixpkgs, nix-darwin, home-manager, nix-direnv, ... }@inputs: {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
-        home-manager.darwinModules.home-manager
-        ({ pkgs, ... }: let username = "ross"; in {
+        home-manager.darwinModules.home-manager ({ pkgs, ... }: let username = "ross"; in {
           environment.systemPackages = with pkgs; [
             git
             neovim
