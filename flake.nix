@@ -315,18 +315,7 @@
             shell = pkgs.zsh;
           };
 
-          nix.gc = {
-            automatic = true;
-            interval = { Weekday = 0; Hour = 0; Minute = 0; }; # first day of every week
-            options = "--delete-older-than 60d";
-          };
-
-          nix.optimise = {
-            automatic = true;
-            interval = { Weekday = 0; Hour = 0; Minute = 0; }; # first day of every week
-          };
-
-          nix.settings.experimental-features = [ "nix-command" "flakes" ];
+          nix.enable = false;
 
           system.stateVersion = 6;
           nixpkgs.hostPlatform = "aarch64-darwin";

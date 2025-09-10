@@ -24,10 +24,10 @@ fi
 brew --version
 
 if $UPDATE; then
+  sudo determinate-nixd upgrade
   nix flake update
 fi
 
-# Run darwin-rebuild or nix-darwin
 if command -v darwin-rebuild >/dev/null 2>&1; then
   sudo darwin-rebuild switch --flake .#macbook
 else
