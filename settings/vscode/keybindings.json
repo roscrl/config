@@ -6,7 +6,12 @@
     "when": "!editorTextFocus"
   },
   {
-    "key": "ctrl+alt+cmd+shift+c",
+    "key": "escape",
+    "command": "closeReferenceSearch",
+    "when": "inReferenceSearchEditor || referenceSearchVisible"
+  },
+  {
+    "key": "ctrl+alt+cmd+c",
     "command": "composer.startComposerPrompt"
   },
   {
@@ -14,20 +19,20 @@
     "command": "workbench.action.showCommands"
   },
   {
-    "key": "ctrl+alt+cmd+shift+x",
+    "key": "ctrl+alt+cmd+x",
     "command": "workbench.action.openRecent"
   },
   {
-    "key": "ctrl+alt+cmd+shift+a",
+    "key": "ctrl+alt+cmd+a",
     "command": "workbench.action.toggleSidebarVisibility"
   },
   {
     "key": "f",
     "command": "workbench.action.quickOpen",
-    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    "when": "(editorTextFocus && vim.active && vim.mode == 'Normal') || (!vim.active && !inputFocus) || filesExplorerFocus"
   },
   {
-    "key": "ctrl+alt+cmd+shift+o",
+    "key": "ctrl+alt+cmd+o",
     "command": "workbench.files.action.showActiveFileInExplorer",
     "when": "editorTextFocus"
   },
@@ -41,7 +46,7 @@
     "when": "editorTextFocus && vim.active && vim.mode != 'Insert'"
   },
   {
-    "key": "cmd+shift+l",
+    "key": "ctrl+s",
     "command": "editor.action.formatDocument",
     "when": "editorTextFocus && !editorReadonly"
   },
@@ -52,5 +57,165 @@
   {
     "key": "ctrl+shift+alt+cmd+c",
     "command": "composerMode.agent"
-  }
+  },
+  {
+    "key": "enter",
+    "command": "list.select",
+    "when": "explorerViewletVisible && explorerViewletFocus && !inputFocus"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+j", // Create line below, keep cursor
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "editor.action.insertLineAfter",
+        "cursorUp"
+      ]
+    },
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+cmd+shift+k", // Create line above, keep cursor
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "editor.action.insertLineBefore",
+        "cursorDown"
+      ]
+    },
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+cmd+z",
+    "command": "workbench.view.extension.claude-dev-ActivityBar",
+    "when": "viewContainer.workbench.view.extension.claude-dev-ActivityBar.enabled"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "editor.action.organizeImports",
+    "when": "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
+  },
+  {
+    "key": "shift+alt+o",
+    "command": "-editor.action.organizeImports",
+    "when": "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
+  },
+  {
+    "key": "shift+space",
+    "command": "editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+space",
+    "command": "-editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+alt+cmd+[Backquote]",
+    "command": "workbench.files.action.focusFilesExplorer"
+  },
+  {
+    "key": "ctrl+shift+alt+cmd+d",
+    "command": "testing.debugLastRun"
+  },
+  {
+    "key": "ctrl+alt+cmd+g",
+    "command": "amp.agent.toggleVisibility",
+    "when": "!amp.primaryShortcuts"
+  },
+  {
+    "key": "alt+cmd+u",
+    "command": "-amp.agent.toggleVisibility",
+    "when": "!amp.primaryShortcuts"
+  },
+  {
+    "key": "ctrl+alt+cmd+g",
+    "command": "amp.agent.toggleVisibility",
+    "when": "amp.primaryShortcuts"
+  },
+  {
+    "key": "f19",
+    "command": "amp.agent.newThread",
+    "when": "!amp.primaryShortcuts"
+  },
+  {
+    "key": "alt+cmd+j",
+    "command": "-amp.agent.newThread",
+    "when": "!amp.primaryShortcuts"
+  },
+  {
+    "key": "ctrl+alt+cmd+w",
+    "command": "editor.action.smartSelect.expand",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+right",
+    "command": "-editor.action.smartSelect.expand",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+cmd+w",
+    "command": "editor.action.smartSelect.shrink",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+left",
+    "command": "-editor.action.smartSelect.shrink",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "left",
+    "command": "-extension.vim_left",
+    "when": "editorTextFocus && vim.active && !inDebugRepl"
+  },
+  {
+    "key": "left",
+    "command": "extension.vim_left",
+    "when": "editorTextFocus && vim.active && !inDebugRepl && vim.mode != 'Insert'"
+  },
+  {
+    "key": "right",
+    "command": "extension.vim_right",
+    "when": "editorTextFocus && vim.active && !inDebugRepl && vim.mode != 'Insert'"
+  },
+  {
+    "key": "right",
+    "command": "-extension.vim_right",
+    "when": "editorTextFocus && vim.active && !inDebugRepl"
+  },
+  {
+    "key": "right",
+    "command": "workbench.action.focusNextGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": ",",
+    "command": "workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled && ((editorTextFocus && vim.active && vim.mode == 'Normal') || (!vim.active && !inputFocus) || filesExplorerFocus)"
+  },
+  {
+    "key": "ctrl+alt+cmd+n",
+    "command": "workbench.action.splitEditorRight"
+  },
+  {
+    "key": "cmd+r cmd+\\",
+    "command": "-workbench.action.splitEditorRight"
+  },
+  {
+    "key": "ctrl+alt+cmd+u",
+    "command": "workbench.action.splitEditorUp"
+  },
+  {
+    "key": "cmd+r cmd+\\",
+    "command": "-workbench.action.splitEditorUp"
+  },
+  {
+    "key": "cmd+l",
+    "command": "-composer.sendToAgent",
+    "when": "editorHasPromptBar && editorPromptBarFocused"
+  },
+  {
+    "key": "cmd+l",
+    "command": "-aichat.newchataction"
+  },
 ]

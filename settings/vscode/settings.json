@@ -1,7 +1,92 @@
 {
+    "update.releaseTrack": "prerelease",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "IBM Plex Mono, Menlo, Monaco, 'Courier New', monospace",
+    "editor.tabSize": 2,
+    "editor.smoothScrolling": true,
+    "editor.minimap.showSlider": "always",
+    "editor.wordWrap": "on",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.fastScrollSensitivity": 20,
+    "editor.linkedEditing": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "always",
+        "source.sortImports": "explicit",
+        "source.sortAndRemoveImports": "explicit"
+    },
+    "editor.fontVariations": false,
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[ruby]": {
+        "editor.defaultFormatter": "Shopify.ruby-lsp"
+    },
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
     "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 100,
+    "explorer.compactFolders": false,
+    "explorer.confirmDelete": false,
+    "workbench.editor.showTabs": "none",
     "workbench.colorTheme": "eyeshield",
-
+    "workbench.colorCustomizations": {
+        "editorCursor.foreground": "#000000",
+    },
+    "workbench.tree.expandMode": "singleClick",
+    "workbench.list.defaultFindMode": "highlight",
+    "workbench.list.typeNavigationMode": "automatic",
+    "workbench.editor.enablePreview": false,
+    "workbench.statusBar.visible": false,
+    "workbench.editor.focusRecentEditorAfterClose": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "makefile.configureOnOpen": false,
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "tailwindCSS.includeLanguages": {
+        "liquid": "liquid"
+    },
+    "prettier.requireConfig": true,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        ".direnv": true
+    },
+    "svelte.enable-ts-plugin": true,
+    "go.toolsManagement.autoUpdate": true,
+    "amp.tools.disable": [
+        "mcp__Shopify__fetch_full_docs",
+        "mcp__Shopify__introspect_graphql_schema",
+        "mcp__Shopify__learn_shopify_api",
+        "mcp__Shopify__search_docs_chunks",
+        "mcp__Shopify__validate_graphql_codeblocks"
+    ],
+    "amp.mcpServers": {
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "@playwright/mcp@latest"
+            ],
+            "_target": "global"
+        },
+        "Shopify": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@shopify/dev-mcp@latest"
+            ],
+            "env": {}
+        }
+    },
     "vim.easymotion": true,
     "vim.surround": true,
     "vim.useSystemClipboard": true,
@@ -10,14 +95,12 @@
     "vim.ignorecase": true,
     "vim.smartcase": true,
     "vim.leader": " ",
-    "vim.scroll": 8,
- 
+    "vim.scroll": 29,
     "vim.handleKeys": {
         "<C-c>": false,
         "<C-v>": false,
         "<C-x>": false
     },
-
     "vim.normalModeKeyBindings": [
         {
             "before": ["g", "h"],
@@ -52,6 +135,10 @@
             "after": ["g", "j"]
         },
         {
+            "before": ["F"],
+            "commands": ["workbench.action.quickTextSearch"]
+        },
+        {
             "before": ["k"],
             "after": ["g", "k"]
         },
@@ -68,7 +155,6 @@
             "after": ["\"", "_", "d", "d"]
         }
     ],
-
     "vim.visualModeKeyBindings": [
         {
             "before": ["<Tab>"],
@@ -79,43 +165,52 @@
             "commands": ["editor.action.outdentLines"]
         },
     ],
-
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["x"],
+            "after": ["\"", "_", "x"]
+        },
+        {
+            "before": ["d"],
+            "after": ["\"", "_", "d"]
+        }
+    ],
     "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["x"],
+            "after": ["\"", "_", "x"]
+        },
+        {
+            "before": ["d"],
+            "after": ["\"", "_", "d"]
+        },
         {
             "before": ["<esc>"],
             "commands": [":noh", "workbench.action.focusActiveEditorGroup"]
         }
     ],
-
-    "workbench.colorCustomizations": {
-        "editorCursor.foreground": "#000000",
-    },
-    
-    // File explorer settings
-    "workbench.tree.expandMode": "singleClick",
-    "workbench.list.defaultFindMode": "highlight",
-    "workbench.list.typeNavigationMode": "automatic",
-    "editor.fontSize": 14,
-    "editor.fontFamily": "IBM Plex Mono, Menlo, Monaco, 'Courier New', monospace",
-    "editor.tabSize": 2,
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "makefile.configureOnOpen": false,
-    "editor.fontVariations": false,
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "workbench.statusBar.visible": false,
-    "workbench.editor.showTabs": "none",
-    "files.autoSaveDelay": 100,
-    "editor.quickSuggestions": {
-        "strings": "on"
-    },
-    "files.associations": {
-        "*.css": "tailwindcss"
-    },
-    "tailwindCSS.includeLanguages": {
-        "liquid": "liquid"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "prettier.requireConfig": true,
+    "amp.commandApproval.allow": [
+        "bin/rails generate job",
+        "bin/rails generate controller Webhooks sms"
+    ],
+    "amp.commands.allowlist": [
+        "make"
+    ],
+    "git.openRepositoryInParentFolders": "never",
+    "amp.permissions": [
+        {
+            "tool": "Bash",
+            "action": "allow",
+            "matches": {
+                "cmd": "cd newsletter && go test -v ./app -run TestRun"
+            }
+        },
+        {
+            "tool": "Bash",
+            "matches": {
+                "cmd": "make"
+            },
+            "action": "allow"
+        }
+    ]
 }
