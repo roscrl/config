@@ -35,6 +35,7 @@
             ripgrep
             claude-code
             amp-cli
+            cursor-cli
             codex
             aider-chat
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
