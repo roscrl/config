@@ -206,7 +206,7 @@
                 "/Users/${username}/Applications/Wise.app"
                 "/Users/${username}/Applications/Stripe.app"
                 "/System/Applications/Preview.app"
-              ]; # TODO automate safari add to Dock web apps
+              ];
             };
 
             finder = {
