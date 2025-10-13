@@ -15,8 +15,6 @@ window-height=40
 window-position-x=480
 window-position-y=210
 
-macos-titlebar-proxy-icon=hidden
-
 confirm-close-surface = false
 
 font-family = SF Mono
@@ -59,3 +57,6 @@ palette = 15=#AAAAAA
 cursor-style = bar 
 cursor-style-blink = false
 shell-integration-features = no-cursor
+
+macos-titlebar-proxy-icon=hidden
+macos-titlebar-style = tabs
