@@ -263,8 +263,6 @@ denv() {
 
   local envrc_file=".envrc"
   local flake_file="flake.nix"
-  local gitignore_file=".gitignore"
-  local gitignore_entries=(".DS_Store" ".direnv/" "result") # Added 'result' common symlink
 
   if [[ -e "$envrc_file" ]]; then
     print -u2 "Error: '$envrc_file' already exists. Aborting."
@@ -276,10 +274,8 @@ denv() {
       echo "fi"
       echo ""
     } > "$envrc_file"
-    print "Created '$envrc_file'"
 
     if command -v direnv &> /dev/null; then
-        print "Running 'direnv allow .'..."
         direnv allow . # Allow direnv to manage the environment
     fi
   fi
@@ -289,7 +285,6 @@ denv() {
     return 1
   fi
 
-  print "Creating '$flake_file'..."
   cat <<EOF > "$flake_file"
 {
   inputs = {
@@ -315,9 +310,7 @@ denv() {
 EOF
 
   # --- Append packages to flake.nix ---
-  # Use printf for reliable newline handling and formatting
   for pkg in "$@"; do
-    # Add indentation for Nix formatting
     printf "          %s\n" "${pkg}" >> "$flake_file"
   done
 
@@ -328,32 +321,6 @@ EOF
   };
 }
 EOF
-
-  print "Successfully created '$flake_file'"
-
-  local temp_gitignore=$(mktemp)
-  local gitignore_updated=false
-
-  [[ -f "$gitignore_file" ]] && cp "$gitignore_file" "$temp_gitignore"
-
-  for entry in "${gitignore_entries[@]}"; do
-      # Use grep -qxF to check for exact, full line match
-      if ! grep -qxF "$entry" "$temp_gitignore"; then
-        print "  Adding '$entry' to $gitignore_file"
-        echo "$entry" >> "$temp_gitignore"
-        gitignore_updated=true
-      fi
-  done
-
-  if $gitignore_updated || [[ ! -f "$gitignore_file" ]]; then
-     if [[ -s "$temp_gitignore" ]] && [[ -n "$(tail -c1 "$temp_gitignore")" ]]; then
-        echo >> "$temp_gitignore"
-     fi
-     mv "$temp_gitignore" "$gitignore_file"
-     print "Updated '$gitignore_file'"
-  else
-     rm "$temp_gitignore"
-  fi
 
   return 0
 }
