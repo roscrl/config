@@ -144,7 +144,7 @@
             };
           };
 
-          # Use settings/scripts/find_defaults.sh to find out which MacOS menu settings relate to which defaults settings
+          # Use scripts/find_defaults.sh to find out which MacOS menu settings relate to which defaults settings
           system.defaults = { # https://nix-darwin.github.io/nix-darwin/manual/index.html
             dock = {
               autohide = true;                 # enable dock auto hiding
