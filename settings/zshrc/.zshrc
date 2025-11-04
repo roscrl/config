@@ -6,6 +6,7 @@ alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
 c() { (( $# )) && cursor "$@" || cursor .; }
+cr() { killall "Cursor"; cursor .; }
 o() { (( $# )) && open  "$@"  || open  .; }
 s() { (( $# )) && subl  "$@"  || subl  .; }
 alias g="git";
