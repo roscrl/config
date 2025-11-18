@@ -34,6 +34,7 @@
             lefthook
             ripgrep
             claude-code
+            gemini-cli
             amp-cli
             cursor-cli
             codex

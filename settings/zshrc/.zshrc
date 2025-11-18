@@ -44,6 +44,8 @@ alias r="make run";
 alias jr="jai run.jai -";
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
+alias kd="bundle exec kamal deploy";
+alias gkd="gcp && kd"
 alias rails="bundle exec rails"
 alias bi="bundle install";
 alias lg="lazygit";
