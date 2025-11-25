@@ -121,7 +121,6 @@ _update_vcs_info() {
   psvar=() # Reset array used by vcs_info internally
   vcs_info
 }
-add-zsh-hook chpwd _update_vcs_info
 git() {
   command git "$@"
   local git_exit_status=$?
