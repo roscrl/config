@@ -94,7 +94,7 @@
                 "vlc"
                 "transmission" 
                 "calibre"
-                "sloth",
+                "sloth"
                 "bisq"
                 "fork"
                 "font-ibm-plex-mono"
