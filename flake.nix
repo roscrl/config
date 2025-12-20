@@ -254,7 +254,7 @@
               KeyRepeat = 1;                                # fast keyboard repeat rate
               InitialKeyRepeat = 10;                        # fast initial keyboard repeat rate
               ApplePressAndHoldEnabled = false;             # disable accent bar when holding key
-              AppleFontSmoothing = 0;                       # disable font smoothing
+              AppleFontSmoothing = 1;                       # light font smoothing
               NSAutomaticSpellingCorrectionEnabled = false; # disable automatic text correction
               NSAutomaticDashSubstitutionEnabled = false;   # disable automatic text correction
               NSAutomaticPeriodSubstitutionEnabled = false; # disable automatic text correction
