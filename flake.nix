@@ -36,6 +36,7 @@
             claude-code
             gemini-cli
             amp-cli
+            opencode
             cursor-cli
             codex
             aider-chat
