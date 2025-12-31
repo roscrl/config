@@ -14,6 +14,7 @@ gac()  { git add .; (( $# )) && git commit -am "$*"; }
 alias gaa="git add -A";
 gcm() { (( $# )) && git commit -m "$*" || git commit; }
 gcp() { git add .; (( $# )) && git commit -m "$*" || git commit --allow-empty-message -m ''; git push; }
+alias gt="go tool";
 alias gs="git status";
 alias gsw="git switch";
 alias gp="git push";
