@@ -73,6 +73,7 @@
                 "cursor"
                 "sublime-text"
                 "zed" 
+                "termius",
                 "rubymine"
                 "goland"
                 "webstorm"
