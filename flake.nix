@@ -97,7 +97,6 @@
                 "transmission" 
                 "calibre"
                 "sloth"
-                "bisq"
                 "fork"
                 "font-ibm-plex-mono"
                 "font-inter"
