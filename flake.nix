@@ -34,6 +34,7 @@
             lefthook
             ripgrep
             claude-code
+            tmux
             gemini-cli
             amp-cli
             opencode

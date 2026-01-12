@@ -42,7 +42,7 @@ alias jgc="jj git clone --colocate";
 alias jgi="jj git init --colocate";
 alias jf="jj git fetch";
 alias r="make run";
-alias jr="jai run.jai -";
+jr() { jai run_$1.jai - ${@:2} }
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
 alias kd="bundle exec kamal deploy";
