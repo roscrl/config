@@ -41,6 +41,7 @@
             cursor-cli
             codex
             aider-chat
+            lazyjj
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
