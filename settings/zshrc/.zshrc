@@ -62,6 +62,7 @@ alias vi="nvim";
 alias vim="nvim";
 alias a="amp";
 alias cc="claude --dangerously-skip-permissions";
+alias co="codex --dangerously-bypass-approvals-and-sandbox";
 alias sync="cd ~/dev/config && ./sync.sh";
 alias econfig="nvim ~/dev/config/flake.nix";
 alias ezsh="nvim ~/.zshrc && source ~/.zshrc";
