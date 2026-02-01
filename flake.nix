@@ -131,10 +131,12 @@
                   () {
                     if [[ $# -gt 0 ]]; then
                       compinit
+                      zcompile "$HOME/.zcompdump"
                     else
                       compinit -C
                     fi
                   } ''${HOME}/.zcompdump(N.mh+24)
+                  [[ "$HOME/.zcompdump.zwc" -nt "$HOME/.zcompdump" ]] || zcompile "$HOME/.zcompdump"
                   _cached_source() {
                     local cmd=''${@:t}
                     local cache="$HOME/.cache/zsh/''${cmd// /_}"
