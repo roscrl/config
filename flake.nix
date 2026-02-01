@@ -5,11 +5,9 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-direnv.url = "github:nix-community/nix-direnv";
-    nix-direnv.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, nix-direnv, ... }@inputs: {
+  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs: {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
         home-manager.darwinModules.home-manager ({ pkgs, ... }: let username = "ross"; in {
@@ -118,7 +116,7 @@
                 ".config/linearmouse".source             = "${self}/settings/linearmouse";
                 ".config/manual/rectangle".source        = "${self}/settings/rectangle";  # manual: Rectangle.app requires config import via its UI
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
-                ".config/direnv/direnvrc".text           = "source ${nix-direnv}/direnvrc";
+                ".config/direnv/direnvrc".text           = "source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc";
                 ".config/direnv/direnv.toml".text        = builtins.readFile "${self}/settings/direnv/direnv.toml" + "\n" + ''
                   [whitelist]
                   prefix = [ "/Users/${username}/dev/projects" ]'';
