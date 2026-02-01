@@ -123,6 +123,7 @@ _update_vcs_info() {
   psvar=() # Reset array used by vcs_info internally
   vcs_info
 }
+add-zsh-hook precmd _update_vcs_info
 git() {
   command git "$@"
   local git_exit_status=$?
@@ -135,7 +136,6 @@ git() {
 
   return $git_exit_status
 }
-_update_vcs_info
 
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 

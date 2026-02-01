@@ -135,9 +135,18 @@
                       compinit -C
                     fi
                   } ''${HOME}/.zcompdump(N.mh+24)
-                  source <(fzf --zsh)
-                  eval "$(zoxide init --cmd cd zsh)"
-                  eval "$(${direnv}/bin/direnv hook zsh)"'';
+                  _cached_source() {
+                    local cmd=''${@:t}
+                    local cache="$HOME/.cache/zsh/''${cmd// /_}"
+                    if [[ ! -f "$cache" ]] || [[ ! -s "$cache" ]]; then
+                      mkdir -p "$HOME/.cache/zsh"
+                      "$@" > "$cache" 2>/dev/null
+                    fi
+                    source "$cache"
+                  }
+                  _cached_source fzf --zsh
+                  _cached_source zoxide init --cmd cd zsh
+                  _cached_source ${direnv}/bin/direnv hook zsh'';
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/scripts";
@@ -321,6 +330,7 @@
           };
 
           programs.zsh.enableCompletion = false;                 # we handle compinit ourselves with caching in ~/.zshrc
+          programs.zsh.promptInit = "";                           # we set our own PROMPT, skip loading promptinit + suse theme
           system.startup.chime = false;                        # disable startup sound
           security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
 
