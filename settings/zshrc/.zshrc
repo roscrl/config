@@ -152,7 +152,7 @@ cnw()        { open -na "Google Chrome" --args --new-window "$@" }
 killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
-speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' }; # 0.0633333 seconds avg (70ms is possible)
+speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' };
 speedbench() { time ZSH_DEBUGRC=1 zsh -i -c exit };
 
 # "Explodes" a directory's contents into the current directory,

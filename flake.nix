@@ -331,8 +331,8 @@
             LaunchServices.LSQuarantine = false;          # disable "Are you sure you want to open this application?" dialog
           };
 
-          programs.zsh.enableCompletion = false;                 # we handle compinit ourselves with caching in ~/.zshrc
-          programs.zsh.promptInit = "";                           # we set our own PROMPT, skip loading promptinit + suse theme
+          programs.zsh.enableCompletion = false;               # we handle compinit ourselves with caching in ~/.zshrc
+          programs.zsh.promptInit = "";                        # we set our own PROMPT, skip loading promptinit + suse theme
           system.startup.chime = false;                        # disable startup sound
           security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
 
