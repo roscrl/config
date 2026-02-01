@@ -162,6 +162,11 @@
                 # TODO secrets + ssh_key
               };
 
+              # disable home-manager manual generation to suppress 'builtins.toFile options.json' store path warning
+              manual.manpages.enable = false;
+              manual.html.enable = false;
+              manual.json.enable = false;
+
               home.stateVersion = "25.05";
             };
           };
