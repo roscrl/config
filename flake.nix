@@ -127,6 +127,14 @@
                   source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
                   source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
                   fpath=(${zsh-completions}/share/zsh-completions/src $fpath)
+                  autoload -Uz compinit
+                  () {
+                    if [[ $# -gt 0 ]]; then
+                      compinit
+                    else
+                      compinit -C
+                    fi
+                  } ''${HOME}/.zcompdump(N.mh+24)
                   source <(fzf --zsh)
                   eval "$(zoxide init --cmd cd zsh)"
                   eval "$(${direnv}/bin/direnv hook zsh)"'';
@@ -312,6 +320,7 @@
             LaunchServices.LSQuarantine = false;          # disable "Are you sure you want to open this application?" dialog
           };
 
+          programs.zsh.enableCompletion = false;                 # we handle compinit ourselves with caching in ~/.zshrc
           system.startup.chime = false;                        # disable startup sound
           security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
 
