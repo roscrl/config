@@ -104,7 +104,7 @@
                 "font-inter"
               ];
               brews = [ "mas" ];
-              masApps = { "AdGuard for Safari" = 1440147259; };
+              masApps = { "uBlock Origin Lite" = 6745342698; };
           };
 
           home-manager = { # https://home-manager-options.extranix.com
