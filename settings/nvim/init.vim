@@ -4,7 +4,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " better syntax high
 
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
-Plug 'BurntSushi/ripgrep'
 Plug 'nvim-lua/plenary.nvim'
 
 Plug 'otavioschwanck/arrow.nvim'         
@@ -16,7 +15,7 @@ Plug 'tpope/vim-repeat'         " repeat with .
 Plug 'junegunn/vim-easy-align'  " allow to create nice formatting alignments like shown
 Plug 'farmergreg/vim-lastplace' " remember cursor position on reopen
 Plug 'windwp/nvim-autopairs'    " auto add ending braces/brackets upon open
-Plug 'phaazon/hop.nvim'         " better jumps/changes around document
+Plug 'smoka7/hop.nvim'           " better jumps/changes around document
 Plug 'terrortylor/nvim-comment' " auto comment detection with gcc
 Plug 'mbbill/undotree'          " easy view of files undo history
 Plug 'rmagatti/auto-session'    " remember my session upon opening
@@ -34,7 +33,14 @@ call plug#end()
 lua vim.loader.enable()
 
 set termguicolors " required for full terminal color support 
-colorscheme paper
+
+" Load colorscheme from writable file, default to paper
+let s:cs_file = expand('~/.vim/colorscheme')
+if filereadable(s:cs_file)
+  execute 'colorscheme ' . trim(readfile(s:cs_file)[0])
+else
+  colorscheme paper
+endif
 let $BAT_THEME='Monokai Extended Light'
 let g:fzf_colors =                                                                         
       \ { 'fg':      ['fg', 'Normal'],                                                           
@@ -239,13 +245,14 @@ nnoremap <expr> i IndentWithI()
 
 nnoremap <silent> <leader>l :call SwitchColorscheme()<cr>
 function SwitchColorscheme()
+  let l:cs_file = expand('~/.vim/colorscheme')
   if g:colors_name == "paper"
-    execute "silent !" . "sed -i '' -e '1s/colorscheme paper/colorscheme paper/;t' -e '1,/colorscheme paper/s//colorscheme rasmus/' ~/.config/nvim/init.vim"
     colorscheme rasmus
   else
-    execute "silent !" . "sed -i '' -e '1s/colorscheme rasmus/colorscheme paper/;t' -e '1,/colorscheme rasmus/s//colorscheme paper/' ~/.config/nvim/init.vim"
     colorscheme paper
   endif
+  call mkdir(fnamemodify(l:cs_file, ':h'), 'p')
+  call writefile([g:colors_name], l:cs_file)
 endfunction
 
 " Telescope
@@ -312,8 +319,6 @@ augroup mygroup
     autocmd!
 
     autocmd FileType java nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:exec '!java' shellescape(@%, 1)<CR>
-
-    autocmd FileType jai nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:call system('kitten @ send-key --match "title:^Output" up enter && kitty @ focus-window --match "title:^Output"')<CR>
 
     autocmd FileType c nnoremap <buffer> <M-C-S-D-R> :silent w<CR>:silent !make build run >/dev/null 2>&1 &<CR>
 

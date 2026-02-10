@@ -63,13 +63,6 @@
     },
     "svelte.enable-ts-plugin": true,
     "go.toolsManagement.autoUpdate": true,
-    "amp.tools.disable": [
-        "mcp__Shopify__fetch_full_docs",
-        "mcp__Shopify__introspect_graphql_schema",
-        "mcp__Shopify__learn_shopify_api",
-        "mcp__Shopify__search_docs_chunks",
-        "mcp__Shopify__validate_graphql_codeblocks"
-    ],
     "amp.mcpServers": {
         "playwright": {
             "command": "npx",
@@ -77,14 +70,6 @@
                 "@playwright/mcp@latest"
             ],
             "_target": "global"
-        },
-        "Shopify": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@shopify/dev-mcp@latest"
-            ],
-            "env": {}
         }
     },
     "vim.easymotion": true,
