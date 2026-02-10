@@ -6,15 +6,10 @@ keybind = ctrl+alt+cmd+z=scroll_page_lines:1
 keybind = cmd+k=goto_split:up
 keybind = cmd+j=goto_split:down
 keybind = cmd+l=goto_split:right
-keybind = cmd+h=goto_split:left
+keybind = f13=goto_split:left
 keybind = cmd+z=toggle_split_zoom
 
-window-width=140
-window-height=40
-
-window-position-x=480
-window-position-y=210
-
+window-save-state = always
 confirm-close-surface = false
 
 font-family = SF Mono
@@ -60,3 +55,5 @@ shell-integration-features = no-cursor
 
 macos-titlebar-proxy-icon=hidden
 macos-titlebar-style=tabs
+
+auto-update-channel = tip

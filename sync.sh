@@ -33,3 +33,8 @@ if command -v darwin-rebuild >/dev/null 2>&1; then
 else
   sudo nix run nix-darwin -- switch --flake .#macbook
 fi
+
+# Invalidate zsh completion cache — fpath changes after rebuild,
+# next shell will run compinit -C against the fresh dump
+rm -f "$HOME/.zcompdump" "$HOME/.zcompdump.zwc"
+rm -rf "$HOME/.cache/zsh"

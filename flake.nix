@@ -64,7 +64,7 @@
                 "linearmouse" 
                 "karabiner-elements" 
                 "betterdisplay"
-                "ghostty"
+                "ghostty@tip"
                 "rectangle"
                 "bruno"
                 "charles"
@@ -126,15 +126,12 @@
                   source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
                   fpath=(${zsh-completions}/share/zsh-completions/src $fpath)
                   autoload -Uz compinit
-                  () {
-                    if [[ $# -gt 0 ]]; then
-                      compinit
-                      zcompile "$HOME/.zcompdump"
-                    else
-                      compinit -C
-                    fi
-                  } ''${HOME}/.zcompdump(N.mh+24)
-                  [[ "$HOME/.zcompdump.zwc" -nt "$HOME/.zcompdump" ]] || zcompile "$HOME/.zcompdump"
+                  if [[ -f "$HOME/.zcompdump" ]]; then
+                    compinit -C
+                  else
+                    compinit
+                    zcompile "$HOME/.zcompdump"
+                  fi
                   _cached_source() {
                     local cmd=''${@:t}
                     local cache="$HOME/.cache/zsh/''${cmd// /_}"
@@ -187,7 +184,7 @@
               tilesize = 58;                   # icon size
               wvous-tl-corner = 1;             # top-left    hot corner -> noop
               wvous-tr-corner = 1;             # top-right   hot corner -> noop
-              wvous-br-corner = 1;             # top-left    hot corner -> noop
+              wvous-br-corner = 1;             # bottom-right hot corner -> noop
               wvous-bl-corner = 1;             # bottom-left hot corner -> noop
               expose-animation-duration = 0.1; # speed up mission control animations
               persistent-apps = [ # defaults read com.apple.dock persistent-apps | grep -i "_CFURLString"

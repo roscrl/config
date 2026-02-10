@@ -83,7 +83,7 @@ set undodir=~/.vim/undodir
 set undofile
 
 " Search 
-set hlsearch   " dont keep highlighting after searching
+set hlsearch   " highlight search results (vim-cool auto clears when done)
 set incsearch  " while typing search command, incrementally show highlited results
 set ignorecase " ignore case when searching with /
 set smartcase  " dont ignore case if a caps letter is used while seraching
