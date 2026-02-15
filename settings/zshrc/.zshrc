@@ -355,4 +355,16 @@ EOF
   return 0
 }
 
+# natural language fallback — type words, if not a command, opens pi
+command_not_found_handler() {
+  local cmd="$*"
+  # single word = probably a typo, show normal error
+  if [[ "$cmd" != *" "* ]]; then
+    echo "zsh: command not found: $cmd"
+    return 127
+  fi
+  # multi-word = probably natural language, send to pi
+  pi "$cmd"
+}
+
 # zprof
