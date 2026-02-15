@@ -26,6 +26,7 @@ alias gdc="git diff --cached";
 alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";
+
 alias j="jj";
 jc()  { (( $# )) && jj commit -m "$*" || jj commit; }
 alias jn="jj new";
@@ -65,14 +66,10 @@ alias cc="claude --dangerously-skip-permissions";
 alias co="codex --dangerously-bypass-approvals-and-sandbox";
 alias sync="cd ~/dev/config && ./sync.sh";
 alias econfig="nvim ~/dev/config/flake.nix";
-alias ezsh="nvim ~/.zshrc && source ~/.zshrc";
-alias eczsh="nvim ~/dev/config/settings/zshrc/.zshrc && source ~/dev/config/settings/zshrc/.zshrc";
-alias evim="nvim ~/.config/nvim/init.vim";
-alias ecvim="nvim ~/dev/config/settings/nvim/init.vim";
-alias eghostty="nvim ~/.config/ghostty/config";
-alias ecghostty="nvim ~/dev/config/settings/ghostty/config";
-alias ekari="nvim ~/.config/karabiner/karabiner.json";
-alias eckari="nvim ~/dev/config/settings/karabiner/karabiner.json";
+alias ezsh="nvim ~/dev/config/settings/zshrc/.zshrc && source ~/dev/config/settings/zshrc/.zshrc";
+alias evim="nvim ~/dev/config/settings/nvim/init.vim";
+alias eghostty="nvim ~/dev/config/settings/ghostty/config";
+alias ekari="nvim ~/dev/config/settings/karabiner/karabiner.json";
 alias drive="cd ~/Drive";
 alias dl="cd ~/Downloads";
 alias docs="cd ~/Documents";
@@ -112,7 +109,7 @@ unsetopt FLOWCONTROL    # disable ^S/^Q flow control
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
 
-# git branch on the right of terminal prompt when in git folder https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
+# VCS info in RPROMPT — supports both jj and plain git repos
 PROMPT='%B%F{blue}%2~%f%b %# '
 autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
@@ -120,22 +117,27 @@ RPROMPT=\$vcs_info_msg_0_
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
 _update_vcs_info() {
-  psvar=() # Reset array used by vcs_info internally
-  vcs_info
+  if jj root &>/dev/null; then
+    # jj repo: show short change id + bookmark context
+    local jj_change jj_bookmarks jj_nearest
+    jj_change=$(jj log --no-graph -r @ -T 'change_id.shortest()' 2>/dev/null)
+    jj_bookmarks=$(jj log --no-graph -r @ -T 'bookmarks' 2>/dev/null)
+    if [[ -n "$jj_bookmarks" ]]; then
+      vcs_info_msg_0_="%F{240}${jj_change} ${jj_bookmarks}%f"
+    else
+      jj_nearest=$(jj log --no-graph -r 'latest(::@- & bookmarks())' -T 'bookmarks' 2>/dev/null)
+      if [[ -n "$jj_nearest" ]]; then
+        vcs_info_msg_0_="%F{240}${jj_change} ← ${jj_nearest}%f"
+      else
+        vcs_info_msg_0_="%F{240}${jj_change}%f"
+      fi
+    fi
+  else
+    psvar=()
+    vcs_info
+  fi
 }
 add-zsh-hook precmd _update_vcs_info
-git() {
-  command git "$@"
-  local git_exit_status=$?
-
-  case "$1" in
-    switch|checkout|commit|merge|rebase|pull|reset|stash|branch|clean)
-      _update_vcs_info
-      ;;
-  esac
-
-  return $git_exit_status
-}
 
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
@@ -153,7 +155,6 @@ killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
 myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
 speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' };
-speedbench() { time ZSH_DEBUGRC=1 zsh -i -c exit };
 
 # "Explodes" a directory's contents into the current directory,
 # then removes the (now empty) source directory.
@@ -183,33 +184,12 @@ explode() {
   mv "$1"/*(D) . && rmdir "$1"
 }
 
-initialize_gh_copilot_alias() {
-    if ! alias | grep -q "alias ghcs="; then
-        eval "$(gh copilot alias -- zsh)"
-    fi
-}
-
-clone_cd_vim() {
-  local url="$1"; 
-  local dir_name=$(basename "$url" .git); 
-
-  if [[ $url =~ ^(https|git|ssh)://.+\.git$ || $url =~ ^git@.+:.+\.git$ ]]; then 
-      git clone "$url" && cd "$dir_name" && vim .; 
-  else 
-      echo "Invalid Git URL"; 
-  fi 
-}
-
 clone_cd() {
-  local url="$1"; 
-  local dir_name=$(basename "$url" .git); 
-
-  if [[ $url =~ ^(https|git|ssh)://.+\.git$ || $url =~ ^git@.+:.+\.git$ ]]; then 
-      git clone "$url" && cd "$dir_name";
-  else 
-      echo "Invalid Git URL"; 
-  fi 
+  local url="$1" dir=$(basename "$1" .git)
+  [[ $url =~ ^(https|git|ssh)://.+\.git$ || $url =~ ^git@.+:.+\.git$ ]] || { echo "Invalid Git URL"; return 1; }
+  git clone "$url" && cd "$dir"
 }
+clone_cd_vim() { clone_cd "$1" && vim .; }
 
 fcd() {
   local dir;
@@ -223,14 +203,6 @@ fcd() {
     fi
   done
 }
-
-pbfilter() {
-    if [ $# -gt 0 ]; then
-        pbpaste | "$@" | pbcopy
-    else
-        pbpaste | pbcopy
-    fi
-}  
 
 open_github() {
   local remote_url=$(git config --get remote.origin.url)
@@ -268,34 +240,26 @@ denv() {
   local envrc_file=".envrc"
   local flake_file="flake.nix"
 
-  if [[ -e "$envrc_file" ]]; then
-    print -u2 "Error: '$envrc_file' already exists. Aborting."
-    return 1
-  else
-    {
-      echo "if has nix;"
-      echo "  then use flake;"
-      echo "fi"
-      echo ""
-    } > "$envrc_file"
-
-    if command -v direnv &> /dev/null; then
-        direnv allow . # Allow direnv to manage the environment
-    fi
-  fi
-
-  if [[ -e "$flake_file" ]]; then
-    print -u2 "Error: '$flake_file' already exists. Aborting."
+  if [[ -e "$envrc_file" || -e "$flake_file" ]]; then
+    [[ -e "$envrc_file" ]] && print -u2 "Error: '$envrc_file' already exists."
+    [[ -e "$flake_file" ]] && print -u2 "Error: '$flake_file' already exists."
+    print -u2 "Aborting."
     return 1
   fi
+
+  cat <<'EOF' > "$envrc_file"
+if has nix;
+  then use flake;
+fi
+EOF
 
   cat <<EOF > "$flake_file"
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, ... } @ inputs:
+  outputs = { self, nixpkgs, ... }:
   let
     supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system:
@@ -305,15 +269,14 @@ denv() {
           config.allowUnfree = true;
         };
       in
-        f pkgs system inputs
+        f pkgs
     );
   in {
-    devShells = forAllSystems (pkgs: system: inputs: {
+    devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
 EOF
 
-  # --- Append packages to flake.nix ---
   for pkg in "$@"; do
     printf "          %s\n" "${pkg}" >> "$flake_file"
   done
@@ -325,6 +288,10 @@ EOF
   };
 }
 EOF
+
+  if command -v direnv &> /dev/null; then
+    direnv allow .
+  fi
 
   return 0
 }

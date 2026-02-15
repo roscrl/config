@@ -12,8 +12,7 @@
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": ["command"],
-                                        "optional": ["any"]
+                                        "mandatory": ["left_command"]
                                     }
                                 },
                                 "to": [{ "key_code": "f13" }],

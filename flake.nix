@@ -14,7 +14,6 @@
           environment.systemPackages = with pkgs; [
             git
             neovim
-            docker
             jq
             yq
             tree
@@ -22,7 +21,6 @@
             jujutsu
             sqlite          
             watchexec
-            psrecord
             zsh-autosuggestions
             zsh-syntax-highlighting
             zsh-completions
@@ -147,9 +145,9 @@
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/scripts";
-                "Library/Application\ Support/jj".source                               = "${self}/settings/jj";
-                "Library/Application\ Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
-                "Library/Application\ Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
+                "Library/Application Support/jj".source                               = "${self}/settings/jj";
+                "Library/Application Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
+                "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 
@@ -195,9 +193,7 @@
                 "/System/Applications/Messages.app"
                 "/System/Applications/Mail.app"
                 "/System/Applications/Notes.app"
-                "/Applications/RubyMine.app"
-                "/Applications/GoLand.app"
-                "/Applications/IntelliJ IDEA.app"
+
                 "/Applications/Cursor.app"
                 "/Applications/Visual Studio Code.app"
                 "/Applications/Sublime Text.app"
@@ -210,15 +206,9 @@
                 "/Applications/Perplexity.app"
                 "/Users/${username}/Applications/Perplexity Web.app"
                 "/Users/${username}/Applications/NotebookLM.app"
-                "/Users/${username}/Applications/Phind.app"
-                "/Users/${username}/Applications/Kagi.app"
-                "/Users/${username}/Applications/DeepSeek.app"
-                "/Users/${username}/Applications/Sourcegraph.app"
-                "/Users/${username}/Applications/Grep.app"
                 "/Users/${username}/Applications/PostHog.app"
                 "/Users/${username}/Applications/v0.app"
                 "/Users/${username}/Applications/Lovable.app"
-                "/Users/${username}/Applications/tldraw.app"
                 "/Users/${username}/Applications/Uptime.app"
                 "/Users/${username}/Applications/Cloudflare.app"
                 "/Users/${username}/Applications/Hetzner.app"
