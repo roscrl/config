@@ -232,19 +232,93 @@ open_github() {
 
 denv() {
   if [[ $# -eq 0 ]]; then
-    print -u2 "Error: No packages specified."
     print -u2 "Usage: denv <pkg1> <pkg2> ..."
+    return 1
+  fi
+
+  local force=0
+  local pkgs=()
+  for arg in "$@"; do
+    if [[ "$arg" == "-f" || "$arg" == "--force" ]]; then
+      force=1
+    else
+      pkgs+=("$arg")
+    fi
+  done
+
+  if [[ ${#pkgs[@]} -eq 0 ]]; then
+    print -u2 "Error: No packages specified."
     return 1
   fi
 
   local envrc_file=".envrc"
   local flake_file="flake.nix"
 
-  if [[ -e "$envrc_file" || -e "$flake_file" ]]; then
+  if [[ $force -eq 0 ]] && [[ -e "$envrc_file" || -e "$flake_file" ]]; then
     [[ -e "$envrc_file" ]] && print -u2 "Error: '$envrc_file' already exists."
     [[ -e "$flake_file" ]] && print -u2 "Error: '$flake_file' already exists."
-    print -u2 "Aborting."
+    print -u2 "Use -f to overwrite."
     return 1
+  fi
+
+  # auto-add golangci-lint for Go projects
+  local has_go=0
+  for pkg in "${pkgs[@]}"; do
+    if [[ "$pkg" == "go" || "$pkg" == go_1* ]]; then
+      has_go=1
+      break
+    fi
+  done
+
+  if [[ $has_go -eq 1 ]]; then
+    pkgs+=(golangci-lint)
+    cat <<'GOLANGCI' > ".golangci.yml"
+version: "2"
+
+linters:
+  default: all
+  disable:
+    - wsl              # Replaced by wsl_v5
+    - depguard         # Tedious dependency allowlisting
+    - exhaustruct      # Requiring all struct fields is tedious
+    - funlen           # Line length too restrictive
+    - cyclop           # Tedious complexity checks
+    - noinlineerr      # Inline error handling is fine
+    - lll              # Line length limits too strict
+    - err113           # Dynamic errors fine for CLI
+    - revive           # Too pedantic, overlaps with other linters
+    - gosec            # Security overkill
+    - gochecknoglobals # Compiled regexps, embed.FS — all idiomatic Go
+    - testpackage      # Many tests need internal access (unexported methods/fields)
+
+  settings:
+    varnamelen:
+      ignore-names:
+        - err
+      ignore-decls:
+        - w io.Writer
+        - r io.Reader
+
+    mnd:
+      ignored-numbers:
+        - '0o644'
+        - '0o755'
+        - '0o750'
+
+    tagliatelle:
+      case:
+        rules:
+          json: snake
+
+    errcheck:
+      exclude-functions:
+        - (*os.File).Close
+        - (io.Closer).Close
+        - (*net/http.Response).Body.Close
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - fmt.Fprint
+GOLANGCI
   fi
 
   cat <<'EOF' > "$envrc_file"
@@ -255,33 +329,18 @@ EOF
 
   cat <<EOF > "$flake_file"
 {
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { nixpkgs, ... }:
   let
-    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      in
-        f pkgs
-    );
+    forAllSystems = f: nixpkgs.lib.genAttrs
+      [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ]
+      (system: f (import nixpkgs { inherit system; config.allowUnfree = true; }));
   in {
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
-EOF
-
-  for pkg in "$@"; do
-    printf "          %s\n" "${pkg}" >> "$flake_file"
-  done
-
-  cat <<EOF >> "$flake_file"
+$(printf "          %s\n" "${pkgs[@]}")
         ];
       };
     });
