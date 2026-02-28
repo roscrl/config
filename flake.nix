@@ -187,14 +187,13 @@
               wvous-bl-corner = 1;             # bottom-left hot corner -> noop
               expose-animation-duration = 0.1; # speed up mission control animations
               persistent-apps = [ # defaults read com.apple.dock persistent-apps | grep -i "_CFURLString"
-                "/System/Applications/iPhone Mirroring.app"
+                "/System/Applications/Preview.app"
                 "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
                 "/Applications/Google Chrome.app"
                 "/Applications/Spotify.app"
                 "/System/Applications/Messages.app"
                 "/System/Applications/Mail.app"
                 "/System/Applications/Notes.app"
-
                 "/Applications/Cursor.app"
                 "/Applications/Visual Studio Code.app"
                 "/Applications/Sublime Text.app"
@@ -202,15 +201,10 @@
                 "/Users/${username}/Applications/ChatGPT.app"
                 "/Users/${username}/Applications/Grok.app"
                 "/Users/${username}/Applications/Claude.app"
-                "/Users/${username}/Applications/Gemini.app"
                 "/Users/${username}/Applications/Gemini Web.app"
-                "/Applications/Perplexity.app"
                 "/Users/${username}/Applications/Perplexity Web.app"
                 "/Users/${username}/Applications/NotebookLM.app"
                 "/Users/${username}/Applications/PostHog.app"
-                "/Users/${username}/Applications/v0.app"
-                "/Users/${username}/Applications/Lovable.app"
-                "/Users/${username}/Applications/Uptime.app"
                 "/Users/${username}/Applications/Cloudflare.app"
                 "/Users/${username}/Applications/Hetzner.app"
                 "/Users/${username}/Applications/AWS.app"
@@ -220,7 +214,7 @@
                 "/Applications/Discord.app"
                 "/Users/${username}/Applications/Wise.app"
                 "/Users/${username}/Applications/Stripe.app"
-                "/System/Applications/Preview.app"
+                "/System/Applications/iPhone Mirroring.app"
               ];
             };
 
