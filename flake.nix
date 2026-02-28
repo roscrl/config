@@ -330,15 +330,6 @@
             ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
           '';
 
-          launchd.daemons.weekly-sync = {
-            command = "/Users/${username}/dev/config/sync.sh -update";
-            serviceConfig = {
-              StartCalendarInterval = [{ Weekday = 1; Hour = 9; Minute = 0; }]; # every Monday 9am
-              StandardOutPath = "/tmp/nix-sync.log";
-              StandardErrorPath = "/tmp/nix-sync.log";
-            };
-          };
-
           users.users.${username} = {
             name = username;
             home = "/Users/${username}";
