@@ -326,6 +326,8 @@
           programs.zsh.promptInit = "";                        # we set our own PROMPT, skip loading promptinit + suse theme
           system.startup.chime = false;                        # disable startup sound
           security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
+
+          # removes need for sudo on the ./sync script
           environment.etc."sudoers.d/10-darwin-rebuild".text = ''
             ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
           '';
