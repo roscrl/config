@@ -201,7 +201,7 @@
                 "/Users/${username}/Applications/ChatGPT.app"
                 "/Users/${username}/Applications/Grok.app"
                 "/Users/${username}/Applications/Claude.app"
-                "/Users/${username}/Applications/Gemini Web.app"
+                "/Users/${username}/Applications/Gemini.app"
                 "/Users/${username}/Applications/Perplexity Web.app"
                 "/Users/${username}/Applications/NotebookLM.app"
                 "/Users/${username}/Applications/PostHog.app"
