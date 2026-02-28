@@ -132,8 +132,9 @@
                   fi
                   _cached_source() {
                     local cmd=''${@:t}
-                    local cache="$HOME/.cache/zsh/''${cmd// /_}"
-                    if [[ ! -f "$cache" ]] || [[ ! -s "$cache" ]]; then
+                    local hash=$(echo "$@" | md5)
+                    local cache="$HOME/.cache/zsh/''${cmd}-''${hash}"
+                    if [[ ! -f "$cache" ]]; then
                       mkdir -p "$HOME/.cache/zsh"
                       "$@" > "$cache" 2>/dev/null
                     fi
@@ -325,6 +326,18 @@
           programs.zsh.promptInit = "";                        # we set our own PROMPT, skip loading promptinit + suse theme
           system.startup.chime = false;                        # disable startup sound
           security.pam.services.sudo_local.touchIdAuth = true; # allow touch id for sudo
+          environment.etc."sudoers.d/10-darwin-rebuild".text = ''
+            ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
+          '';
+
+          launchd.daemons.weekly-sync = {
+            command = "/Users/${username}/dev/config/sync.sh -update";
+            serviceConfig = {
+              StartCalendarInterval = [{ Weekday = 1; Hour = 9; Minute = 0; }]; # every Monday 9am
+              StandardOutPath = "/tmp/nix-sync.log";
+              StandardErrorPath = "/tmp/nix-sync.log";
+            };
+          };
 
           users.users.${username} = {
             name = username;

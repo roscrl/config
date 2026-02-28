@@ -106,6 +106,7 @@ setopt ALWAYS_TO_END    # move cursor to end of word on completion
 setopt AUTO_PUSHD       # automatically push directories onto the stack
 unsetopt CORRECT_ALL    # disable command correction
 unsetopt FLOWCONTROL    # disable ^S/^Q flow control
+setopt NO_NOMATCH       # pass unmatched globs (like ?) through literally instead of erroring
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
 
@@ -365,6 +366,19 @@ command_not_found_handler() {
   fi
   # multi-word = probably natural language, send to pi
   pi "$cmd"
+}
+
+# "pf" = pi fix — re-runs last command, captures error, sends to pi
+pf() {
+  local last_cmd=$(fc -ln -1 | sed 's/^ *//')
+  local output
+  output=$(eval "$last_cmd" 2>&1)
+  local exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
+    echo "Last command succeeded, nothing to fix."
+    return 0
+  fi
+  pi "I ran this command in $(pwd):\n\n\`\`\`\n$ ${last_cmd}\n${output}\n\`\`\`\n\nIt failed with exit code ${exit_code}. Fix it."
 }
 
 # zprof
