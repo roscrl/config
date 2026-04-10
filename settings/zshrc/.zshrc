@@ -86,6 +86,9 @@ alias me="cd ~/dev/projects/roscrl.com";
 alias posts="cd ~/dev/projects/roscrl.com/posts && nvim";
 alias secrets="nvim ~/Drive/settings/dotfiles/.secrets && source ~/.zshrc";
 
+bindkey "^[OA" up-line-or-beginning-search
+bindkey "^[OB" down-line-or-beginning-search
+
 # options
 
 HISTSIZE=100000

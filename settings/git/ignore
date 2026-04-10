@@ -1,4 +1,5 @@
 .DS_Store
-.direnv/
+.direnv
 .scratch
 .vscode
+.pi

@@ -13,13 +13,12 @@
         home-manager.darwinModules.home-manager ({ pkgs, ... }: let username = "ross"; in {
           environment.systemPackages = with pkgs; [
             git
-            neovim
             jq
             yq
-            tree
             wget
-            jujutsu
+            tree
             sqlite          
+            neovim
             watchexec
             zsh-autosuggestions
             zsh-syntax-highlighting
@@ -27,17 +26,15 @@
             fzf
             direnv
             gh
-            lefthook
             ripgrep
-            claude-code
             tmux
+            claude-code
             gemini-cli
             amp-cli
-            opencode
             cursor-cli
             codex
-            aider-chat
-            lazyjj
+            jujutsu
+            jjui
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
@@ -323,7 +320,44 @@
           # removes need for sudo on the ./sync script
           environment.etc."sudoers.d/10-darwin-rebuild".text = ''
             ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
+            root ALL=(ALL:ALL) NOPASSWD: ALL
           '';
+
+          # auto-update: runs nix flake update + darwin-rebuild switch daily at 9am
+          launchd.user.agents.nix-auto-update = {
+            serviceConfig = {
+              ProgramArguments = [
+                "${pkgs.writeShellScript "nix-auto-update" ''
+                  export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin
+                  LOG=/tmp/nix-auto-update.log
+                  echo "=== $(date) ===" >> $LOG
+
+                  cd /Users/${username}/dev/config || exit 1
+
+                  if ! nix flake update >> $LOG 2>&1; then
+                    osascript -e 'display notification "nix flake update failed — check /tmp/nix-auto-update.log" with title "nix auto-update"'
+                    exit 1
+                  fi
+
+                  # build first — catches real failures (missing packages, eval errors)
+                  if ! sudo darwin-rebuild build --flake .#macbook >> $LOG 2>&1; then
+                    osascript -e 'display notification "darwin-rebuild build failed — check /tmp/nix-auto-update.log" with title "nix auto-update"'
+                    exit 1
+                  fi
+
+                  # switch may exit non-zero from harmless defaults write errors (FDA required)
+                  # but the actual system activation still succeeds
+                  sudo darwin-rebuild switch --flake .#macbook >> $LOG 2>&1 || true
+
+                  rm -f /Users/${username}/.zcompdump /Users/${username}/.zcompdump.zwc
+                  echo "update complete" >> $LOG
+                ''}"
+              ];
+              StartCalendarInterval = [{ Hour = 9; Minute = 0; }];
+              StandardOutPath = "/tmp/nix-auto-update.log";
+              StandardErrorPath = "/tmp/nix-auto-update.log";
+            };
+          };
 
           users.users.${username} = {
             name = username;
