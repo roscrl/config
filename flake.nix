@@ -54,6 +54,7 @@
                 upgrade = true;
                 cleanup = "none";
               };
+              taps = [ "jurplel/tap" ];
               casks = [
                 "alfred"
                 "linearmouse" 
@@ -95,6 +96,7 @@
                 "fork"
                 "font-ibm-plex-mono"
                 "font-inter"
+                "jurplel/tap/instant-space-switcher"
               ];
               brews = [ "mas" ];
               masApps = { "uBlock Origin Lite" = 6745342698; };
