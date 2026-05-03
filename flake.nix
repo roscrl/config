@@ -7,7 +7,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs: {
+  outputs = { self, nix-darwin, home-manager, ... }: {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
         home-manager.darwinModules.home-manager ({ pkgs, ... }: let username = "ross"; in {
@@ -79,7 +79,6 @@
                 "github"
                 "istat-menus" 
                 "cleanshot" 
-                "superwhisper"
                 "tailscale-app"
                 "shifty" 
                 "numi" 
@@ -322,7 +321,6 @@
           # removes need for sudo on the ./sync script
           environment.etc."sudoers.d/10-darwin-rebuild".text = ''
             ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
-            root ALL=(ALL:ALL) NOPASSWD: ALL
           '';
 
           # auto-update: runs nix flake update + darwin-rebuild switch daily at 9am

@@ -200,10 +200,10 @@ fcd() {
   while true; do
     # exit with ^D
     dir="$(ls -a1F | grep '[/@]$' | grep -v '^./$' | sed 's/@$//' | fzf --height 40% --reverse --no-multi --preview 'pwd' --preview-window=up,1,border-none --no-info)"
-    if [[ -z "''${dir}" ]]; then
+    if [[ -z "${dir}" ]]; then
       break
-    elif [[ -d "''${dir}" ]]; then
-      cd "''${dir}"
+    elif [[ -d "${dir}" ]]; then
+      cd "${dir}"
     fi
   done
 }
@@ -217,11 +217,11 @@ open_github() {
 
   # Convert SSH URL to HTTPS if necessary
   if [[ $remote_url == git@github.com:* ]]; then
-    remote_url=''${remote_url/git@github.com:/https://github.com/}
+    remote_url=${remote_url/git@github.com:/https://github.com/}
   fi
 
   # Remove .git suffix if present
-  remote_url=''${remote_url%.git}
+  remote_url=${remote_url%.git}
 
   # Open the URL in the default browser
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -265,65 +265,6 @@ denv() {
     return 1
   fi
 
-  # auto-add golangci-lint for Go projects
-  local has_go=0
-  for pkg in "${pkgs[@]}"; do
-    if [[ "$pkg" == "go" || "$pkg" == go_1* ]]; then
-      has_go=1
-      break
-    fi
-  done
-
-  if [[ $has_go -eq 1 ]]; then
-    pkgs+=(golangci-lint)
-    cat <<'GOLANGCI' > ".golangci.yml"
-version: "2"
-
-linters:
-  default: all
-  disable:
-    - wsl              # Replaced by wsl_v5
-    - depguard         # Tedious dependency allowlisting
-    - exhaustruct      # Requiring all struct fields is tedious
-    - funlen           # Line length too restrictive
-    - cyclop           # Tedious complexity checks
-    - noinlineerr      # Inline error handling is fine
-    - lll              # Line length limits too strict
-    - err113           # Dynamic errors fine for CLI
-    - revive           # Too pedantic, overlaps with other linters
-    - gosec            # Security overkill
-    - gochecknoglobals # Compiled regexps, embed.FS — all idiomatic Go
-    - testpackage      # Many tests need internal access (unexported methods/fields)
-
-  settings:
-    varnamelen:
-      ignore-names:
-        - err
-      ignore-decls:
-        - w io.Writer
-        - r io.Reader
-
-    mnd:
-      ignored-numbers:
-        - '0o644'
-        - '0o755'
-        - '0o750'
-
-    tagliatelle:
-      case:
-        rules:
-          json: snake
-
-    errcheck:
-      exclude-functions:
-        - (*os.File).Close
-        - (io.Closer).Close
-        - (*net/http.Response).Body.Close
-        - fmt.Fprintf
-        - fmt.Fprintln
-        - fmt.Fprint
-GOLANGCI
-  fi
 
   cat <<'EOF' > "$envrc_file"
 if has nix;
@@ -337,9 +278,13 @@ EOF
 
   outputs = { nixpkgs, ... }:
   let
-    forAllSystems = f: nixpkgs.lib.genAttrs
-      [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ]
-      (system: f (import nixpkgs { inherit system; config.allowUnfree = true; }));
+    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system:
+      f (import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      })
+    );
   in {
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
