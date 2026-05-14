@@ -33,6 +33,7 @@
             amp-cli
             cursor-cli
             codex
+            colima
             jujutsu
             jjui
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
@@ -68,6 +69,7 @@
                 "visual-studio-code"
                 "cursor"
                 "sublime-text"
+                "droid"
                 "zed" 
                 "termius"
                 "rubymine"

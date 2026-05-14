@@ -4,11 +4,6 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-UPDATE=false
-if [[ "${1:-}" == "-update" ]]; then
-  UPDATE=true
-fi
-
 # Install Nix if not already installed
 if ! command -v nix >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --determinate --no-confirm
@@ -25,10 +20,8 @@ fi
 
 brew --version
 
-if $UPDATE; then
-  sudo determinate-nixd upgrade || echo "warning: determinate-nixd upgrade failed, continuing..."
-  nix flake update
-fi
+sudo determinate-nixd upgrade
+nix flake update
 
 if command -v darwin-rebuild >/dev/null 2>&1; then
   sudo darwin-rebuild switch --flake .#macbook
