@@ -198,21 +198,15 @@
                 "/Applications/Ghostty.app"
                 "/Applications/Discord.app"
                 "/Users/${username}/Applications/ChatGPT.app"
-                "/Users/${username}/Applications/Grok.app"
                 "/Users/${username}/Applications/Claude.app"
                 "/Users/${username}/Applications/Gemini.app"
-                "/Users/${username}/Applications/Perplexity Web.app"
                 "/Users/${username}/Applications/NotebookLM.app"
                 "/Users/${username}/Applications/PostHog.app"
                 "/Users/${username}/Applications/Cloudflare.app"
                 "/Users/${username}/Applications/Hetzner.app"
                 "/Users/${username}/Applications/AWS.app"
                 "/Users/${username}/Applications/Excalidraw.app"
-                "/Users/${username}/Applications/QuickBooks.app"
                 "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
-                "/Users/${username}/Applications/Wise.app"
-                "/Users/${username}/Applications/Stripe.app"
-                "/System/Applications/iPhone Mirroring.app"
               ];
             };
 
