@@ -33,8 +33,6 @@
             cursor-cli
             codex
             colima
-            jujutsu
-            jjui
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
@@ -130,22 +128,20 @@
                     zcompile "$HOME/.zcompdump"
                   fi
                   _cached_source() {
-                    local cmd=''${@:t}
-                    local hash=$(echo "$@" | md5)
-                    local cache="$HOME/.cache/zsh/''${cmd}-''${hash}"
+                    local executable=$1
+                    local cache="$HOME/.cache/zsh/''${executable:h:h:t}-''${executable:t}.zsh"
                     if [[ ! -f "$cache" ]]; then
                       mkdir -p "$HOME/.cache/zsh"
                       "$@" > "$cache" 2>/dev/null
                     fi
                     source "$cache"
                   }
-                  _cached_source fzf --zsh
-                  _cached_source zoxide init --cmd cd zsh
+                  _cached_source ${fzf}/bin/fzf --zsh
+                  _cached_source ${zoxide}/bin/zoxide init --cmd cd zsh
                   _cached_source ${direnv}/bin/direnv hook zsh'';
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/scripts";
-                "Library/Application Support/jj".source                               = "${self}/settings/jj";
                 "Library/Application Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
                 "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 # TODO alfred 

@@ -27,21 +27,6 @@ alias gopen="open_github";
 alias gce="clone_cd_vim";
 alias gc="clone_cd";
 
-alias j="jj";
-jc()  { (( $# )) && jj commit -m "$*" || jj commit; }
-alias jn="jj new";
-alias jl="jj log";
-jd()  { (( $# )) && jj describe -m "$*" || jj describe; }
-alias jh="jj log -r 'heads(all())'"
-alias jdi="jj diff";
-alias jcp="jj commit -m '' && jj git push --allow-empty-description -c ";
-alias js="jj st";
-alias ju="jj undo";
-alias jp="jj git push";
-alias jpu="jj git fetch && jj rebase -d 'trunk()'";
-alias jgc="jj git clone --colocate";
-alias jgi="jj git init --colocate";
-alias jf="jj git fetch";
 alias r="make run";
 jr() { jai "run_${1}.jai" - "${@:2}"; }
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
@@ -113,35 +98,14 @@ setopt NO_NOMATCH       # pass unmatched globs (like ?) through literally instea
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
 
-# VCS info in RPROMPT — supports both jj and plain git repos
+# Git branch in RPROMPT
 PROMPT='%B%F{blue}%2~%f%b %# '
 autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
 RPROMPT=\$vcs_info_msg_0_
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
-_update_vcs_info() {
-  if jj root &>/dev/null; then
-    # jj repo: show short change id + bookmark context
-    local jj_change jj_bookmarks jj_nearest
-    jj_change=$(jj log --no-graph -r @ -T 'change_id.shortest()' 2>/dev/null)
-    jj_bookmarks=$(jj log --no-graph -r @ -T 'bookmarks' 2>/dev/null)
-    if [[ -n "$jj_bookmarks" ]]; then
-      vcs_info_msg_0_="%F{240}${jj_change} ${jj_bookmarks}%f"
-    else
-      jj_nearest=$(jj log --no-graph -r 'latest(::@- & bookmarks())' -T 'bookmarks' 2>/dev/null)
-      if [[ -n "$jj_nearest" ]]; then
-        vcs_info_msg_0_="%F{240}${jj_change} ← ${jj_nearest}%f"
-      else
-        vcs_info_msg_0_="%F{240}${jj_change}%f"
-      fi
-    fi
-  else
-    psvar=()
-    vcs_info
-  fi
-}
-add-zsh-hook precmd _update_vcs_info
+add-zsh-hook precmd vcs_info
 
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
