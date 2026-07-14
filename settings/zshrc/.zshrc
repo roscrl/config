@@ -5,8 +5,8 @@
 alias ".."="cd ..";
 alias ll="ls -roAhtG";
 alias copy="tr -d '\\n' | pbcopy";
-c() { (( $# )) && cursor "$@" || cursor .; }
-cr() { killall "Cursor"; cursor .; }
+c() { (( $# )) && code "$@" || code .; }
+cr() { killall "Visual Studio Code"; code .; }
 o() { (( $# )) && open  "$@"  || open  .; }
 s() { (( $# )) && subl  "$@"  || subl  .; }
 alias g="git";

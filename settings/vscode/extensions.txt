@@ -1,0 +1,7 @@
+anaer.eyeshield
+apparentlystudio.jails
+golang.go
+mermaidchart.vscode-mermaid-chart
+ms-python.python
+ms-toolsai.jupyter
+vscodevim.vim

@@ -33,6 +33,10 @@
             cursor-cli
             codex
             colima
+            docker-client
+            docker-compose
+            docker-buildx
+            docker-credential-helpers
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
@@ -62,18 +66,12 @@
                 "rectangle"
                 "bruno"
                 "charles"
-                "docker-desktop"
                 "visual-studio-code"
                 "cursor"
                 "sublime-text"
                 "droid"
                 "zed" 
                 "termius"
-                "rubymine"
-                "goland"
-                "webstorm"
-                "intellij-idea"
-                "pycharm"
                 "beekeeper-studio"
                 "postico"
                 "github"
@@ -97,7 +95,7 @@
                 "font-inter"
                 "jurplel/tap/instant-space-switcher"
               ];
-              brews = [ "mas" ];
+              brews = [ "mas" "hunk" ];
               masApps = { "uBlock Origin Lite" = 6745342698; };
           };
 
@@ -154,6 +152,22 @@
                 # TODO secrets + ssh_key
               };
 
+              launchd.agents.colima = {
+                enable = true;
+                config = {
+                  ProgramArguments = [ "${pkgs.colima}/bin/colima" "start" ];
+                  EnvironmentVariables = {
+                    HOME = "/Users/${username}";
+                    PATH = "${pkgs.docker-client}/bin:${pkgs.docker-compose}/bin:${pkgs.docker-buildx}/bin:${pkgs.docker-credential-helpers}/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+                  };
+                  RunAtLoad = true;
+                  ProcessType = "Background";
+                  ThrottleInterval = 10;
+                  StandardOutPath = "/Users/${username}/Library/Logs/colima.log";
+                  StandardErrorPath = "/Users/${username}/Library/Logs/colima.log";
+                };
+              };
+
               # disable home-manager manual generation to suppress 'builtins.toFile options.json' store path warning
               manual.manpages.enable = false;
               manual.html.enable = false;
@@ -184,18 +198,19 @@
               expose-animation-duration = 0.1; # speed up mission control animations
               persistent-apps = [ # defaults read com.apple.dock persistent-apps | grep -i "_CFURLString"
                 "/System/Applications/Preview.app"
-                "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
-                "/Applications/Google Chrome.app"
                 "/Applications/Spotify.app"
+                "/Applications/Google Chrome.app"
+                "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
                 "/System/Applications/Messages.app"
                 "/System/Applications/Mail.app"
                 "/System/Applications/Notes.app"
-                "/Applications/Cursor.app"
-                "/Applications/Sublime Text.app"
-                "/Applications/Ghostty.app"
+                "/Applications/Visual Studio Code.app"
                 "/Applications/Discord.app"
-                "/Users/${username}/Applications/ChatGPT.app"
-                "/Users/${username}/Applications/Claude.app"
+                "/Applications/Ghostty.app"
+                "/Users/${username}/Applications/Fizzy.app"
+                "/Applications/Sublime Text.app"
+                "/Applications/ChatGPT.app"
+                "/Applications/Claude.app"
                 "/Users/${username}/Applications/Gemini.app"
                 "/Users/${username}/Applications/NotebookLM.app"
                 "/Users/${username}/Applications/PostHog.app"
@@ -319,6 +334,15 @@
             name = username;
             home = "/Users/${username}";
             shell = pkgs.zsh;
+          };
+
+          # Determinate manages Nix, so nix-darwin's nix.gc module cannot be used.
+          # Run the equivalent collector directly every Sunday and retain 30 days of generations.
+          launchd.daemons.nix-gc.serviceConfig = {
+            ProgramArguments = [ "${pkgs.nix}/bin/nix-collect-garbage" "--delete-older-than" "30d" ];
+            StartCalendarInterval = [{ Weekday = 0; Hour = 4; Minute = 0; }];
+            StandardOutPath = "/var/log/nix-gc.log";
+            StandardErrorPath = "/var/log/nix-gc.log";
           };
 
           nix.enable = false;

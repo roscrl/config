@@ -40,5 +40,11 @@ else
   sudo nix run nix-darwin -- switch --flake .#macbook
 fi
 
+# VS Code has no global extensions settings file, so install the declared extension IDs via its CLI.
+while IFS= read -r extension || [[ -n "$extension" ]]; do
+  [[ -z "$extension" || "$extension" == \#* ]] && continue
+  code --install-extension "$extension" >/dev/null
+done < settings/vscode/extensions.txt
+
 # Invalidate zsh completion cache — fpath changes after rebuild
 rm -f "$HOME/.zcompdump" "$HOME/.zcompdump.zwc"
