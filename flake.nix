@@ -110,6 +110,10 @@
                 ".config/linearmouse".source             = "${self}/settings/linearmouse";
                 ".config/manual/rectangle".source        = "${self}/settings/rectangle";  # manual: Rectangle.app requires config import via its UI
                 ".config/manual/istatmenus".source       = "${self}/settings/istatmenus"; # manual: iStat Menus.app requires config import via its UI
+                ".vscode/argv.json".text                  = builtins.toJSON {
+                  disable-color-correct-rendering = true;
+                  enable-crash-reporter = true;
+                };
                 ".config/direnv/direnvrc".text           = "source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc";
                 ".config/direnv/direnv.toml".text        = builtins.readFile "${self}/settings/direnv/direnv.toml" + "\n" + ''
                   [whitelist]
