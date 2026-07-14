@@ -5,7 +5,7 @@ Nix-darwin + home-manager dotfiles for macOS. One repo, one command (`./sync.sh`
 ## Structure
 
 - `flake.nix` — single-file system config: nix packages, homebrew casks, home-manager dotfiles, macOS defaults
-- `sync.sh` — bootstrap and apply (`-update` flag to upgrade nix + flake inputs)
+- `sync.sh` — bootstrap and apply (`-update` flag to upgrade Nix, flake inputs, and Homebrew packages)
 - `settings/` — app configs symlinked into `~` by home-manager
 - `scripts/` — utility scripts symlinked to `~/dev/scripts`
 

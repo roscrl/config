@@ -4,6 +4,13 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+update=false
+case "${1:-}" in
+    "") ;;
+    -update|--update) update=true ;;
+    *) echo "Usage: $0 [-update]" >&2; exit 2 ;;
+esac
+
 # Install Nix if not already installed
 if ! command -v nix >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --determinate --no-confirm
@@ -20,8 +27,12 @@ fi
 
 brew --version
 
-sudo determinate-nixd upgrade
-nix flake update
+if $update; then
+    sudo determinate-nixd upgrade
+    nix flake update
+    brew update
+    brew upgrade --greedy
+fi
 
 if command -v darwin-rebuild >/dev/null 2>&1; then
   sudo darwin-rebuild switch --flake .#macbook

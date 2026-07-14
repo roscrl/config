@@ -58,4 +58,5 @@ shell-integration-features = no-cursor
 macos-titlebar-proxy-icon=hidden
 macos-titlebar-style=tabs
 
+auto-update = off
 auto-update-channel = tip

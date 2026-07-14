@@ -51,8 +51,8 @@
           homebrew = {
               enable = true;
               onActivation = {
-                autoUpdate = true;
-                upgrade = true;
+                autoUpdate = false;
+                upgrade = false;
                 cleanup = "none";
               };
               taps = [ "jurplel/tap" ];
@@ -324,42 +324,6 @@
           environment.etc."sudoers.d/10-darwin-rebuild".text = ''
             ${username} ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild
           '';
-
-          # auto-update: runs nix flake update + darwin-rebuild switch daily at 9am
-          launchd.user.agents.nix-auto-update = {
-            serviceConfig = {
-              ProgramArguments = [
-                "${pkgs.writeShellScript "nix-auto-update" ''
-                  export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin
-                  LOG=/tmp/nix-auto-update.log
-                  echo "=== $(date) ===" >> $LOG
-
-                  cd /Users/${username}/dev/config || exit 1
-
-                  if ! nix flake update >> $LOG 2>&1; then
-                    osascript -e 'display notification "nix flake update failed — check /tmp/nix-auto-update.log" with title "nix auto-update"'
-                    exit 1
-                  fi
-
-                  # build first — catches real failures (missing packages, eval errors)
-                  if ! sudo darwin-rebuild build --flake .#macbook >> $LOG 2>&1; then
-                    osascript -e 'display notification "darwin-rebuild build failed — check /tmp/nix-auto-update.log" with title "nix auto-update"'
-                    exit 1
-                  fi
-
-                  # switch may exit non-zero from harmless defaults write errors (FDA required)
-                  # but the actual system activation still succeeds
-                  sudo darwin-rebuild switch --flake .#macbook >> $LOG 2>&1 || true
-
-                  rm -f /Users/${username}/.zcompdump /Users/${username}/.zcompdump.zwc
-                  echo "update complete" >> $LOG
-                ''}"
-              ];
-              StartCalendarInterval = [{ Hour = 9; Minute = 0; }];
-              StandardOutPath = "/tmp/nix-auto-update.log";
-              StandardErrorPath = "/tmp/nix-auto-update.log";
-            };
-          };
 
           users.users.${username} = {
             name = username;

@@ -2,4 +2,5 @@
 .direnv
 .scratch
 .vscode
+.idea
 .pi

@@ -241,21 +241,5 @@
       // "font.size": "var(font_size)",
     },
 
-    // Misc
-    // { "class": "tab_control",
-    //   "attributes": ["dirty", "!selected", "!hover"],
-    //   "settings": {
-    //     "file_tab_style": "square",
-    //     "highlight_modified_tabs": true
-    //   },
-    //   "layer2.inner_margin": [0, 0, 0, 0],
-    // },
-
-    // { "class": "tab_close_button",
-    //   "parents": [{"class": "tab_control", "attributes": ["dirty"]}],
-    //   "layer0.texture": "rsms-theme/img/dirty.png",
-    //   "content_margin": [6, 8]
-    // },
-
   ]
 }

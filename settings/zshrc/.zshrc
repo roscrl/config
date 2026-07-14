@@ -10,7 +10,7 @@ cr() { killall "Cursor"; cursor .; }
 o() { (( $# )) && open  "$@"  || open  .; }
 s() { (( $# )) && subl  "$@"  || subl  .; }
 alias g="git";
-gac()  { git add .; (( $# )) && git commit -am "$*"; }
+gac()  { git add -A && gcm "$@"; }
 alias gaa="git add -A";
 gcm() { (( $# )) && git commit -m "$*" || git commit; }
 gcp() { git add .; (( $# )) && git commit -m "$*" || git commit --allow-empty-message -m ''; git push; }
@@ -38,12 +38,12 @@ alias jcp="jj commit -m '' && jj git push --allow-empty-description -c ";
 alias js="jj st";
 alias ju="jj undo";
 alias jp="jj git push";
-alias jpu="jj git fetch && jj rebase -d";
+alias jpu="jj git fetch && jj rebase -d 'trunk()'";
 alias jgc="jj git clone --colocate";
 alias jgi="jj git init --colocate";
 alias jf="jj git fetch";
 alias r="make run";
-jr() { jai run_$1.jai - ${@:2} }
+jr() { jai "run_${1}.jai" - "${@:2}"; }
 rs() { bundle exec foreman start -f Procfile.dev "$@" }
 alias be="bundle exec";
 alias kd="bundle exec kamal deploy";
@@ -153,9 +153,9 @@ export NIXPKGS_ALLOW_UNFREE=1
 
 # functions
 
-mkcd()       { mkdir $1 && cd $1; }
+mkcd()       { mkdir "$1" && cd "$1"; }
 cnw()        { open -na "Google Chrome" --args --new-window "$@" }
-killport()   { lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9 }
+killport()   { lsof -i "tcp:$1" | awk 'NR!=1 {print $2}' | xargs kill -9 }
 myip()       { curl -s https://api.ipify.org; printf "\n" }
 grab()       { find . -type f -print0 | while IFS= read -r -d \'\' file; do echo "$file\`\`\`"; cat "$file"; echo "\`\`\`"; done | pbcopy }
 speedcheck() { for i in $(seq 0 50); do /usr/bin/time -p /bin/zsh -i -c exit 2>&1 | grep real | awk '{print $2}'; done | awk '{ sum += $1 } END { print "Average time:", sum/NR, "seconds" }' };
@@ -302,31 +302,6 @@ EOF
   fi
 
   return 0
-}
-
-# natural language fallback — type words, if not a command, opens pi
-command_not_found_handler() {
-  local cmd="$*"
-  # single word = probably a typo, show normal error
-  if [[ "$cmd" != *" "* ]]; then
-    echo "zsh: command not found: $cmd"
-    return 127
-  fi
-  # multi-word = probably natural language, send to pi
-  pi "$cmd"
-}
-
-# "pf" = pi fix — re-runs last command, captures error, sends to pi
-pf() {
-  local last_cmd=$(fc -ln -1 | sed 's/^ *//')
-  local output
-  output=$(eval "$last_cmd" 2>&1)
-  local exit_code=$?
-  if [[ $exit_code -eq 0 ]]; then
-    echo "Last command succeeded, nothing to fix."
-    return 0
-  fi
-  pi "I ran this command in $(pwd):\n\n\`\`\`\n$ ${last_cmd}\n${output}\n\`\`\`\n\nIt failed with exit code ${exit_code}. Fix it."
 }
 
 # zprof
