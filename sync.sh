@@ -30,8 +30,8 @@ brew --version
 if $update; then
     sudo determinate-nixd upgrade
     nix flake update
-    brew update
-    brew upgrade --greedy
+    brew update || echo "Warning: Homebrew update failed; upgrading from cached metadata." >&2
+    HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade --greedy
 fi
 
 if command -v darwin-rebuild >/dev/null 2>&1; then
