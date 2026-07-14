@@ -19,7 +19,6 @@
             tree
             sqlite          
             neovim
-            watchexec
             zsh-autosuggestions
             zsh-syntax-highlighting
             zsh-completions
