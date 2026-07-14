@@ -75,6 +75,7 @@
                 "intellij-idea"
                 "pycharm"
                 "beekeeper-studio"
+                "postico"
                 "github"
                 "istat-menus" 
                 "cleanshot" 
