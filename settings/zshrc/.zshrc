@@ -98,14 +98,17 @@ setopt NO_NOMATCH       # pass unmatched globs (like ?) through literally instea
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' # built in zsh autocomplete will match lowercase to uppercase
 
-# Git branch in RPROMPT
+# Git branch in RPROMPT. A direct symbolic-ref lookup avoids vcs_info's multiple
+# Git subprocesses on every prompt; detached HEADs intentionally show no branch.
 PROMPT='%B%F{blue}%2~%f%b %# '
-autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
-RPROMPT=\$vcs_info_msg_0_
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats '%F{240}%b%f'
-add-zsh-hook precmd vcs_info
+update_git_rprompt() {
+  local branch
+  branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null)
+  RPROMPT=${branch:+%F{240}${branch}%f}
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd update_git_rprompt
 
 bindkey -r '^S' # unbind ctrl+s history-incremental-search-forward
 
