@@ -150,7 +150,6 @@
                 # TODO alfred 
                 # TODO cursor
                 # TODO vscode 
-                # TODO jetbrains
                 # TODO .zsh_history 
                 # TODO .zoxide history
                 # TODO secrets + ssh_key
