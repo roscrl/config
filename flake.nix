@@ -27,9 +27,6 @@
             gh
             ripgrep
             tmux
-            claude-code
-            gemini-cli
-            amp-cli
             cursor-cli
             codex
             colima
@@ -95,7 +92,7 @@
                 "font-inter"
                 "jurplel/tap/instant-space-switcher"
               ];
-              brews = [ "mas" "hunk" ];
+              brews = [ "mas" ];
               masApps = { "uBlock Origin Lite" = 6745342698; };
           };
 
