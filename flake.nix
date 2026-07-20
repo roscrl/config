@@ -169,9 +169,6 @@
                 "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 "Library/Application Support/Code/User/settings.json".source    = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/settings.json";
                 "Library/Application Support/Code/User/keybindings.json".source = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/keybindings.json";
-                # TODO alfred 
-                # TODO .zsh_history 
-                # TODO .zoxide history
               };
 
               launchd.agents.colima = {
