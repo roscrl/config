@@ -163,6 +163,8 @@
                 ".ideavimrc".source                      = "${self}/settings/ideavimrc/.ideavimrc";
                 ".hushlogin".text                        = "";
                 "dev/scripts".source                     = "${self}/scripts";
+                ".ssh/id_ed25519".source                  = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/Drive/settings/ssh/id_ed25519";
+                ".ssh/id_ed25519.pub".source              = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/Drive/settings/ssh/id_ed25519.pub";
                 "Library/Application Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
                 "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 "Library/Application Support/Code/User/settings.json".source    = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/settings.json";
@@ -170,7 +172,6 @@
                 # TODO alfred 
                 # TODO .zsh_history 
                 # TODO .zoxide history
-                # TODO secrets + ssh_key
               };
 
               launchd.agents.colima = {
