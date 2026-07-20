@@ -5,13 +5,38 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    pi-coding-agent = { url = "github:earendil-works/pi/v0.80.10"; flake = false; };
   };
 
-  outputs = { self, nix-darwin, home-manager, ... }: {
+  outputs = { self, nix-darwin, home-manager, pi-coding-agent, ... }: {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
-        home-manager.darwinModules.home-manager ({ pkgs, ... }: let username = "ross"; in {
+        home-manager.darwinModules.home-manager ({ pkgs, ... }: let
+          username = "ross";
+
+          # standalone prebuilt binary, much faster startup than the npm/node build
+          pi = pkgs.stdenvNoCC.mkDerivation rec {
+            pname = "pi-coding-agent";
+            version = (builtins.fromJSON (builtins.readFile "${pi-coding-agent}/packages/coding-agent/package.json")).version;
+            src = pkgs.fetchurl {
+              url = "https://github.com/earendil-works/pi/releases/download/v${version}/pi-darwin-arm64.tar.gz";
+              hash = "sha256-RAbtInxIby48Fs8U95PcOtRrXQG/aRNaJCTP+lipo0s=";
+            };
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            dontStrip = true;
+            installPhase = ''
+              mkdir -p "$out/lib/pi-coding-agent"
+              cp -R . "$out/lib/pi-coding-agent"
+              makeWrapper "$out/lib/pi-coding-agent/pi" "$out/bin/pi" \
+                --set PI_PACKAGE_DIR "$out/lib/pi-coding-agent" \
+                --set-default PI_SKIP_VERSION_CHECK 1 \
+                --set-default PI_TELEMETRY 0 \
+                --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.fd pkgs.ripgrep ]}
+            '';
+          };
+        in {
           environment.systemPackages = with pkgs; [
+            pi
             git
             jq
             yq
