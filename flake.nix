@@ -15,12 +15,14 @@
 
           # standalone prebuilt binary, much faster startup than the npm/node build
           # version + hash bumped to latest release by ./sync.sh -update
-          pi = let release = builtins.fromJSON (builtins.readFile ./pi-release.json); in pkgs.stdenvNoCC.mkDerivation {
+          piVersion = "0.80.10";
+          piHash = "sha256-RAbtInxIby48Fs8U95PcOtRrXQG/aRNaJCTP+lipo0s=";
+          pi = pkgs.stdenvNoCC.mkDerivation {
             pname = "pi-coding-agent";
-            inherit (release) version;
+            version = piVersion;
             src = pkgs.fetchurl {
-              url = "https://github.com/earendil-works/pi/releases/download/v${release.version}/pi-darwin-arm64.tar.gz";
-              inherit (release) hash;
+              url = "https://github.com/earendil-works/pi/releases/download/v${piVersion}/pi-darwin-arm64.tar.gz";
+              hash = piHash;
             };
             nativeBuildInputs = [ pkgs.makeWrapper ];
             dontStrip = true;
