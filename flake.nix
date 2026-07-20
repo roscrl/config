@@ -5,22 +5,22 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    pi-coding-agent = { url = "github:earendil-works/pi/v0.80.10"; flake = false; };
   };
 
-  outputs = { self, nix-darwin, home-manager, pi-coding-agent, ... }: {
+  outputs = { self, nix-darwin, home-manager, ... }: {
     darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
       modules = [
         home-manager.darwinModules.home-manager ({ pkgs, ... }: let
           username = "ross";
 
           # standalone prebuilt binary, much faster startup than the npm/node build
-          pi = pkgs.stdenvNoCC.mkDerivation rec {
+          # version + hash bumped to latest release by ./sync.sh -update
+          pi = let release = builtins.fromJSON (builtins.readFile ./pi-release.json); in pkgs.stdenvNoCC.mkDerivation {
             pname = "pi-coding-agent";
-            version = (builtins.fromJSON (builtins.readFile "${pi-coding-agent}/packages/coding-agent/package.json")).version;
+            inherit (release) version;
             src = pkgs.fetchurl {
-              url = "https://github.com/earendil-works/pi/releases/download/v${version}/pi-darwin-arm64.tar.gz";
-              hash = "sha256-RAbtInxIby48Fs8U95PcOtRrXQG/aRNaJCTP+lipo0s=";
+              url = "https://github.com/earendil-works/pi/releases/download/v${release.version}/pi-darwin-arm64.tar.gz";
+              inherit (release) hash;
             };
             nativeBuildInputs = [ pkgs.makeWrapper ];
             dontStrip = true;
@@ -117,7 +117,7 @@
                 "font-inter"
                 "jurplel/tap/instant-space-switcher"
               ];
-              brews = [ "mas" ];
+              brews = [ "mas" "container" ];
               masApps = { "uBlock Origin Lite" = 6745342698; };
           };
 
