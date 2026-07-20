@@ -122,7 +122,7 @@
           };
 
           home-manager = { # https://home-manager-options.extranix.com
-            users.${username} = { ... }: { 
+            users.${username} = { config, ... }: { 
               home.file = {
                 ".config/git".source                     = "${self}/settings/git";
                 ".config/nvim".source                    = "${self}/settings/nvim";
@@ -165,8 +165,9 @@
                 "dev/scripts".source                     = "${self}/scripts";
                 "Library/Application Support/Sublime Text/Packages/rsms-theme".source = "${self}/settings/sublime/rsms-theme";
                 "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
+                "Library/Application Support/Code/User/settings.json".source    = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/settings.json";
+                "Library/Application Support/Code/User/keybindings.json".source = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/keybindings.json";
                 # TODO alfred 
-                # TODO vscode 
                 # TODO .zsh_history 
                 # TODO .zoxide history
                 # TODO secrets + ssh_key
