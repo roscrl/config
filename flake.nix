@@ -97,7 +97,7 @@
                 "zed" 
                 "termius"
                 "beekeeper-studio"
-                "postico"
+                "lithepg"
                 "github"
                 "istat-menus" 
                 "cleanshot" 
