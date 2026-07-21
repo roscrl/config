@@ -80,7 +80,7 @@
                 upgrade = false;
                 cleanup = "none";
               };
-              taps = [ "jurplel/tap" ];
+              taps = [ "jurplel/tap" "omarpr/tap" ];
               casks = [
                 "alfred"
                 "linearmouse" 
@@ -97,7 +97,8 @@
                 "zed" 
                 "termius"
                 "beekeeper-studio"
-                "lithepg"
+                "omarpr/tap/lithepg"
+                "postico"
                 "github"
                 "istat-menus" 
                 "cleanshot" 
