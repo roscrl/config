@@ -56,11 +56,6 @@
             tmux
             cursor-cli
             codex
-            colima
-            docker-client
-            docker-compose
-            docker-buildx
-            docker-credential-helpers
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
             broot               # file tree navigation
@@ -172,22 +167,6 @@
                 "Library/Application Support/Sublime Text/Packages/User".source       = "${self}/settings/sublime/User";
                 "Library/Application Support/Code/User/settings.json".source    = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/settings.json";
                 "Library/Application Support/Code/User/keybindings.json".source = config.lib.file.mkOutOfStoreSymlink "/Users/${username}/dev/config/settings/vscode/keybindings.json";
-              };
-
-              launchd.agents.colima = {
-                enable = true;
-                config = {
-                  ProgramArguments = [ "${pkgs.colima}/bin/colima" "start" ];
-                  EnvironmentVariables = {
-                    HOME = "/Users/${username}";
-                    PATH = "${pkgs.docker-client}/bin:${pkgs.docker-compose}/bin:${pkgs.docker-buildx}/bin:${pkgs.docker-credential-helpers}/bin:/usr/bin:/bin:/usr/sbin:/sbin";
-                  };
-                  RunAtLoad = true;
-                  ProcessType = "Background";
-                  ThrottleInterval = 10;
-                  StandardOutPath = "/Users/${username}/Library/Logs/colima.log";
-                  StandardErrorPath = "/Users/${username}/Library/Logs/colima.log";
-                };
               };
 
               # disable home-manager manual generation to suppress 'builtins.toFile options.json' store path warning
