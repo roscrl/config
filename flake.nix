@@ -15,14 +15,16 @@
         in {
           environment.systemPackages = with pkgs; [
             git
+            gh
+            python3
+            nodejs
+            bun
             jq
             yq
             wget
             tree
+            tmux
             sqlite
-            python3
-            nodejs
-            bun
             poppler-utils       # includes pdftotext
             nixfmt
             neovim
@@ -31,9 +33,7 @@
             zsh-syntax-highlighting
             zsh-completions
             pi-coding-agent
-            gh
-            tmux
-            codex
+            agent-browser
             fzf
             ripgrep
             broot               # file tree navigation
