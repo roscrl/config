@@ -190,7 +190,6 @@
                 "/Users/${username}/Applications/Hetzner.app"
                 "/Users/${username}/Applications/AWS.app"
                 "/Users/${username}/Applications/Excalidraw.app"
-                "/Users/${username}/Applications/Chrome Apps.localized/Sheets.app"
               ];
             };
 
