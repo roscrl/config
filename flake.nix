@@ -14,6 +14,7 @@
           username = "ross";
         in {
           environment.systemPackages = with pkgs; [
+            direnv
             pi-coding-agent
             git
             jq
@@ -26,21 +27,16 @@
             zsh-syntax-highlighting
             zsh-completions
             fzf
-            direnv
             gh
-            ripgrep
             tmux
             codex
+            ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
-            httpie              # easy curl
             broot               # file tree navigation
             btop                # better htop
             zoxide              # better cd
             fd                  # find files
             hyperfine           # benchmark
-            lazygit             # git tui
-            lazydocker          # docker tui
-            dive                # docker layer viewer
           ];
 
           homebrew = {
