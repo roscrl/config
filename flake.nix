@@ -14,8 +14,6 @@
           username = "ross";
         in {
           environment.systemPackages = with pkgs; [
-            direnv
-            pi-coding-agent
             git
             jq
             yq
@@ -23,13 +21,15 @@
             tree
             sqlite          
             neovim
+            direnv
             zsh-autosuggestions
             zsh-syntax-highlighting
             zsh-completions
-            fzf
+            pi-coding-agent
             gh
             tmux
             codex
+            fzf
             ripgrep
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             broot               # file tree navigation
