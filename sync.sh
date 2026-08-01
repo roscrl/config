@@ -31,17 +31,6 @@ if $update; then
     sudo determinate-nixd upgrade
     nix flake update
 
-    # bump pi pin to latest GitHub release
-    latest=$(curl -sSf https://api.github.com/repos/earendil-works/pi/releases/latest | jq -r .tag_name)
-    current=$(sed -nE 's/[[:space:]]*piVersion = "([^"]+)";/\1/p' flake.nix)
-    if [[ ${latest#v} != "$current" ]]; then
-        echo "pi: $current -> ${latest#v}"
-        hash=$(nix store prefetch-file --json "https://github.com/earendil-works/pi/releases/download/$latest/pi-darwin-arm64.tar.gz" | jq -r .hash)
-        sed -i '' -E \
-            -e 's/(piVersion = )"[^"]+";/\1"'"${latest#v}"'";/' \
-            -e 's/(piHash = )"[^"]+";/\1"'"$hash"'";/' \
-            flake.nix
-    fi
     brew update || echo "Warning: Homebrew update failed; upgrading from cached metadata." >&2
     HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade --greedy || echo "Warning: Some Homebrew packages failed to upgrade; continuing with system rebuild." >&2
 fi
