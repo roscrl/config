@@ -19,7 +19,12 @@
             yq
             wget
             tree
-            sqlite          
+            sqlite
+            python3
+            nodejs
+            bun
+            poppler-utils       # includes pdftotext
+            nixfmt
             neovim
             direnv
             zsh-autosuggestions
@@ -31,7 +36,6 @@
             codex
             fzf
             ripgrep
-            ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             broot               # file tree navigation
             btop                # better htop
             zoxide              # better cd
@@ -59,13 +63,10 @@
                 "visual-studio-code"
                 "cursor"
                 "sublime-text"
-                "droid"
-                "zed" 
                 "termius"
                 "beekeeper-studio"
                 "omarpr/tap/lithepg"
                 "postico"
-                "github"
                 "istat-menus" 
                 "cleanshot" 
                 "tailscale-app"
@@ -73,6 +74,7 @@
                 "numi" 
                 "google-chrome"
                 "discord" 
+                "slack"
                 "spotify" 
                 "signal" 
                 "mullvad-vpn"
