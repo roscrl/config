@@ -389,5 +389,6 @@
     "workbench.layoutControl.enabled": false,
     "workbench.activityBar.location": "bottom",
     "terminal.external.osxExec": "Ghostty.app",
-    "mermaidChart.showGenerateDiagramCodeLens": false
+    "mermaidChart.showGenerateDiagramCodeLens": false,
+    "workbench.secondarySideBar.defaultVisibility": "hidden"
 }

@@ -12,33 +12,9 @@
       modules = [
         home-manager.darwinModules.home-manager ({ pkgs, ... }: let
           username = "ross";
-
-          # standalone prebuilt binary, much faster startup than the npm/node build
-          # version + hash bumped to latest release by ./sync.sh -update
-          piVersion = "0.80.10";
-          piHash = "sha256-RAbtInxIby48Fs8U95PcOtRrXQG/aRNaJCTP+lipo0s=";
-          pi = pkgs.stdenvNoCC.mkDerivation {
-            pname = "pi-coding-agent";
-            version = piVersion;
-            src = pkgs.fetchurl {
-              url = "https://github.com/earendil-works/pi/releases/download/v${piVersion}/pi-darwin-arm64.tar.gz";
-              hash = piHash;
-            };
-            nativeBuildInputs = [ pkgs.makeWrapper ];
-            dontStrip = true;
-            installPhase = ''
-              mkdir -p "$out/lib/pi-coding-agent"
-              cp -R . "$out/lib/pi-coding-agent"
-              makeWrapper "$out/lib/pi-coding-agent/pi" "$out/bin/pi" \
-                --set PI_PACKAGE_DIR "$out/lib/pi-coding-agent" \
-                --set-default PI_SKIP_VERSION_CHECK 1 \
-                --set-default PI_TELEMETRY 0 \
-                --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.fd pkgs.ripgrep ]}
-            '';
-          };
         in {
           environment.systemPackages = with pkgs; [
-            pi
+            pi-coding-agent
             git
             jq
             yq
@@ -54,7 +30,6 @@
             gh
             ripgrep
             tmux
-            cursor-cli
             codex
             ripgrep-all         # ripgrep but for pdf, zip, tar, sqlite
             httpie              # easy curl
